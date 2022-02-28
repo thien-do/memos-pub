@@ -1,11 +1,16 @@
 import type { NextPage, GetStaticProps, GetStaticPaths } from "next";
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import rehypeSanitize from "rehype-sanitize";
+import rehypeStringify from "rehype-stringify";
 
 interface PageProps {
-  text: string;
+  html: string;
 }
 
 const Page: NextPage<PageProps> = (props) => {
-  return <div>{props.text}</div>;
+  return <div dangerouslySetInnerHTML={{ __html: props.html }} />;
 };
 
 export default Page;
@@ -17,6 +22,18 @@ interface PageParams extends NodeJS.Dict<string | string[]> {
    */
   path: string[];
 }
+
+const processor = unified()
+  .use(remarkParse)
+  .use(remarkRehype)
+  .use(rehypeSanitize)
+  .use(rehypeStringify);
+
+const toHTML = async (markdown: string): Promise<string> => {
+  const file = await processor.process(markdown);
+  const html = String(file);
+  return html;
+};
 
 const getRaw = (url: string[]): string => {
   const [host, user, repo, _blob, branch, ...path] = url;
@@ -40,11 +57,12 @@ export const getStaticProps: GetStaticProps<PageProps, PageParams> = async (
   const path = context.params?.path;
   if (path === undefined) throw Error("params.path is not defined");
   const raw = getRaw(path);
-  const res = await fetch(raw);
-  const text = await res.text();
+  const response = await fetch(raw);
+  const markdown = await response.text();
+  const html = await toHTML(markdown);
 
   return {
-    props: { text },
+    props: { html },
     revalidate: 60, // seconds
   };
 };
