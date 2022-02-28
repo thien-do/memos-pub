@@ -14,7 +14,7 @@ const makeUrl = (components: URLComponents): string => {
   return url;
 };
 
-export const fetchGitHubSource = async (
+export const fetchGitHubMarkdown = async (
   components: URLComponents
 ): Promise<string> => {
   if (isGitHubSource(components) === false) {

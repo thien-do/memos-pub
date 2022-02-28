@@ -10,8 +10,8 @@ const processor = unified()
   .use(rehypeSanitize)
   .use(rehypeStringify);
 
-export const markdownToHTML = (markdown: string): string => {
-  const file = processor.processSync(markdown);
+export const markdownToHTML = async (markdown: string): Promise<string> => {
+  const file = await processor.process(markdown);
   const html = String(file);
   return html;
 };

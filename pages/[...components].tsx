@@ -1,18 +1,13 @@
 import type { NextPage, GetStaticProps, GetStaticPaths } from "next";
-import { markdownToHTML } from "../lib/markdown/html";
+import { PostPage } from "../lib/post/page";
 import { fetchSource } from "../lib/sources/fetch";
 
 interface PageProps {
-  markdown: string;
+  html: string;
 }
 
 const Page: NextPage<PageProps> = (props) => {
-  return (
-    <div
-      className="prose"
-      dangerouslySetInnerHTML={{ __html: markdownToHTML(props.markdown) }}
-    />
-  );
+  return <PostPage html={props.html} />;
 };
 
 export default Page;
@@ -26,9 +21,9 @@ export const getStaticProps: GetStaticProps<PageProps, PageParams> = async (
 ) => {
   const components = context.params?.components;
   if (components === undefined) throw Error("params.components is not defined");
-  const markdown = await fetchSource(components);
+  const html = await fetchSource(components);
   return {
-    props: { markdown },
+    props: { html },
     revalidate: 60, // seconds
   };
 };
