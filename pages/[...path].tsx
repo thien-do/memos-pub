@@ -10,7 +10,9 @@ interface PageProps {
 }
 
 const Page: NextPage<PageProps> = (props) => {
-  return <div dangerouslySetInnerHTML={{ __html: props.html }} />;
+  return (
+    <div className="prose" dangerouslySetInnerHTML={{ __html: props.html }} />
+  );
 };
 
 export default Page;
