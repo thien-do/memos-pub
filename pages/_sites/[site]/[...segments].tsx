@@ -1,26 +1,36 @@
 import type { NextPage, GetStaticProps, GetStaticPaths } from "next";
+import { ContentCommon } from "../lib/content/type";
+import { ContentPage } from "../lib/content/page";
+import { fetchGitHubContent } from "../lib/github/content";
+import { parseGitHubPath } from "../lib/github/path";
+import { expandPath } from "../../../lib/path/expand";
 
 interface PageProps {
-	params: any;
+	content: ContentCommon;
+	segments: string[];
 }
 
 const Page: NextPage<PageProps> = (props) => {
-	return <div>Ahihi {JSON.stringify(props.params)}</div>;
+	return <ContentPage segments={props.segments} content={props.content} />;
 };
 
 export default Page;
 
 interface PageParams extends NodeJS.Dict<string | string[]> {
-	site: string;
+	site: string | undefined;
 	segments: string[];
 }
 
 export const getStaticProps: GetStaticProps<PageProps, PageParams> = async (
 	context
 ) => {
-	const params = context.params;
+	if (context.params === undefined) throw Error("Params is not defined");
+	const { site, segments } = context.params;
+	const ghSegments = expandPath({ site, segments });
+	const path = parseGitHubPath(ghSegments);
+	const content = await fetchGitHubContent(path);
 	return {
-		props: { params },
+		props: { content, segments },
 		revalidate: 60, // seconds
 	};
 };
