@@ -24,7 +24,6 @@ export const getStaticProps: GetStaticProps<PageProps, PageParams> = async (
 ) => {
 	const segments = context.params?.segments;
 	if (segments === undefined) throw Error("params.segments is not defined");
-	// const html = await fetchSource(segments);
 
 	const path = parseGitHubPath(segments);
 	const content = await fetchGitHubContent(path);
