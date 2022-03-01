@@ -1,8 +1,8 @@
 import type { NextPage, GetStaticProps, GetStaticPaths } from "next";
-import { ContentCommon } from "../lib/content/type";
-import { ContentPage } from "../lib/content/page";
-import { fetchGitHubContent } from "../lib/github/content";
-import { parseGitHubPath } from "../lib/github/path";
+import { ContentCommon } from "../../../lib/content/type";
+import { ContentPage } from "../../../lib/content/page";
+import { fetchGitHubContent } from "../../../lib/github/content";
+import { parseGitHubPath } from "../../../lib/github/path";
 import { expandPath } from "../../../lib/path/expand";
 
 interface PageProps {
