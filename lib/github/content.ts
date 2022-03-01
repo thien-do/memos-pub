@@ -1,7 +1,11 @@
 import { components, operations } from "@octokit/openapi-types";
-import { ContentCommon } from "../content/common";
-import { ContentDir, ContentDirFile } from "../content/dir";
-import { ContentFile } from "../content/file";
+import {
+	ContentCommon,
+	ContentDir,
+	ContentFile,
+	ContentDirFile,
+} from "../content/type";
+import { markdownToHTML } from "../markdown/html";
 import { isNotNull } from "../utils/not-null";
 import { getGitHubKit } from "./kit";
 import { GitHubPath } from "./path";
@@ -20,20 +24,28 @@ const toDirFile = (raw: RawDirFile): ContentDirFile | null => {
 	return { name: raw.name, type: raw.type };
 };
 
-const parseContent = (response: Response): ContentCommon => {
+const makeFile = async (markdown: string): Promise<ContentFile> => {
+	const html = await markdownToHTML(markdown);
+	return { type: "file", markdown, html };
+};
+
+const parseContent = async (response: Response): Promise<ContentCommon> => {
 	// Directory
 	if (Array.isArray(response)) {
 		const files: ContentDirFile[] = response
 			.map(toDirFile)
 			.filter(isNotNull);
-		const dir: ContentDir = { files };
+		const dir: ContentDir = { type: "dir", files };
 		return dir;
 	}
-	// Single file
+	// Single file raw
+	if (typeof response === "string") {
+		return await makeFile(response);
+	}
+	// Single file json
 	if (response.type === "file") {
 		if (!("content" in response)) throw Error("File doesn't have content");
-		const file: ContentFile = { content: response.content };
-		return file;
+		return makeFile(response.content);
 	}
 	throw Error(`Unknown content type "${response.type}"`);
 };
