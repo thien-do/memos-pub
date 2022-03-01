@@ -13,15 +13,15 @@ const Page: NextPage<PageProps> = (props) => {
 export default Page;
 
 interface PageParams extends NodeJS.Dict<string | string[]> {
-  components: string[];
+  segments: string[];
 }
 
 export const getStaticProps: GetStaticProps<PageProps, PageParams> = async (
   context
 ) => {
-  const components = context.params?.components;
-  if (components === undefined) throw Error("params.components is not defined");
-  const html = await fetchSource(components);
+  const segments = context.params?.segments;
+  if (segments === undefined) throw Error("params.segments is not defined");
+  const html = await fetchSource(segments);
   return {
     props: { html },
     revalidate: 60, // seconds
