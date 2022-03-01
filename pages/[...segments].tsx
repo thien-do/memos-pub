@@ -6,10 +6,11 @@ import { parseGitHubPath } from "../lib/github/path";
 
 interface PageProps {
 	content: ContentCommon;
+	segments: string[];
 }
 
 const Page: NextPage<PageProps> = (props) => {
-	return <ContentPage content={props.content} />;
+	return <ContentPage segments={props.segments} content={props.content} />;
 };
 
 export default Page;
@@ -29,7 +30,7 @@ export const getStaticProps: GetStaticProps<PageProps, PageParams> = async (
 	const content = await fetchGitHubContent(path);
 
 	return {
-		props: { content },
+		props: { content, segments },
 		revalidate: 60, // seconds
 	};
 };

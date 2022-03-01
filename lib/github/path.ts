@@ -20,3 +20,11 @@ export const parseGitHubPath = (segments: string[]): GitHubPath => {
 	if (!ensureType(type)) throw Error(`Unknown type "${type}"`);
 	return { owner, repo, path, type, branch };
 };
+
+export const stringifyGitHubPath = (path: GitHubPath): string[] => {
+	const { owner, repo, type, branch } = path;
+	const host = "github.com";
+	const others = path.path.split("/");
+	const segments: string[] = [host, owner, repo, type, branch, ...others];
+	return segments;
+};
