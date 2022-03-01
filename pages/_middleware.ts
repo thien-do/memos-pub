@@ -20,7 +20,7 @@ const middleware: NextMiddleware = (req) => {
 		return new Response(null, { status: 404 });
 	}
 
-	if (!pathname.includes(".") && !pathname.startsWith("/api")) {
+	if (!pathname.startsWith("/api")) {
 		if (hostname === "localhost:3000") {
 			url.pathname = `/home`;
 			return NextResponse.rewrite(url);
