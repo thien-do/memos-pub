@@ -13,7 +13,7 @@ const middleware: NextMiddleware = (req) => {
 
 	const currentHost =
 		process.env.NODE_ENV === "production" && process.env.VERCEL === "1"
-			? hostname.replace(`.writing.md`, "") // you have to replace ".vercel.pub" with your own domain if you deploy this example under your domain.
+			? hostname.replace(`.memos.pub`, "") // you have to replace ".vercel.pub" with your own domain if you deploy this example under your domain.
 			: hostname.replace(`.localhost:3000`, "");
 
 	if (pathname.startsWith(`/_sites`)) {
