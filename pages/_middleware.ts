@@ -1,34 +1,34 @@
 import { NextResponse, NextMiddleware } from "next/server";
 
+/*
+Re-route `foo.memos.pub/bar/baz` into `memos.pub/_sites/foo/bar/baz`. Extended
+from https://github.com/vercel/platforms/blob/main/pages/_middleware.js
+*/
 const middleware: NextMiddleware = (req) => {
-	const url = req.nextUrl.clone(); // clone the request url
-	const { pathname } = req.nextUrl; // get pathname of request (e.g. /blog-slug)
-	const hostname = req.headers.get("host"); // get hostname of request (e.g. demo.vercel.pub)
-	if (hostname === null) throw Error("Host is null");
+	// clone the request url to change it later
+	const url = req.nextUrl.clone();
 
-	// // only for demo purposes – remove this if you want to use your root domain as the landing page
-	// if (hostname === "vercel.pub" || hostname === "platforms.vercel.app") {
-	// 	return NextResponse.redirect("https://demo.vercel.pub");
-	// }
-
-	const currentHost =
+	// get parts of url
+	const { pathname } = req.nextUrl; // e.g. "/blog-slug" (this includes "/")
+	const host = req.headers.get("host"); // e.g. "thien.memos.pub"
+	if (host === null) throw Error("Host is null");
+	const tenant =
 		process.env.NODE_ENV === "production" && process.env.VERCEL === "1"
-			? hostname.replace(`.memos.pub`, "") // you have to replace ".vercel.pub" with your own domain if you deploy this example under your domain.
-			: hostname.replace(`.localhost:3000`, "");
+			? host.replace(`.memos.pub`, "") // e.g. "thien"
+			: host.replace(`.localhost:3000`, "");
 
+	// _sites is our dynamic routing logic
 	if (pathname.startsWith(`/_sites`)) {
 		return new Response(null, { status: 404 });
 	}
 
-	if (!pathname.startsWith("/api")) {
-		if (hostname === "localhost:3000") {
-			url.pathname = `/home`;
-			return NextResponse.rewrite(url);
-		} else {
-			url.pathname = `/_sites/${currentHost}${pathname}`;
-			return NextResponse.rewrite(url);
-		}
-	}
+	// avoid rewriting /api requests
+	if (pathname.startsWith("/api")) return;
+
+	const isHome = host === "localhost:3000" || host === "memos.pub"; // not tenant
+	const prefix = isHome ? "/home" : `_sites/${tenant}`;
+	url.pathname = `${prefix}${pathname}`;
+	return NextResponse.rewrite(url);
 };
 
 export default middleware;
