@@ -20,7 +20,7 @@ export const FilePage = (props: Props): JSX.Element => {
 	}, [code]);
 
 	return (
-		<div className="bg-gray-100 dark:bg-gray-800">
+		<div className="bg-gray-100 dark:bg-gray-800 pt-24 pb-32">
 			<div
 				className={[
 					"prose dark:prose-invert mx-auto",
