@@ -1,8 +1,8 @@
+import { fetchContent } from "@/lib/content/fetch";
+import { ContentCommon, ContentRequest } from "@/lib/content/type";
+import { PageCommon } from "@/lib/page/common";
+import { getContentRequestFromPage } from "@/lib/page/request";
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import { fetchContent } from "../../../lib/content/fetch";
-import { ContentCommon, ContentRequest } from "../../../lib/content/type";
-import { PageCommon } from "../../../lib/page/common";
-import { getContentRequestFromPage } from "../../../lib/page/request";
 
 interface PageProps {
 	content: ContentCommon;
