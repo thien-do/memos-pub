@@ -10,8 +10,7 @@ export interface ContentDir {
 
 export interface ContentFile {
 	type: "file";
-	markdown: string;
-	html: string;
+	body: string;
 }
 
 export type ContentCommon = ContentDir | ContentFile;

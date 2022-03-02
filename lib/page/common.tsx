@@ -1,6 +1,6 @@
 import { ContentCommon, ContentRequest } from "../content/type";
-import { PageDir } from "./dir";
-import { PageFile } from "./file";
+import { DirPage } from "../dir/page";
+import { FilePage } from "../file/page";
 
 interface Props {
 	content: ContentCommon;
@@ -10,8 +10,8 @@ interface Props {
 export const PageCommon = (props: Props): JSX.Element => {
 	switch (props.content.type) {
 		case "file":
-			return <PageFile content={props.content} />;
+			return <FilePage content={props.content} />;
 		case "dir":
-			return <PageDir request={props.request} content={props.content} />;
+			return <DirPage request={props.request} content={props.content} />;
 	}
 };

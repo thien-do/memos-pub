@@ -1,7 +1,6 @@
 import { components, operations } from "@octokit/openapi-types";
 import { Octokit } from "octokit";
 import { isNotNull } from "../utils/not-null";
-import { markdownToHTML } from "./markdown";
 import {
 	ContentCommon,
 	ContentDir,
@@ -26,15 +25,23 @@ const toDirEntry = (raw: RawDirEntry): ContentDirEntry | null => {
 	return { name: raw.name, type: raw.type };
 };
 
-const makeFile = async (markdown: string): Promise<ContentFile> => {
-	const html = await markdownToHTML(markdown);
-	return { type: "file", markdown, html };
+const makeFile = async (body: string): Promise<ContentFile> => {
+	return { type: "file", body };
+};
+
+const isValidEntry = (raw: RawDirEntry): boolean => {
+	if (raw.name.startsWith(".")) return false;
+	if (raw.name.startsWith("_")) return false;
+	if (raw.name.endsWith(".md")) return true;
+	if (raw.type === "dir") return true;
+	return false;
 };
 
 const parseResponse = async (response: RawResponse): Promise<ContentCommon> => {
 	// Directory
 	if (Array.isArray(response)) {
 		const entries: ContentDirEntry[] = response
+			.filter(isValidEntry)
 			.map(toDirEntry)
 			.filter(isNotNull);
 		const dir: ContentDir = { type: "dir", entries };
