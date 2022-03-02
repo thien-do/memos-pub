@@ -15,3 +15,15 @@ export interface ContentFile {
 }
 
 export type ContentCommon = ContentDir | ContentFile;
+
+/**
+ * Params to get a resource from GitHub
+ */
+export interface ContentRequest {
+	/** e.g. "thien-do" */
+	owner: string;
+	/** e.g. "notes" */
+	repo: string;
+	/** e.g. "dir/foo", "dir/foo/hello.md" */
+	path: string;
+}

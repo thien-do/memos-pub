@@ -1,5 +1,4 @@
-import { ContentRequest } from "../content/fetch";
-import { ContentDir, ContentDirEntry } from "../content/type";
+import { ContentRequest, ContentDir, ContentDirEntry } from "../content/type";
 
 interface Props {
 	content: ContentDir;

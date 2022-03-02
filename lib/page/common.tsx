@@ -1,5 +1,4 @@
-import { ContentRequest } from "../content/fetch";
-import { ContentCommon } from "../content/type";
+import { ContentCommon, ContentRequest } from "../content/type";
 import { PageDir } from "./dir";
 import { PageFile } from "./file";
 

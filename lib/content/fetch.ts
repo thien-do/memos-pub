@@ -7,39 +7,26 @@ import {
 	ContentDir,
 	ContentDirEntry,
 	ContentFile,
+	ContentRequest,
 } from "./type";
 
 const octokit = new Octokit({});
-
-/**
- * Params to get a resource from GitHub
- */
-export interface ContentRequest {
-	/** e.g. "thien-do" */
-	owner: string;
-	/** e.g. "notes" */
-	repo: string;
-	/** e.g. "dir/foo", "dir/foo/hello.md" */
-	path: string;
-}
 
 type RawResponse =
 	operations["repos/get-content"]["responses"]["200"]["content"]["application/json"];
 type RawDirEntry = components["schemas"]["content-directory"][number];
 
-const ensureContentDirEntryType = (
-	type: string
-): type is ContentDirEntry["type"] => {
+const ensureDirEntryType = (type: string): type is ContentDirEntry["type"] => {
 	return ["file", "dir"].includes(type);
 };
 
-const toContentDirEntry = (raw: RawDirEntry): ContentDirEntry | null => {
+const toDirEntry = (raw: RawDirEntry): ContentDirEntry | null => {
 	// Just skip unknown file types (submodule, symlink)
-	if (!ensureContentDirEntryType(raw.type)) return null;
+	if (!ensureDirEntryType(raw.type)) return null;
 	return { name: raw.name, type: raw.type };
 };
 
-const makeContentFile = async (markdown: string): Promise<ContentFile> => {
+const makeFile = async (markdown: string): Promise<ContentFile> => {
 	const html = await markdownToHTML(markdown);
 	return { type: "file", markdown, html };
 };
@@ -48,19 +35,19 @@ const parseResponse = async (response: RawResponse): Promise<ContentCommon> => {
 	// Directory
 	if (Array.isArray(response)) {
 		const entries: ContentDirEntry[] = response
-			.map(toContentDirEntry)
+			.map(toDirEntry)
 			.filter(isNotNull);
 		const dir: ContentDir = { type: "dir", entries };
 		return dir;
 	}
 	// Single file raw
 	if (typeof response === "string") {
-		return await makeContentFile(response);
+		return await makeFile(response);
 	}
 	// Single file json
 	if (response.type === "file") {
 		if (!("content" in response)) throw Error("File doesn't have content");
-		return makeContentFile(response.content);
+		return makeFile(response.content);
 	}
 	throw Error(`Unknown content type "${response.type}"`);
 };

@@ -1,37 +1,33 @@
-import type { NextPage, GetStaticProps, GetStaticPaths } from "next";
-import { ContentCommon } from "../../../lib/content/type";
-import { ContentPage } from "../../../lib/content/page";
-import { fetchGitHubContent } from "../../../lib/github/content";
-import { parseGitHubPath } from "../../../lib/github/path";
-import { expandPath } from "../../../lib/path/expand";
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { fetchContent } from "../../../lib/content/fetch";
+import { ContentCommon, ContentRequest } from "../../../lib/content/type";
+import { PageCommon } from "../../../lib/page/common";
+import { getContentRequestFromPage } from "../../../lib/page/request";
 
 interface PageProps {
 	content: ContentCommon;
-	segments: string[];
+	request: ContentRequest;
 }
 
 const Page: NextPage<PageProps> = (props) => {
-	return <ContentPage segments={props.segments} content={props.content} />;
+	return <PageCommon request={props.request} content={props.content} />;
 };
 
 export default Page;
 
 interface PageParams extends NodeJS.Dict<string | string[]> {
-	site: string | undefined;
-	segments: string[];
+	tenant: string | undefined;
+	slug: string[] | undefined;
 }
 
 export const getStaticProps: GetStaticProps<PageProps, PageParams> = async (
 	context
 ) => {
-	if (context.params === undefined) throw Error("Params is not defined");
-	const { site, segments } = context.params;
-	const ghSegments = expandPath({ site, segments });
-	const path = parseGitHubPath(ghSegments);
-	const content = await fetchGitHubContent(path);
+	const request = getContentRequestFromPage(context.params);
+	const content = await fetchContent(request);
 	return {
-		props: { content, segments },
-		revalidate: 60, // seconds
+		props: { content, request },
+		revalidate: 60 * 5, // seconds
 	};
 };
 
