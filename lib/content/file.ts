@@ -1,5 +1,6 @@
 import { compile } from "@mdx-js/mdx";
 import rehypePrettyCode, { Options } from "rehype-pretty-code";
+import remarkFrontmatter from "remark-frontmatter";
 import { ContentFile } from "./type";
 import * as shiki from "shiki";
 import path from "path";
@@ -36,6 +37,7 @@ const compileMarkdown = async (markdown: string): Promise<string> => {
 	const fn = await compile(markdown, {
 		format: "md",
 		outputFormat: "function-body",
+		remarkPlugins: [remarkFrontmatter],
 		rehypePlugins: [[rehypePrettyCode, options]],
 	});
 	const code = String(fn);
