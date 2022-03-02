@@ -9,6 +9,7 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@mdx-js/mdx": "^2.0.0",
 		"@octokit/openapi-types": "^11.2.0",
 		"next": "12.1.0",
 		"octokit": "^1.7.1",
@@ -16,6 +17,7 @@
 		"react-dom": "17.0.2",
 		"rehype-sanitize": "^5.0.1",
 		"rehype-stringify": "^9.0.3",
+		"remark-gfm": "^3.0.1",
 		"remark-parse": "^10.0.1",
 		"remark-rehype": "^10.1.0",
 		"unified": "^10.1.1"

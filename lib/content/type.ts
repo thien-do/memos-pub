@@ -10,7 +10,10 @@ export interface ContentDir {
 
 export interface ContentFile {
 	type: "file";
-	body: string;
+	/**
+	 * MDX's code to be executed on client-side
+	 */
+	code: string;
 }
 
 export type ContentCommon = ContentDir | ContentFile;
