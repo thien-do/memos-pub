@@ -1,4 +1,6 @@
 import { operations } from "@octokit/openapi-types";
+import fs from "fs";
+import { join } from "path";
 import { Octokit } from "octokit";
 import { makeContentDir } from "./dir";
 import { makeContentFile } from "./file";
@@ -35,10 +37,14 @@ const isMarkdown = (request: ContentRequest): boolean => {
 export const fetchContent = async (
 	request: ContentRequest
 ): Promise<ContentCommon> => {
+	const a = join(process.cwd(), "lib/shiki");
+	fs.readdirSync(a);
+
 	const { owner, path, repo } = request;
 	const format = isMarkdown(request) ? "raw" : "json";
 	const params = { owner, path, repo, mediaType: { format } };
 	const response = await octokit.rest.repos.getContent(params);
 	const content = parseResponse(response.data);
+
 	return content;
 };
