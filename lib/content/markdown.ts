@@ -5,13 +5,13 @@ import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 
 const processor = unified()
-  .use(remarkParse)
-  .use(remarkRehype)
-  .use(rehypeSanitize)
-  .use(rehypeStringify);
+	.use(remarkParse)
+	.use(remarkRehype)
+	.use(rehypeSanitize)
+	.use(rehypeStringify);
 
 export const markdownToHTML = async (markdown: string): Promise<string> => {
-  const file = await processor.process(markdown);
-  const html = String(file);
-  return html;
+	const file = await processor.process(markdown);
+	const html = String(file);
+	return html;
 };

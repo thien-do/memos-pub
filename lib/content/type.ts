@@ -1,11 +1,11 @@
-export interface ContentDirFile {
+export interface ContentDirEntry {
 	type: "file" | "dir";
 	name: string;
 }
 
 export interface ContentDir {
 	type: "dir";
-	files: ContentDirFile[];
+	entries: ContentDirEntry[];
 }
 
 export interface ContentFile {

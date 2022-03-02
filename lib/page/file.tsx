@@ -4,7 +4,7 @@ interface Props {
 	content: ContentFile;
 }
 
-export const FilePage = (props: Props): JSX.Element => (
+export const PageFile = (props: Props): JSX.Element => (
 	<div className="py-16 bg-white overflow-hidden">
 		<div className="px-4 sm:px-6 lg:px-8">
 			<div
