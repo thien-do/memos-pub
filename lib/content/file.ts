@@ -1,9 +1,11 @@
 import { compile } from "@mdx-js/mdx";
 import rehypePrettyCode from "rehype-pretty-code";
 import { ContentFile } from "./type";
+import theme from "shiki/themes/github-dark.json";
+// const grammar = require('shiki/languages/tsx.tmLanguage.json')
 
 const options = {
-	theme: "github-dark",
+	theme: theme,
 };
 
 const compileMarkdown = async (markdown: string): Promise<string> => {
