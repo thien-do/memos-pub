@@ -1,7 +1,7 @@
 import { NextResponse, NextMiddleware } from "next/server";
 
 /*
-Re-route `foo.memos.pub/bar/baz` into `memos.pub/_sites/foo/bar/baz`. Extended
+Re-route `foo.memos.pub/bar/baz` into `memos.pub/_tenants/foo/bar/baz`. Extended
 from https://github.com/vercel/platforms/blob/main/pages/_middleware.js
 */
 const middleware: NextMiddleware = (req) => {
@@ -17,16 +17,15 @@ const middleware: NextMiddleware = (req) => {
 			? host.replace(`.memos.pub`, "") // e.g. "thien"
 			: host.replace(`.localhost:3000`, "");
 
-	// _sites is our dynamic routing logic
-	if (pathname.startsWith(`/_sites`)) {
+	// avoid accessing tenant routing
+	if (pathname.startsWith(`/_tenants`))
 		return new Response(null, { status: 404 });
-	}
 
 	// avoid rewriting /api requests
 	if (pathname.startsWith("/api")) return;
 
 	const isHome = host === "localhost:3000" || host === "memos.pub"; // not tenant
-	const prefix = isHome ? "/home" : `_sites/${tenant}`;
+	const prefix = isHome ? "/home" : `_tenants/${tenant}`;
 	url.pathname = `${prefix}${pathname}`;
 	return NextResponse.rewrite(url);
 };
