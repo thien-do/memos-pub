@@ -1,5 +1,5 @@
-import { compileMdx } from "../mdx/compile";
-import { ContentFile, ContentRequest } from "./type";
+import { compileMdx } from "@/lib/mdx/compile";
+import { ContentFile, ContentRequest } from "../type";
 
 interface Params {
 	request: ContentRequest;

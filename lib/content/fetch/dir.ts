@@ -1,6 +1,6 @@
 import { components } from "@octokit/openapi-types";
-import { isNotNull } from "../utils/not-null";
-import { ContentDir, ContentDirEntry } from "./type";
+import { isNotNull } from "@/lib/utils/not-null";
+import { ContentDir, ContentDirEntry } from "../type";
 
 type RawDir = components["schemas"]["content-directory"];
 type RawDirEntry = RawDir[number];

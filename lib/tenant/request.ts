@@ -9,7 +9,7 @@ interface PageRequest {
 	tenant: string | undefined;
 }
 
-export const getContentRequestFromPage = (
+export const parseTenantRequest = (
 	page: PageRequest | undefined
 ): ContentRequest => {
 	if (page === undefined) throw Error("request is undefined");

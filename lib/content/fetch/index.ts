@@ -2,7 +2,7 @@ import { operations } from "@octokit/openapi-types";
 import { Octokit } from "octokit";
 import { makeContentDir } from "./dir";
 import { getContentFile } from "./file";
-import { ContentCommon, ContentRequest } from "./type";
+import { ContentCommon, ContentRequest } from "../type";
 
 const octokit = new Octokit({
 	auth: process.env.GH_AUTH,

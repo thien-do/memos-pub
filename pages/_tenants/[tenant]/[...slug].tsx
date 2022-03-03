@@ -1,7 +1,7 @@
 import { fetchContent } from "@/lib/content/fetch";
 import { ContentCommon, ContentRequest } from "@/lib/content/type";
-import { PageCommon } from "@/lib/page/common";
-import { getContentRequestFromPage } from "@/lib/page/request";
+import { TenantPage } from "@/lib/tenant/page";
+import { parseTenantRequest } from "@/lib/tenant/request";
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 
 interface PageProps {
@@ -10,7 +10,7 @@ interface PageProps {
 }
 
 const Page: NextPage<PageProps> = (props) => {
-	return <PageCommon request={props.request} content={props.content} />;
+	return <TenantPage request={props.request} content={props.content} />;
 };
 
 export default Page;
@@ -23,7 +23,7 @@ interface PageParams extends NodeJS.Dict<string | string[]> {
 export const getStaticProps: GetStaticProps<PageProps, PageParams> = async (
 	context
 ) => {
-	const request = getContentRequestFromPage(context.params);
+	const request = parseTenantRequest(context.params);
 	const content = await fetchContent(request);
 	return {
 		props: { content, request },
