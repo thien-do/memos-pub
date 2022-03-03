@@ -10,7 +10,10 @@ const getHref = (props: Props): string => {
 	const { entry, request } = props;
 	// don't need "user" here because we redirect inside subdomain
 	const { repo, path } = request;
-	return `/${repo}/${path}/${entry.name}`;
+	// "path" is the only part that may be empty
+	const pathSegment = path === "" ? "" : `/${path}`;
+	const href = `/${repo}${pathSegment}/${entry.name}`;
+	return href;
 };
 
 export const ContentDirEntry = (props: Props): JSX.Element => (
