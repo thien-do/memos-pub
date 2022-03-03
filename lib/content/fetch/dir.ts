@@ -17,7 +17,6 @@ const toDirEntry = (raw: RawDirEntry): ContentDirEntry | null => {
 
 const isValidEntry = (raw: RawDirEntry): boolean => {
 	if (raw.name.startsWith(".")) return false;
-	if (raw.name.startsWith("_")) return false;
 	if (raw.name.endsWith(".md")) return true;
 	if (raw.type === "dir") return true;
 	return false;
