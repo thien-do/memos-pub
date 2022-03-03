@@ -1,16 +1,26 @@
-import { ContentRequest, ContentDir, ContentDirEntry } from "../content/type";
+import { ContentDir, ContentDirEntry, ContentRequest } from "../content/type";
+import { DirEntry } from "./entry";
 
 interface Props {
 	content: ContentDir;
 	request: ContentRequest;
 }
 
+const byType = (a: ContentDirEntry, b: ContentDirEntry): number => {
+	if (a.type === b.type) return 0;
+	if (a.type === "dir") return -1;
+	return 1;
+};
+
 export const DirPage = (props: Props): JSX.Element => (
-	<div className="container mx-auto px-4 sm:px-6 lg:px-8">
-		<ul>
-			{props.content.entries.map((entry) => (
-				<li key={entry.name}></li>
+	<ul>
+		{props.content.entries
+			.reverse()
+			.sort(byType)
+			.map((entry) => (
+				<li key={entry.name}>
+					<DirEntry entry={entry} request={props.request} />
+				</li>
 			))}
-		</ul>
-	</div>
+	</ul>
 );

@@ -28,7 +28,6 @@ const getFormat = (file: string): CompileOptions["format"] => {
 const getRahOptions = (): Partial<rahOptions> => ({
 	behavior: "append",
 	content: { type: "text", value: "#" },
-	test: ["h2", "h3", "h4", "h5", "h6"],
 	properties: {
 		class: "text-gray-500 absolute right-full mr-3",
 	},

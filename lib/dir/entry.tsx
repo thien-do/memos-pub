@@ -12,12 +12,13 @@ const getHref = (props: Props): string => {
 	return `/${repo}/${path}/${entry.name}`;
 };
 
-interface EntryDisplay extends ContentDirEntry {
-	prefix: string | null;
-}
-
 export const DirEntry = (props: Props): JSX.Element => (
-	<a target="_self" href={getHref(props)}>
-		({props.entry.type}) {props.entry.name}
+	<a
+		target="_self"
+		href={getHref(props)}
+		className="font-normal no-underline"
+	>
+		{props.entry.name}
+		{props.entry.type === "dir" ? "/" : ""}
 	</a>
 );
