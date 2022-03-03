@@ -10,6 +10,7 @@ import rehypeAutolinkHeadings, {
 import rehypeSlug from "rehype-slug";
 
 import { getMdxHighlighter } from "./highlight";
+import { rcnOptions, rehypeClassName } from "./className";
 
 const getRpcOptions = (): Partial<rpcOptions> => ({
 	// Need to use a custom highlighter because rehype-pretty-code doesn't
@@ -29,8 +30,15 @@ const getRahOptions = (): Partial<rahOptions> => ({
 	content: { type: "text", value: "#" },
 	test: ["h2", "h3", "h4", "h5", "h6"],
 	properties: {
-		class: "ml-3 text-gray-500",
+		class: "text-gray-500 absolute right-full mr-3",
 	},
+});
+
+const getRcnOptions = (): rcnOptions => ({
+	changes: [
+		{ selector: "p:first-of-type", className: "lead" },
+		{ selector: "h1,h2,h3,h4,h5,h6", className: "relative" },
+	],
 });
 
 const getCompileOptions = (file: string): CompileOptions => ({
@@ -41,6 +49,7 @@ const getCompileOptions = (file: string): CompileOptions => ({
 		[rehypePrettyCode, getRpcOptions()],
 		rehypeSlug,
 		[rehypeAutolinkHeadings, getRahOptions()],
+		[rehypeClassName, getRcnOptions()],
 	],
 });
 

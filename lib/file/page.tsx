@@ -17,7 +17,7 @@ export const FilePage = (props: Props): JSX.Element => {
 					"prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl",
 				].join(" ")}
 			>
-				{date && <p className="lead">{date}</p>}
+				{date && <p>{date}</p>}
 				{title && <h1>{title}</h1>}
 				<Content />
 			</div>

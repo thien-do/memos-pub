@@ -10,6 +10,7 @@
 	},
 	"dependencies": {
 		"@mdx-js/mdx": "^2.0.0",
+		"hast-util-select": "^5.0.1",
 		"next": "12.1.0",
 		"octokit": "^1.7.1",
 		"react": "17.0.2",
@@ -20,7 +21,8 @@
 		"remark-frontmatter": "^4.0.1",
 		"remark-mdx-frontmatter": "^1.1.1",
 		"remark-toc": "^8.0.1",
-		"shiki": "^0.10.1"
+		"shiki": "^0.10.1",
+		"unified": "^10.1.1"
 	},
 	"devDependencies": {
 		"@octokit/openapi-types": "^11.2.0",
