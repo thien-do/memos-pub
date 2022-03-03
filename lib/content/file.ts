@@ -4,7 +4,6 @@ import remarkFrontmatter from "remark-frontmatter";
 import { ContentFile } from "./type";
 import * as shiki from "shiki";
 import path from "path";
-import fs from "fs";
 
 // Shiki loads languages and themes using "fs" instead of "import", so Next.js
 // doesn't bundle them into production build. To work around, we manually copy

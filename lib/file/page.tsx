@@ -23,8 +23,9 @@ export const FilePage = (props: Props): JSX.Element => {
 		<div className="bg-gray-100 dark:bg-gray-800 pt-24 pb-32">
 			<div
 				className={[
-					"prose dark:prose-invert mx-auto",
-					"prose-sm sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl",
+					"prose dark:prose-invert",
+					"mx-auto px-4 sm:px-6 lg:px-8",
+					"prose-base md:prose-lg lg:prose-xl xl:prose-2xl",
 				].join(" ")}
 			>
 				<Content />
