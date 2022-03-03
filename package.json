@@ -16,6 +16,7 @@
 		"react-dom": "17.0.2",
 		"rehype-pretty-code": "^0.2.3",
 		"remark-frontmatter": "^4.0.1",
+		"remark-mdx-frontmatter": "^1.1.1",
 		"shiki": "^0.10.1"
 	},
 	"devDependencies": {

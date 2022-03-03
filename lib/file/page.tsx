@@ -1,5 +1,4 @@
-import { run } from "@mdx-js/mdx";
-import { Fragment, useEffect, useState } from "react";
+import { runSync } from "@mdx-js/mdx";
 import * as runtime from "react/jsx-runtime.js";
 import { ContentFile } from "../content/type";
 
@@ -10,14 +9,9 @@ interface Props {
 export const FilePage = (props: Props): JSX.Element => {
 	const { code } = props.content;
 
-	const [mdxModule, setMdxModule] = useState<any>();
-	const Content = mdxModule ? mdxModule.default : Fragment;
-
-	useEffect(() => {
-		(async () => {
-			setMdxModule(await run(code, runtime));
-		})();
-	}, [code]);
+	const mdx = runSync(code, runtime);
+	const Content = mdx.default;
+	console.log(mdx);
 
 	return (
 		<div className="bg-gray-100 dark:bg-gray-800 pt-24 pb-32">

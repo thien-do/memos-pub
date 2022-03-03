@@ -1,29 +1,32 @@
 import { operations } from "@octokit/openapi-types";
-import fs from "fs";
-import { join } from "path";
 import { Octokit } from "octokit";
 import { makeContentDir } from "./dir";
-import { makeContentFile } from "./file";
+import { getContentFile } from "./file";
 import { ContentCommon, ContentRequest } from "./type";
 
-const octokit = new Octokit({});
+const octokit = new Octokit({
+	auth: process.env.GH_AUTH,
+});
 
 type RawResponse =
 	operations["repos/get-content"]["responses"]["200"]["content"]["application/json"];
 
-const parseResponse = async (response: RawResponse): Promise<ContentCommon> => {
+const parseResponse = async (
+	request: ContentRequest,
+	response: RawResponse
+): Promise<ContentCommon> => {
 	// Directory
 	if (Array.isArray(response)) {
 		return makeContentDir(response);
 	}
 	// Single file raw
 	if (typeof response === "string") {
-		return await makeContentFile(response);
+		return await getContentFile({ request, content: response });
 	}
 	// Single file json
 	if (response.type === "file") {
 		if (!("content" in response)) throw Error("File doesn't have content");
-		return makeContentFile(response.content);
+		return getContentFile({ request, content: response.content });
 	}
 	throw Error(`Unknown content type "${response.type}"`);
 };
@@ -37,14 +40,11 @@ const isMarkdown = (request: ContentRequest): boolean => {
 export const fetchContent = async (
 	request: ContentRequest
 ): Promise<ContentCommon> => {
-	const a = join(process.cwd(), "lib/shiki");
-	fs.readdirSync(a);
-
 	const { owner, path, repo } = request;
 	const format = isMarkdown(request) ? "raw" : "json";
 	const params = { owner, path, repo, mediaType: { format } };
 	const response = await octokit.rest.repos.getContent(params);
-	const content = parseResponse(response.data);
+	const content = parseResponse(request, response.data);
 
 	return content;
 };
