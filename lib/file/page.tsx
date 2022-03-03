@@ -1,6 +1,5 @@
-import { runSync } from "@mdx-js/mdx";
-import * as runtime from "react/jsx-runtime.js";
 import { ContentFile } from "../content/type";
+import { runMdx } from "../mdx/run";
 
 interface Props {
 	content: ContentFile;
@@ -8,11 +7,7 @@ interface Props {
 
 export const FilePage = (props: Props): JSX.Element => {
 	const { code } = props.content;
-
-	const mdx = runSync(code, runtime);
-	const Content = mdx.default;
-	console.log(mdx);
-
+	const { Content, title, date } = runMdx(code);
 	return (
 		<div className="bg-gray-100 dark:bg-gray-800 pt-24 pb-32">
 			<div
@@ -22,6 +17,8 @@ export const FilePage = (props: Props): JSX.Element => {
 					"prose-base md:prose-lg lg:prose-xl xl:prose-2xl",
 				].join(" ")}
 			>
+				{date && <p className="lead">{date}</p>}
+				{title && <h1>{title}</h1>}
 				<Content />
 			</div>
 		</div>
