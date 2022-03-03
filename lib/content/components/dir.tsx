@@ -14,7 +14,7 @@ const byType = (a: type.ContentDirEntry, b: type.ContentDirEntry): number => {
 };
 
 const sortEntries = (props: Props): type.ContentDirEntry[] => {
-	return props.content.entries.reverse().sort(byType);
+	return props.content.entries.slice().reverse().sort(byType);
 };
 
 const toEntry = (props: Props) => {
