@@ -5,7 +5,7 @@ import { getContentFile } from "./file";
 import { ContentCommon, ContentRequest } from "../type";
 
 const octokit = new Octokit({
-	auth: process.env.GH_AUTH,
+	auth: process.env.MP_GH_AUTH,
 });
 
 type RawResponse =
