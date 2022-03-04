@@ -9,7 +9,9 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@mdx-js/loader": "^2.0.0",
 		"@mdx-js/mdx": "^2.0.0",
+		"@next/mdx": "^12.1.0",
 		"hast-util-select": "^5.0.1",
 		"next": "12.1.0",
 		"octokit": "^1.7.1",

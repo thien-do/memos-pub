@@ -1,8 +1,11 @@
+import { AppLayout } from "@/lib/app/layout";
 import type { AppProps } from "next/app";
 import "tailwindcss/tailwind.css";
 
-const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => (
-	<Component {...pageProps} />
+const CustomApp = ({ Component, pageProps }: AppProps): JSX.Element => (
+	<AppLayout>
+		<Component {...pageProps} />
+	</AppLayout>
 );
 
-export default MyApp;
+export default CustomApp;
