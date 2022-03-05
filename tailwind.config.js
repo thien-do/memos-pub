@@ -1,5 +1,5 @@
 module.exports = {
-	content: ["./pages/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
+	content: ["./pages/**/*.{ts,tsx,mdx}", "./lib/**/*.{ts,tsx,mdx}"],
 	theme: {
 		// Tailwind's breakpoints but minus 20px so it's the same with or without
 		// scrollbar
@@ -11,5 +11,8 @@ module.exports = {
 			"2xl": "1516px",
 		},
 	},
-	plugins: [require("@tailwindcss/typography")],
+	plugins: [
+		require("@tailwindcss/forms"),
+		require("@tailwindcss/typography"),
+	],
 };

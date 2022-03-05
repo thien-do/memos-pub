@@ -11,6 +11,7 @@ import rehypeSlug from "rehype-slug";
 
 import { getMdxHighlighter } from "./highlight";
 import { rcnOptions, rehypeClassName } from "./className";
+import remarkGfm from "remark-gfm";
 
 const getRpcOptions = (): Partial<rpcOptions> => ({
 	// Need to use a custom highlighter because rehype-pretty-code doesn't
@@ -43,7 +44,12 @@ const getRcnOptions = (): rcnOptions => ({
 const getCompileOptions = (file: string): CompileOptions => ({
 	format: getFormat(file),
 	outputFormat: "function-body",
-	remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter, remarkToc],
+	remarkPlugins: [
+		remarkGfm,
+		remarkFrontmatter,
+		remarkMdxFrontmatter,
+		remarkToc,
+	],
 	rehypePlugins: [
 		[rehypePrettyCode, getRpcOptions()],
 		rehypeSlug,
