@@ -30,7 +30,7 @@ const getRahOptions = (): Partial<rahOptions> => ({
 	behavior: "append",
 	content: { type: "text", value: "#" },
 	properties: {
-		class: "text-gray-500 absolute right-full mr-3",
+		class: "text-gray-500 absolute right-full top-0 mr-3",
 	},
 });
 
