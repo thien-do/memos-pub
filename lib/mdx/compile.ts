@@ -36,7 +36,7 @@ const getRahOptions = (): Partial<rahOptions> => ({
 
 const getRcnOptions = (): rcnOptions => ({
 	changes: [
-		{ selector: "p:first-of-type", className: "lead" },
+		{ selector: "p:first-child", className: "lead" },
 		{ selector: "h1,h2,h3,h4,h5,h6", className: "relative" },
 	],
 });
