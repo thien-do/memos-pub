@@ -6,7 +6,7 @@ import rehypeInferDescriptionMeta from "rehype-infer-description-meta";
 import rehypeInferTitleMeta, {
 	Options as rehypeTitleOptions,
 } from "rehype-infer-title-meta";
-import rehypeMeta, { Options as rehypeMetaOptions } from "rehype-meta";
+import rehypeMeta from "rehype-meta";
 import rehypePrettyCode, {
 	Options as rehypeCodeOptions,
 } from "rehype-pretty-code";
@@ -49,10 +49,6 @@ const getRehypeClassNameOptions = (): rehypeClassNameOptions => ({
 		{ selector: "p:first-child", className: "lead" },
 		{ selector: "h1,h2,h3,h4,h5,h6", className: "relative" },
 	],
-});
-
-const getRehypeMetaOptions = (): rehypeMetaOptions => ({
-	title: "ahihi",
 });
 
 const getCompileOptions = (file: string): CompileOptions => ({
