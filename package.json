@@ -11,6 +11,7 @@
 	"dependencies": {
 		"@mdx-js/loader": "^2.0.0",
 		"@mdx-js/mdx": "^2.0.0",
+		"@mdx-js/react": "^2.0.0",
 		"@next/mdx": "^12.1.0",
 		"@tailwindcss/forms": "^0.5.0",
 		"hast-util-select": "^5.0.1",
@@ -19,6 +20,9 @@
 		"react": "17.0.2",
 		"react-dom": "17.0.2",
 		"rehype-autolink-headings": "^6.1.1",
+		"rehype-infer-description-meta": "^1.0.1",
+		"rehype-infer-title-meta": "^1.0.1",
+		"rehype-meta": "^3.2.1",
 		"rehype-pretty-code": "^0.2.3",
 		"rehype-slug": "^5.0.1",
 		"remark-frontmatter": "^4.0.1",

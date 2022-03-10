@@ -1,19 +1,25 @@
 import { compile, CompileOptions } from "@mdx-js/mdx";
-import rehypePrettyCode, { Options as rpcOptions } from "rehype-pretty-code";
+import rehypeAutolinkHeadings, {
+	Options as rehypeLinkOptions,
+} from "rehype-autolink-headings";
+import rehypeInferDescriptionMeta from "rehype-infer-description-meta";
+import rehypeInferTitleMeta, {
+	Options as rehypeTitleOptions,
+} from "rehype-infer-title-meta";
+import rehypeMeta, { Options as rehypeMetaOptions } from "rehype-meta";
+import rehypePrettyCode, {
+	Options as rehypeCodeOptions,
+} from "rehype-pretty-code";
+import rehypeSlug from "rehype-slug";
 import remarkFrontmatter from "remark-frontmatter";
+import remarkGfm from "remark-gfm";
 import { remarkMdxFrontmatter } from "remark-mdx-frontmatter";
 import remarkToc from "remark-toc";
 import { Highlighter } from "shiki";
-import rehypeAutolinkHeadings, {
-	Options as rahOptions,
-} from "rehype-autolink-headings";
-import rehypeSlug from "rehype-slug";
-
+import { rehypeClassName, rehypeClassNameOptions } from "./className";
 import { getMdxHighlighter } from "./highlight";
-import { rcnOptions, rehypeClassName } from "./className";
-import remarkGfm from "remark-gfm";
 
-const getRpcOptions = (): Partial<rpcOptions> => ({
+const getRehypeCodeOptions = (): Partial<rehypeCodeOptions> => ({
 	// Need to use a custom highlighter because rehype-pretty-code doesn't
 	// let us customize "paths". Also wrong typing by rehype-pretty-code
 	// See: https://github.com/atomiks/rehype-pretty-code/pull/24
@@ -26,7 +32,7 @@ const getFormat = (file: string): CompileOptions["format"] => {
 	throw Error(`Unknown extension "${file}"`);
 };
 
-const getRahOptions = (): Partial<rahOptions> => ({
+const getRehypeLinkOptions = (): Partial<rehypeLinkOptions> => ({
 	behavior: "append",
 	content: { type: "text", value: "#" },
 	properties: {
@@ -34,11 +40,19 @@ const getRahOptions = (): Partial<rahOptions> => ({
 	},
 });
 
-const getRcnOptions = (): rcnOptions => ({
+const getRehypeTitleOptions = (): rehypeTitleOptions => ({
+	selector: "h1,h2,h3",
+});
+
+const getRehypeClassNameOptions = (): rehypeClassNameOptions => ({
 	changes: [
 		{ selector: "p:first-child", className: "lead" },
 		{ selector: "h1,h2,h3,h4,h5,h6", className: "relative" },
 	],
+});
+
+const getRehypeMetaOptions = (): rehypeMetaOptions => ({
+	title: "ahihi",
 });
 
 const getCompileOptions = (file: string): CompileOptions => ({
@@ -51,10 +65,13 @@ const getCompileOptions = (file: string): CompileOptions => ({
 		remarkToc,
 	],
 	rehypePlugins: [
-		[rehypePrettyCode, getRpcOptions()],
+		[rehypePrettyCode, getRehypeCodeOptions()],
 		rehypeSlug,
-		[rehypeAutolinkHeadings, getRahOptions()],
-		[rehypeClassName, getRcnOptions()],
+		rehypeInferDescriptionMeta,
+		[rehypeInferTitleMeta, getRehypeTitleOptions()],
+		rehypeMeta,
+		[rehypeAutolinkHeadings, getRehypeLinkOptions()],
+		[rehypeClassName, getRehypeClassNameOptions()],
 	],
 });
 

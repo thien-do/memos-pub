@@ -19,7 +19,7 @@ interface Change {
 	className: string;
 }
 
-export interface rcnOptions {
+export interface rehypeClassNameOptions {
 	changes: Change[];
 }
 
@@ -27,7 +27,9 @@ export interface rcnOptions {
  * martypdx/rehype-add-classes rewritten in TS
  * See: https://github.com/martypdx/rehype-add-classes/blob/master/index.mjs
  */
-export const rehypeClassName = (options: rcnOptions): Transformer<HastNode> => {
+export const rehypeClassName = (
+	options: rehypeClassNameOptions
+): Transformer<HastNode> => {
 	const appliers = options.changes.map(toApplier);
 	return (node): void => {
 		appliers.forEach((apply) => apply(node));

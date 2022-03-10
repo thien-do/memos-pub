@@ -1,8 +1,13 @@
 import { runSync } from "@mdx-js/mdx";
 import * as runtime from "react/jsx-runtime.js";
+import { MDXComponents } from "mdx/types";
+
+interface ContentProps {
+	components: MDXComponents;
+}
 
 interface Result {
-	Content: () => JSX.Element;
+	Content: (props: ContentProps) => JSX.Element;
 	title?: string;
 	date?: string;
 }
