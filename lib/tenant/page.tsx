@@ -2,6 +2,7 @@ import { ContentDir } from "../content/components/dir";
 import { ContentFile } from "../content/components/file";
 import { ContentCommon, ContentRequest } from "../content/type";
 import { TenantBreadcrumb } from "./breadcrumb";
+import { TenantFavicon } from "./favicon";
 
 interface Props {
 	request: ContentRequest;
@@ -21,6 +22,7 @@ const Body = (props: Props): JSX.Element => {
 
 export const TenantPage = (props: Props): JSX.Element => (
 	<div>
+		<TenantFavicon request={props.request} />
 		<TenantBreadcrumb request={props.request} />
 		<div className="mt-16">
 			<Body {...props} />
