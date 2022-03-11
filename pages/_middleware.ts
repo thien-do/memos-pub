@@ -1,5 +1,17 @@
 import { NextResponse, NextMiddleware } from "next/server";
-import { getMwTenant, getMwTenantRedirect } from "@/lib/middleware/tenant";
+/**
+ * Get tenant info from host. E.g.:
+ * - thien-do.memos.pub -> "thien-do"
+ * - memos.pub -> null
+ * - thien-do.localhost:3000 -> "thien-do"
+ * - localhost:3000 -> null
+ */
+const getTenant = (host: string): string | null => {
+	const root = process.env.MP_ROOT_HOST; // part without tenant
+	if (host === root) return null; // no tenant, we're at root
+	const tenant = host.replace(`.${root}`, "");
+	return tenant;
+};
 
 /*
 Re-route `foo.memos.pub/bar/baz` into `memos.pub/_tenants/foo/bar/baz`. Extended
@@ -12,7 +24,7 @@ const middleware: NextMiddleware = (req) => {
 	// sub-domain.
 	const host = req.headers.get("host");
 	if (host === null) throw Error("Host is not defined");
-	const tenant = getMwTenant(host);
+	const tenant = getTenant(host);
 
 	// Skip /api requests
 	if (pathname.startsWith("/api")) return NextResponse.next();

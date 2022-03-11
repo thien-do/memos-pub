@@ -1,9 +1,3 @@
-import Head from "next/head";
-
-<Head>
-	<title>memos.pub</title>
-</Head>
-
 <p className="lead">You write. We do the rest.</p>
 
 # 📝 Memos.pub
