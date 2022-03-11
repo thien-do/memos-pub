@@ -1,4 +1,4 @@
-import { operations } from "@octokit/openapi-types";
+import { components, operations } from "@octokit/openapi-types";
 import { Octokit } from "octokit";
 import { makeContentDir } from "./dir";
 import { getContentFile } from "./file";
@@ -19,30 +19,26 @@ const parseResponse = async (
 	if (Array.isArray(response)) {
 		return makeContentDir(response);
 	}
+
 	// Single file raw
 	if (typeof response === "string") {
-		return await getContentFile({ request, content: response });
+		throw Error("Not support raw response");
 	}
+
 	// Single file json
 	if (response.type === "file") {
-		if (!("content" in response)) throw Error("File doesn't have content");
-		return getContentFile({ request, content: response.content });
+		const r = response as components["schemas"]["content-file"];
+		return getContentFile({ request, response: r });
 	}
-	throw Error(`Unknown content type "${response.type}"`);
-};
 
-const isMarkdown = (request: ContentRequest): boolean => {
-	if (request.path.endsWith(".md")) return true;
-	if (request.path.endsWith(".mdx")) return true;
-	return false;
+	throw Error(`Unknown content type "${response.type}"`);
 };
 
 export const fetchContent = async (
 	request: ContentRequest
 ): Promise<ContentCommon> => {
 	const { owner, path, repo } = request;
-	const format = isMarkdown(request) ? "raw" : "json";
-	const params = { owner, path, repo, mediaType: { format } };
+	const params = { owner, path, repo, mediaType: { format: "json" } };
 	const response = await octokit.rest.repos.getContent(params);
 	const content = parseResponse(request, response.data);
 

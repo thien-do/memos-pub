@@ -1,15 +1,23 @@
 import { compileMdx } from "@/lib/mdx/compile";
+import { components } from "@octokit/openapi-types";
 import { ContentFile, ContentRequest } from "../type";
 
-interface Params {
+type RawFile = components["schemas"]["content-file"];
+
+interface Props {
 	request: ContentRequest;
-	content: string;
+	response: RawFile;
 }
 
-export const getContentFile = async (params: Params): Promise<ContentFile> => {
-	const { request, content } = params;
-	const name = request.path.split(" ").pop();
-	if (name === undefined) throw Error("There is no file name");
-	const code = await compileMdx({ name, content });
+export const getContentFile = async (props: Props): Promise<ContentFile> => {
+	const { request, response } = props;
+
+	if (!("content" in response)) throw Error("File doesn't have content");
+	const content = Buffer.from(response.content, "base64").toString();
+
+	const branch = response.url.split("?ref=").pop();
+	if (branch === undefined) throw Error("Branch is not defined");
+
+	const code = await compileMdx(content, { branch, request });
 	return { type: "file", code };
 };
