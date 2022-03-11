@@ -4,7 +4,7 @@ interface Props {
 	children: ReactNode;
 }
 
-export const ProseLayout = (props: Props): JSX.Element => (
+export const AppLayout = (props: Props): JSX.Element => (
 	<div
 		className={[
 			"prose dark:prose-invert",

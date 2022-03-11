@@ -28,8 +28,6 @@ const getUrl = (location: Location): string => {
 export const useHomeRedirect = (): void => {
 	const router = useRouter();
 
-	console.log(process.env.MP_ROOT_HOST);
-
 	useEffect(() => {
 		const location = getLocation();
 		if (location === null) return;

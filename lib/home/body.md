@@ -20,9 +20,9 @@ Or take a look at specific articles:
 -   https://axieinfinity.memos.pub/festival/component_export.md
 -   https://zerox-dg.memos.pub/blog/source/_posts/Browser-from-Scratch-CSS-parsing-processing.md
 
-Or just prefix a URL (without the protocol) with `memos.pub`:
+Or just prefix a URL with `memos.pub/#`:
 
--   https://memos.pub/github.com/axieinfinity/festival/blob/master/component_export.md
+-   https://memos.pub/#https://github.com/axieinfinity/festival/blob/master/component_export.md
 
 ### Why
 
