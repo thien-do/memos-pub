@@ -45,7 +45,7 @@ const Owner = (props: Props): JSX.Element => (
 			].join(" ")}
 		>
 			<img
-				src={`https://github.com/${props.request.owner}.png?s=64`}
+				src={`https://github.com/${props.request.owner}.png?size=64`}
 				alt=""
 				width="32"
 				height="32"
