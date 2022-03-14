@@ -17,10 +17,13 @@ const getHref = (props: Props): string => {
 };
 
 export const ContentDirEntry = (props: Props): JSX.Element => (
-	<Link href={getHref(props)}>
-		<a target="_self" className="font-normal no-underline">
-			{props.entry.name}
-			{props.entry.type === "dir" ? "/" : ""}
-		</a>
-	</Link>
+	<li
+		className={props.entry.type === "dir" ? "list-[disclosure-closed]" : ""}
+	>
+		<Link href={getHref(props)}>
+			<a target="_self" className="font-normal no-underline">
+				{props.entry.name}
+			</a>
+		</Link>
+	</li>
 );
