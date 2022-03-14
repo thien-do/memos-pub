@@ -6,6 +6,11 @@ export interface ContentDirEntry {
 export interface ContentDir {
 	type: "dir";
 	entries: ContentDirEntry[];
+	/**
+	 * A dir may have an "index" or "README" file which should be displayed
+	 * along the entry list
+	 */
+	readme: ContentFile | null;
 }
 
 export interface ContentFile {

@@ -1,7 +1,7 @@
 import { components, operations } from "@octokit/openapi-types";
 import { Octokit } from "octokit";
-import { makeContentDir } from "./dir";
-import { getContentFile } from "./file";
+import { parseContentDir } from "./dir";
+import { parseContentFile } from "./file";
 import { ContentCommon, ContentRequest } from "../type";
 
 const octokit = new Octokit({
@@ -17,7 +17,7 @@ const parseResponse = async (
 ): Promise<ContentCommon> => {
 	// Directory
 	if (Array.isArray(response)) {
-		return makeContentDir(response);
+		return await parseContentDir({ request, response });
 	}
 
 	// Single file raw
@@ -28,7 +28,7 @@ const parseResponse = async (
 	// Single file json
 	if (response.type === "file") {
 		const r = response as components["schemas"]["content-file"];
-		return getContentFile({ request, response: r });
+		return parseContentFile({ request, response: r });
 	}
 
 	throw Error(`Unknown content type "${response.type}"`);

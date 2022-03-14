@@ -9,7 +9,7 @@ interface Props {
 	response: RawFile;
 }
 
-export const getContentFile = async (props: Props): Promise<ContentFile> => {
+export const parseContentFile = async (props: Props): Promise<ContentFile> => {
 	const { request, response } = props;
 
 	if (!("content" in response)) throw Error("File doesn't have content");

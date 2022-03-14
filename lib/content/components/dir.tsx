@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import * as type from "../type";
 import { ContentDirEntry } from "./dir-entry";
+import { ContentFile } from "./file";
 
 interface Props {
 	content: type.ContentDir;
@@ -30,5 +31,6 @@ export const ContentDir = (props: Props): JSX.Element => (
 	<Fragment>
 		<h1>{props.request.path.split("/").pop()}</h1>
 		<ul>{sortEntries(props).map(toEntry(props))}</ul>
+		{props.content.readme && <ContentFile content={props.content.readme} />}
 	</Fragment>
 );
