@@ -18,9 +18,18 @@ const sortEntries = (props: Props): type.ContentDirEntry[] => {
 	return props.content.entries.slice().reverse().sort(byType);
 };
 
+const getTitle = (props: Props): string => {
+	const { repo, path } = props.request;
+	// Use current dir name from path first
+	const dir = path.split("/").pop();
+	if (dir !== "" && dir !== undefined) return dir;
+	// Else (path is empty -> at repo root) we use repo
+	return repo;
+};
+
 export const ContentDir = (props: Props): JSX.Element => (
 	<Fragment>
-		<h1>{props.request.path.split("/").pop()}</h1>
+		<h1>{getTitle(props)}</h1>
 		<ul>
 			{sortEntries(props).map((entry) => (
 				<ContentDirEntry
