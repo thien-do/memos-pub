@@ -27,18 +27,31 @@ const getTitle = (props: Props): string => {
 	return repo;
 };
 
+/**
+ * If dir has only 1 file and that file is README (or index) then we can skip
+ * the dir title and entry list
+ */
+const shouldSkipDir = (props: Props): boolean => {
+	const { entries, readme } = props.content;
+	return entries.length === 1 && readme !== null;
+};
+
 export const ContentDir = (props: Props): JSX.Element => (
 	<Fragment>
-		<h1>{getTitle(props)}</h1>
-		<ul>
-			{sortEntries(props).map((entry) => (
-				<ContentDirEntry
-					entry={entry}
-					request={props.request}
-					key={entry.name}
-				/>
-			))}
-		</ul>
+		{shouldSkipDir(props) === false && (
+			<Fragment>
+				<h1>{getTitle(props)}</h1>
+				<ul>
+					{sortEntries(props).map((entry) => (
+						<ContentDirEntry
+							entry={entry}
+							request={props.request}
+							key={entry.name}
+						/>
+					))}
+				</ul>
+			</Fragment>
+		)}
 		{props.content.readme && (
 			<div className="mt-16">
 				<ContentFile content={props.content.readme} />
