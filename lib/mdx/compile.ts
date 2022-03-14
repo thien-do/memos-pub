@@ -39,10 +39,13 @@ const getFormat = (options: Options): CompileOptions["format"] => {
 };
 
 const getRehypeLinkOptions = (): Partial<rehypeLinkOptions> => ({
-	behavior: "append",
-	content: { type: "text", value: "#" },
+	behavior: "prepend",
+	content: { type: "text", value: "# " },
 	properties: {
-		class: "text-gray-500 absolute right-full top-0 mr-3",
+		class: [
+			"text-gray-500 no-underline",
+			"sm:absolute sm:right-full sm:top-0 sm:mr-3",
+		].join(" "),
 	},
 });
 
