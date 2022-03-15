@@ -1,9 +1,9 @@
+import { BlogRequest } from "@/lib/blog/type";
 import { Options as rehypeUrlOptions } from "@jsdevtools/rehype-url-inspector";
-import { ContentRequest } from "@/lib/content/type";
 import nodepath from "path";
 
 interface Props {
-	request: ContentRequest;
+	request: BlogRequest;
 	branch: string;
 }
 
