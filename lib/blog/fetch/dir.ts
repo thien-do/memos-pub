@@ -52,6 +52,7 @@ const fetchReadme = async (
 	const path = nodepath.join(request.path, readme.name);
 	const content = await fetchBlog({ ...request, path });
 	if (content.type === "dir") throw Error("README file cannot be dir (2)");
+	if (content.type === "error") throw Error(content.message);
 	return content;
 };
 

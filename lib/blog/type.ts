@@ -21,7 +21,13 @@ export interface BlogFile {
 	code: string;
 }
 
-export type BlogResponse = BlogDir | BlogFile;
+export interface BlogError {
+	type: "error";
+	status: number;
+	message: string;
+}
+
+export type BlogResponse = BlogDir | BlogFile | BlogError;
 
 /**
  * Params to get a resource from GitHub

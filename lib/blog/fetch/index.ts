@@ -2,6 +2,7 @@ import { components, operations } from "@octokit/openapi-types";
 import { Octokit } from "octokit";
 import { BlogRequest, BlogResponse } from "../type";
 import { parseBlogDir } from "./dir";
+import { parseBlogError } from "./error";
 import { parseBlogFile } from "./file";
 
 const octokit = new Octokit({
@@ -37,12 +38,16 @@ const parseResponse = async (
 export const fetchBlog = async (
 	request: BlogRequest
 ): Promise<BlogResponse> => {
-	const raw = await octokit.rest.repos.getContent({
-		owner: request.owner,
-		repo: request.repo,
-		path: request.path,
-		mediaType: { format: "json" },
-	});
-	const response = parseResponse(request, raw.data);
-	return response;
+	try {
+		const raw = await octokit.rest.repos.getContent({
+			owner: request.owner,
+			repo: request.repo,
+			path: request.path,
+			mediaType: { format: "json" },
+		});
+		const response = parseResponse(request, raw.data);
+		return response;
+	} catch (error) {
+		return parseBlogError(request, error);
+	}
 };

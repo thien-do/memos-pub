@@ -1,3 +1,4 @@
+import { AppErrorBase } from "@/lib/app/error/base";
 import { BlogDir } from "../dir";
 import { BlogFile } from "../file/file";
 import { BlogRequest, BlogResponse } from "../type";
@@ -16,6 +17,12 @@ const Body = (props: BlogPageProps): JSX.Element => {
 			return <BlogFile file={response} />;
 		case "dir":
 			return <BlogDir request={request} dir={response} />;
+		case "error":
+			return (
+				<AppErrorBase title={response.status.toString()}>
+					{response.message}
+				</AppErrorBase>
+			);
 	}
 };
 
