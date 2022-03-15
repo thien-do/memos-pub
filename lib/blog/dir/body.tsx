@@ -19,7 +19,7 @@ const sortEntries = (props: Props): type.BlogDirEntry[] => {
 export const BlogDirBody = (props: Props): JSX.Element => {
 	const entries = sortEntries(props);
 	return entries.length === 0 ? (
-		<p>Empty</p>
+		<p className="text-gray-400">This folder is empty</p>
 	) : (
 		<ul>
 			{sortEntries(props).map((entry) => (
