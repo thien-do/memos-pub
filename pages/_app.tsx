@@ -1,3 +1,1 @@
-import { CustomApp } from "@/lib/app";
-
-export default CustomApp;
+export { AppMain as default } from "@/lib/app/main";

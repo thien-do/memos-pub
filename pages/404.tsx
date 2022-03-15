@@ -1,3 +1,1 @@
-import Page404 from "@/lib/error/404.md";
-
-export default Page404;
+export { AppError404 as default } from "@/lib/app/error/404";

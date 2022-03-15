@@ -1,3 +1,1 @@
-import { middleware } from "@/lib/middleware";
-
-export default middleware;
+export { appMiddleware as default } from "@/lib/app/middleware";

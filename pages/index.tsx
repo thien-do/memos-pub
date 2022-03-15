@@ -1,3 +1,1 @@
-import { HomePage } from "@/lib/home";
-
-export default HomePage;
+export { AppHome as default } from "@/lib/app/home";

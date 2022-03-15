@@ -1,3 +1,1 @@
-import { CustomDocument } from "@/lib/document";
-
-export default CustomDocument;
+export { AppDocument as default } from "@/lib/app/document";
