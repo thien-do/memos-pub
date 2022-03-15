@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import Head from "next/head";
 import * as type from "../type";
 import { ContentDirEntry } from "./dir-entry";
 import { ContentFile } from "./file";
@@ -27,35 +27,47 @@ const getTitle = (props: Props): string => {
 	return repo;
 };
 
-/**
- * If dir has only 1 file and that file is README (or index) then we can skip
- * the dir title and entry list
- */
-const shouldSkipDir = (props: Props): boolean => {
+const Main = (props: Props): JSX.Element | null => {
 	const { entries, readme } = props.content;
-	return entries.length === 1 && readme !== null;
+
+	// If dir has only 1 file and that file is README (or index) then we can skip
+	// the dir title and entry list
+	if (entries.length === 1 && readme !== null) return null;
+
+	const title = getTitle(props);
+
+	return (
+		<div>
+			<Head>
+				<title>{title}</title>
+			</Head>
+			<h1>{title}</h1>
+			<ul>
+				{sortEntries(props).map((entry) => (
+					<ContentDirEntry
+						entry={entry}
+						request={props.request}
+						key={entry.name}
+					/>
+				))}
+			</ul>
+		</div>
+	);
+};
+
+const Readme = (props: Props): JSX.Element | null => {
+	const { readme } = props.content;
+	if (readme === null) return null;
+	return (
+		<div className="mt-16">
+			<ContentFile content={readme} />
+		</div>
+	);
 };
 
 export const ContentDir = (props: Props): JSX.Element => (
-	<Fragment>
-		{shouldSkipDir(props) === false && (
-			<Fragment>
-				<h1>{getTitle(props)}</h1>
-				<ul>
-					{sortEntries(props).map((entry) => (
-						<ContentDirEntry
-							entry={entry}
-							request={props.request}
-							key={entry.name}
-						/>
-					))}
-				</ul>
-			</Fragment>
-		)}
-		{props.content.readme && (
-			<div className="mt-16">
-				<ContentFile content={props.content.readme} />
-			</div>
-		)}
-	</Fragment>
+	<div>
+		<Main {...props} />
+		<Readme {...props} />
+	</div>
 );
