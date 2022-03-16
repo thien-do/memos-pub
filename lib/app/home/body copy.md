@@ -57,3 +57,9 @@ more at the project repository. For private concerns, please mail to
 hi@memos.pub.
 
 [gh]: http://github.com/thien-do/memos-pub
+
+-   https://ruanyf.memos.pub/weekly/docs
+-   https://huytd.memos.pub/everyday/notes
+-   https://zerox-dg.memos.pub/everyday/notes
+-   https://ledongthuc.memos.pub/notes/leetcode
+-   https://mquy.memos.pub/mquy/notes

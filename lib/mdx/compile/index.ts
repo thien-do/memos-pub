@@ -18,7 +18,6 @@ import remarkGfm from "remark-gfm";
 import { remarkMdxFrontmatter } from "remark-mdx-frontmatter";
 import remarkToc from "remark-toc";
 import { Highlighter } from "shiki";
-import { rehypeClassName, rehypeClassNameOptions } from "./className";
 import { getMdxHighlighter } from "./highlight";
 import { getRehypeUrlOptions } from "./url";
 
@@ -53,13 +52,6 @@ const getRehypeTitleOptions = (): rehypeTitleOptions => ({
 	selector: "h1,h2,h3",
 });
 
-const getRehypeClassNameOptions = (): rehypeClassNameOptions => ({
-	changes: [
-		{ selector: "p:first-child", className: "lead" },
-		{ selector: "h1,h2,h3,h4,h5,h6", className: "relative" },
-	],
-});
-
 const getCompileOptions = (options: Options): CompileOptions => {
 	const { branch, request } = options;
 	return {
@@ -78,7 +70,6 @@ const getCompileOptions = (options: Options): CompileOptions => {
 			[rehypeInferTitleMeta, getRehypeTitleOptions()],
 			rehypeMeta,
 			[rehypeAutolinkHeadings, getRehypeLinkOptions()],
-			[rehypeClassName, getRehypeClassNameOptions()],
 			[rehypeUrl, getRehypeUrlOptions({ branch, request })],
 		],
 	};

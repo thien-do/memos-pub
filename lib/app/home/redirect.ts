@@ -17,7 +17,7 @@ const getLocation = (): Location | null => {
  * - #https://github.com/thien-do/notes
  */
 const getUrl = (location: Location): string => {
-	const { host, protocol, hash } = location;
+	const { host, protocol } = location;
 	const [_protocol, _empty, _gh, owner, repo, _type, _branch, ...paths] =
 		location.hash.split("/");
 	const path = paths.join("/");

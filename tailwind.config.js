@@ -1,3 +1,5 @@
+const defaultTheme = require("tailwindcss/defaultTheme");
+
 module.exports = {
 	content: ["./pages/**/*.{ts,tsx,mdx}", "./lib/**/*.{ts,tsx,mdx}"],
 	theme: {
@@ -9,6 +11,11 @@ module.exports = {
 			lg: "1004px",
 			xl: "1260px",
 			"2xl": "1516px",
+		},
+		extend: {
+			fontFamily: {
+				sans: ["'Inter'", ...defaultTheme.fontFamily.sans],
+			},
 		},
 	},
 	plugins: [
