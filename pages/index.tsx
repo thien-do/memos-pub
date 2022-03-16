@@ -1,1 +1,1 @@
-export { AppHome as default } from "@/lib/app/home";
+export { Home as default } from "@/lib/home";

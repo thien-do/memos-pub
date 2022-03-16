@@ -25,7 +25,7 @@ const getUrl = (location: Location): string => {
 	return url;
 };
 
-export const useAppHomeRedirect = (): void => {
+export const useHomeRedirect = (): void => {
 	const router = useRouter();
 
 	useEffect(() => {

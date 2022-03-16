@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const AppHomeTry = (): JSX.Element => {
+export const HomeTry = (): JSX.Element => {
 	const [text, setText] = useState("");
 	return (
 		<form
@@ -18,8 +18,10 @@ export const AppHomeTry = (): JSX.Element => {
 		>
 			<input
 				className={[
-					"flex-1 px-4 py-3 bg-white border-none",
-					"focus:ring-0 text-base placeholder-gray-400",
+					"flex-1 px-4 py-3 border-none",
+					"bg-white dark:bg-gray-900",
+					"placeholder-gray-400 dark:placeholder-gray-600",
+					"focus:ring-0 text-base",
 				].join(" ")}
 				type="text"
 				value={text}
@@ -31,7 +33,8 @@ export const AppHomeTry = (): JSX.Element => {
 				className={[
 					"flex-0 px-4 py-3 rounded-none",
 					"outline-none focus:outline-none focus:underline",
-					"transition-all bg-white",
+					"bg-white dark:bg-gray-900",
+					"transition-all",
 					"text-base text-indigo-500 font-semibold",
 				].join(" ")}
 			>
