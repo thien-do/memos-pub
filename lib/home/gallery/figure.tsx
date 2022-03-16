@@ -24,7 +24,7 @@ const FigureImage = (props: Props): JSX.Element => (
 );
 
 const FigureCaption = (props: Props): JSX.Element => (
-	<figcaption>
+	<figcaption className="mt-0 xl:mt-0 2xl:mt-0">
 		{props.caption.map((part, index) =>
 			part === "break" ? (
 				<br key={index} />

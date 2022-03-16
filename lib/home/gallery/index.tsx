@@ -7,8 +7,8 @@ import { HomeGalleryFigure } from "./figure";
 export const HomeGallery = (): JSX.Element => (
 	<div
 		className={[
-			"flex items-center text-center",
-			"w-[90vw] relative left-1/2 ml-[-45vw]",
+			"md:flex md:items-center text-center",
+			"md:w-[90vw] md:relative md:left-1/2 md:ml-[-45vw]",
 		].join(" ")}
 	>
 		<HomeGalleryFigure
@@ -27,7 +27,10 @@ export const HomeGallery = (): JSX.Element => (
 				["component_export.md", "bold"],
 			]}
 		/>
-		<div>→</div>
+		<div>
+			<div className="hidden md:block">→</div>
+			<div className="block md:hidden">↓</div>
+		</div>
 		<HomeGalleryFigure
 			image={{
 				light: afterLight,
