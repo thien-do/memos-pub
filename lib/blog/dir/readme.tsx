@@ -11,7 +11,7 @@ export const BlogDirReadme = (props: Props): JSX.Element | null => {
 	if (readme === null) return null;
 	return (
 		<div className="mt-16">
-			<BlogFile file={readme} />
+			<BlogFile file={readme} request={props.request}/>
 		</div>
 	);
 };

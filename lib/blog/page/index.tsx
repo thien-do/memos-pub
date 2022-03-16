@@ -14,7 +14,7 @@ const Body = (props: BlogPageProps): JSX.Element => {
 	const { request, response } = props;
 	switch (response.type) {
 		case "file":
-			return <BlogFile file={response} />;
+			return <BlogFile file={response} request={request}/>;
 		case "dir":
 			return <BlogDir request={request} dir={response} />;
 		case "error":

@@ -12,7 +12,7 @@ interface Props {
  *   "/notes/july/hello-world",
  * ]
  */
-const getItems = (props: Props): string[] => {
+export const getItems = (props: Props): string[] => {
 	const { path, repo } = props.request;
 	let last = `/${repo}`;
 	const items: string[] = [last];
