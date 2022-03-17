@@ -22,16 +22,23 @@ export const parseBlogGitlabRequest = (page: PageParams): BlogGitlabRequest => {
 
 	const [project, resource] = slug.join("/").split("/-/");
 
-	// Repo root
-	if (resource === undefined) {
-		return { project, path: null, ref: null, type: "tree" };
-	}
+	// Default to repo root
+	const request: BlogGitlabRequest = {
+		source: "gitlab",
+		project,
+		path: null,
+		ref: null,
+		type: "tree",
+	};
 
 	// Repo resource
-	const [type, ref, ...paths] = resource.split("/");
-	const path = paths.join("/");
-	if (!ensureType(type)) throw Error(`Unknown type: "${type}"`);
+	if (resource !== undefined) {
+		const [type, ref, ...paths] = resource.split("/");
+		if (!ensureType(type)) throw Error(`Unknown type: "${type}"`);
+		request.path = paths.join("/");
+		request.ref = ref;
+		request.type = type;
+	}
 
-	const request: BlogGitlabRequest = { project, path, ref, type };
 	return request;
 };

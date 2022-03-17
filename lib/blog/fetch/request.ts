@@ -20,6 +20,6 @@ export const parseBlogRequest = (page: BlogPageParams): BlogRequest => {
 	const [repo, ...parts] = slug;
 	const path = parts.join("/");
 
-	const request: BlogRequest = { owner, path, repo };
+	const request: BlogRequest = { source: "github", owner, path, repo };
 	return request;
 };

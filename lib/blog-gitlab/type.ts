@@ -2,6 +2,7 @@
  * Params to get a resource from GitLab
  */
 export interface BlogGitlabRequest {
+	source: "gitlab";
 	/** URL-encoded path of project */
 	project: string;
 	/** URL-encoded path to resource */

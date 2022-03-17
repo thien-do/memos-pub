@@ -30,6 +30,7 @@ export type BlogResponse = BlogDir | BlogFile | BlogError;
  * Params to get a resource from GitHub
  */
 export interface BlogRequest {
+	source: "github";
 	/** e.g. "thien-do" */
 	owner: string;
 	/** e.g. "notes" */
