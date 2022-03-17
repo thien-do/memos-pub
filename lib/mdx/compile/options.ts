@@ -1,6 +1,6 @@
 import { BlogRequest } from "@/lib/blog/type";
 import rehypeUrl from "@jsdevtools/rehype-url-inspector";
-import { EvaluateOptions } from "@mdx-js/mdx";
+import { CompileOptions } from "@mdx-js/mdx";
 import * as runtimeRaw from "react/jsx-runtime.js";
 import rehypeAutolinkHeadings, {
 	Options as rehypeLinkOptions,
@@ -26,7 +26,7 @@ import { getRehypeUrlOptions } from "./url";
 // https://mdxjs.com/packages/mdx/#optionsjsx-1
 const runtime = runtimeRaw as any;
 
-export interface MdxEvaluateParams {
+export interface MdxCompileParams {
 	request: BlogRequest;
 	ref: string;
 }
@@ -38,7 +38,7 @@ const getRehypeCodeOptions = (): Partial<rehypeCodeOptions> => ({
 	getHighlighter: getMdxHighlighter as unknown as () => Highlighter,
 });
 
-const getFormat = (params: MdxEvaluateParams): EvaluateOptions["format"] => {
+const getFormat = (params: MdxCompileParams): CompileOptions["format"] => {
 	const path = params.request.path;
 	const fileName = path.split("/").pop();
 	if (fileName === undefined) throw Error(`No file found: "${path}"`);
@@ -63,12 +63,13 @@ const getRehypeTitleOptions = (): rehypeTitleOptions => ({
 	selector: "h1,h2,h3",
 });
 
-export const getMdxEvaluateOptions = (
-	params: MdxEvaluateParams
-): EvaluateOptions => {
+export const getMdxCompileOptions = (
+	params: MdxCompileParams
+): CompileOptions => {
 	const { ref, request } = params;
 	return {
 		format: getFormat(params),
+		outputFormat: "function-body",
 		remarkPlugins: [
 			remarkGfm,
 			remarkFrontmatter,
@@ -84,9 +85,5 @@ export const getMdxEvaluateOptions = (
 			[rehypeAutolinkHeadings, getRehypeLinkOptions()],
 			[rehypeUrl, getRehypeUrlOptions({ ref, request })],
 		],
-		// https://mdxjs.com/packages/mdx/#optionsjsx-1
-		Fragment: runtime.Fragment,
-		jsx: runtime.jsx,
-		jsxs: runtime.jsxs,
 	};
 };

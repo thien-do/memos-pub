@@ -15,8 +15,7 @@ export interface BlogDir {
 
 export interface BlogFile {
 	type: "file";
-	content: string;
-	ref: string;
+	code: string;
 }
 
 export interface BlogError {

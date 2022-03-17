@@ -24,6 +24,6 @@ export const BlogDir = (props: Props): JSX.Element => (
 				<BlogDirBody {...props} />
 			</Fragment>
 		)}
-		<BlogDirReadme {...props} />
+		<BlogDirReadme dir={props.dir} />
 	</div>
 );

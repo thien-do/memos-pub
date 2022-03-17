@@ -1,17 +1,13 @@
-import { evaluateMdx } from "@/lib/mdx/evaluate";
-import { MdxEvaluateParams } from "@/lib/mdx/evaluate/options";
+import { runMdx } from "@/lib/mdx/run";
 import { mdxNextComponents } from "@/lib/mdx/utils/components";
 import * as type from "../type";
 
 interface Props {
-	request: type.BlogRequest;
 	file: type.BlogFile;
 }
 
 export const BlogFile = (props: Props): JSX.Element => {
-	const { file, request } = props;
-	const { content, ref } = file;
-	const params: MdxEvaluateParams = { request, ref };
-	const { Content } = evaluateMdx({ content, params });
+	const { code } = props.file;
+	const { Content } = runMdx(code);
 	return <Content components={mdxNextComponents} />;
 };
