@@ -4,16 +4,16 @@ import nodepath from "path";
 
 interface Props {
 	request: BlogRequest;
-	branch: string;
+	ref: string;
 }
 
 const getRaw = (props: Props, assetUrl: string): string => {
-	const { branch, request } = props;
+	const { ref, request } = props;
 	const { owner, repo, path: mdPath } = request;
 	const dirname = nodepath.dirname(mdPath);
 	const assetPath = nodepath.join(dirname, assetUrl);
 	const origin = "https://raw.githubusercontent.com";
-	return `${origin}/${owner}/${repo}/${branch}/${assetPath}`;
+	return `${origin}/${owner}/${repo}/${ref}/${assetPath}`;
 };
 
 export const getRehypeUrlOptions = (props: Props): rehypeUrlOptions => ({

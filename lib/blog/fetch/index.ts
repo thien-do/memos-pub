@@ -29,7 +29,7 @@ const parseResponse = async (
 	// Single file json
 	if (response.type === "file") {
 		const r = response as components["schemas"]["content-file"];
-		return parseBlogFile({ request, response: r });
+		return parseBlogFile({ response: r });
 	}
 
 	throw Error(`Unknown content type "${response.type}"`);

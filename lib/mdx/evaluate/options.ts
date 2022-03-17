@@ -1,6 +1,7 @@
 import { BlogRequest } from "@/lib/blog/type";
 import rehypeUrl from "@jsdevtools/rehype-url-inspector";
-import { compile, CompileOptions } from "@mdx-js/mdx";
+import { EvaluateOptions } from "@mdx-js/mdx";
+import * as runtimeRaw from "react/jsx-runtime.js";
 import rehypeAutolinkHeadings, {
 	Options as rehypeLinkOptions,
 } from "rehype-autolink-headings";
@@ -21,6 +22,15 @@ import { Highlighter } from "shiki";
 import { getMdxHighlighter } from "./highlight";
 import { getRehypeUrlOptions } from "./url";
 
+// Will pass this directly to evaluate function
+// https://mdxjs.com/packages/mdx/#optionsjsx-1
+const runtime = runtimeRaw as any;
+
+export interface MdxEvaluateParams {
+	request: BlogRequest;
+	ref: string;
+}
+
 const getRehypeCodeOptions = (): Partial<rehypeCodeOptions> => ({
 	// Need to use a custom highlighter because rehype-pretty-code doesn't
 	// let us customize "paths". Also wrong typing by rehype-pretty-code
@@ -28,8 +38,8 @@ const getRehypeCodeOptions = (): Partial<rehypeCodeOptions> => ({
 	getHighlighter: getMdxHighlighter as unknown as () => Highlighter,
 });
 
-const getFormat = (options: Options): CompileOptions["format"] => {
-	const path = options.request.path;
+const getFormat = (params: MdxEvaluateParams): EvaluateOptions["format"] => {
+	const path = params.request.path;
 	const fileName = path.split("/").pop();
 	if (fileName === undefined) throw Error(`No file found: "${path}"`);
 	if (fileName.endsWith(".mdx")) return "mdx";
@@ -53,11 +63,12 @@ const getRehypeTitleOptions = (): rehypeTitleOptions => ({
 	selector: "h1,h2,h3",
 });
 
-const getCompileOptions = (options: Options): CompileOptions => {
-	const { branch, request } = options;
+export const getMdxEvaluateOptions = (
+	params: MdxEvaluateParams
+): EvaluateOptions => {
+	const { ref, request } = params;
 	return {
-		format: getFormat(options),
-		outputFormat: "function-body",
+		format: getFormat(params),
 		remarkPlugins: [
 			remarkGfm,
 			remarkFrontmatter,
@@ -71,29 +82,11 @@ const getCompileOptions = (options: Options): CompileOptions => {
 			[rehypeInferTitleMeta, getRehypeTitleOptions()],
 			rehypeMeta,
 			[rehypeAutolinkHeadings, getRehypeLinkOptions()],
-			[rehypeUrl, getRehypeUrlOptions({ branch, request })],
+			[rehypeUrl, getRehypeUrlOptions({ ref, request })],
 		],
+		// https://mdxjs.com/packages/mdx/#optionsjsx-1
+		Fragment: runtime.Fragment,
+		jsx: runtime.jsx,
+		jsxs: runtime.jsxs,
 	};
-};
-
-interface Options {
-	request: BlogRequest;
-	/** Brach of the content, known from GH's response */
-	branch: string;
-}
-
-/**
- * Compile mdx string to code (that is serializable)
- */
-export const compileMdx = async (
-	content: string,
-	options: Options
-): Promise<string> => {
-	if (typeof window !== "undefined")
-		throw Error("compileMdx should run on server only");
-
-	const fn = await compile(content, getCompileOptions(options));
-	const code = String(fn);
-
-	return code;
 };

@@ -15,10 +15,8 @@ export interface BlogDir {
 
 export interface BlogFile {
 	type: "file";
-	/**
-	 * MDX's code to be executed on client-side
-	 */
-	code: string;
+	content: string;
+	ref: string;
 }
 
 export interface BlogError {

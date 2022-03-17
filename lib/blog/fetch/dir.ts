@@ -69,6 +69,7 @@ export const parseBlogDir = async (props: Props): Promise<BlogDir> => {
 		.map(toDirEntry)
 		.filter(isNotNull);
 	const readme = await fetchReadme(request, entries);
+
 	const dir: BlogDir = { type: "dir", entries, readme };
 	return dir;
 };

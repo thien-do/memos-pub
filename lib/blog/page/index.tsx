@@ -1,6 +1,6 @@
 import { AppErrorBase } from "@/lib/app/error/base";
 import { BlogDir } from "../dir";
-import { BlogFile } from "../file/file";
+import { BlogFile } from "../file";
 import { BlogRequest, BlogResponse } from "../type";
 import { BlogBreadcrumb } from "./breadcrumb";
 import { BlogFavicon } from "./favicon";
@@ -14,7 +14,7 @@ const Body = (props: BlogPageProps): JSX.Element => {
 	const { request, response } = props;
 	switch (response.type) {
 		case "file":
-			return <BlogFile file={response} />;
+			return <BlogFile request={request} file={response} />;
 		case "dir":
 			return <BlogDir request={request} dir={response} />;
 		case "error":
