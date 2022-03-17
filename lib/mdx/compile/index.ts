@@ -34,6 +34,7 @@ const getFormat = (options: Options): CompileOptions["format"] => {
 	if (fileName === undefined) throw Error(`No file found: "${path}"`);
 	if (fileName.endsWith(".mdx")) return "mdx";
 	if (fileName.endsWith(".md")) return "md";
+	if (fileName.endsWith(".markdown")) return "md";
 	throw Error(`Unknown extension "${fileName}"`);
 };
 

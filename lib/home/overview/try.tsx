@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const HomeTry = (): JSX.Element => {
+export const HomeOverviewTry = (): JSX.Element => {
 	const [text, setText] = useState("");
 	return (
 		<form
@@ -24,7 +24,6 @@ export const HomeTry = (): JSX.Element => {
 					"focus:ring-0 text-base",
 				].join(" ")}
 				type="text"
-				autoFocus
 				value={text}
 				onChange={(event) => setText(event.target.value)}
 				placeholder="https://github.com/path"

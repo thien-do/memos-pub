@@ -1,13 +1,17 @@
-import { mdxNextComponents } from "@/lib/mdx/utils/components";
 import Head from "next/head";
-import Markdown from "./body.mdx";
+import { NoLayout } from "../app/main";
+import { HomeDetail } from "./detail";
+import { HomeGallery } from "./gallery";
+import { HomeOverview } from "./overview";
 import { useHomeRedirect } from "./redirect";
 
 export const Home = (): JSX.Element => {
 	useHomeRedirect();
 	return (
 		<div>
-			<Markdown components={mdxNextComponents} />
+			<HomeOverview />
+			<HomeGallery />
+			<HomeDetail />
 			{/* Below Markdown to override any auto title in Markdown */}
 			<Head>
 				<title>Memos.pub</title>
@@ -15,3 +19,5 @@ export const Home = (): JSX.Element => {
 		</div>
 	);
 };
+
+Home.Layout = NoLayout;

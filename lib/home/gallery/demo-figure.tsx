@@ -10,6 +10,7 @@ interface Props {
 		dark: ImageProps["src"];
 		alt: ImageProps["alt"];
 	};
+	url: string;
 }
 
 const FigureImage = (props: Props): JSX.Element => (
@@ -24,7 +25,7 @@ const FigureImage = (props: Props): JSX.Element => (
 );
 
 const FigureCaption = (props: Props): JSX.Element => (
-	<figcaption className="mt-0 xl:mt-0 2xl:mt-0">
+	<figcaption>
 		{props.caption.map((part, index) =>
 			part === "break" ? (
 				<br key={index} />
@@ -44,9 +45,11 @@ const FigureCaption = (props: Props): JSX.Element => (
 	</figcaption>
 );
 
-export const HomeGalleryFigure = (props: Props): JSX.Element => (
-	<figure>
-		<FigureCaption {...props} />
-		<FigureImage {...props} />
-	</figure>
+export const HomeGalleryDemoFigure = (props: Props): JSX.Element => (
+	<a href={props.url} target="_blank" rel="noreferrer">
+		<figure>
+			<FigureImage {...props} />
+			<FigureCaption {...props} />
+		</figure>
+	</a>
 );

@@ -27,6 +27,7 @@ const isValidEntry = (raw: RawDirEntry): boolean => {
 	if (raw.name.startsWith(".")) return false;
 	if (raw.name.startsWith("_")) return false;
 	if (raw.name.endsWith(".md")) return true;
+	if (raw.name.endsWith(".markdown")) return true;
 	if (raw.name.endsWith(".mdx")) return true;
 	if (raw.type === "dir") return true;
 	return false;
