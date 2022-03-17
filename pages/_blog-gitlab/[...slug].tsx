@@ -1,3 +1,5 @@
+import { fetchBlogGitlab } from "@/lib/blog-gitlab/fetch";
+import { parseBlogGitlabRequest } from "@/lib/blog-gitlab/fetch/request";
 import { BlogGitlabPageProps } from "@/lib/blog-gitlab/page";
 import type { GetStaticPaths, GetStaticProps } from "next";
 
@@ -14,10 +16,10 @@ type GetProps = GetStaticProps<BlogGitlabPageProps, PageParams>;
 // error
 // - https://nextjs.org/docs/messages/module-not-found#the-module-youre-trying-to-import-uses-nodejs-specific-modules
 export const getStaticProps: GetProps = async (context) => {
-	const slug = context.params?.slug;
-	if (slug === undefined) throw Error("Should handle at index");
+	const request = parseBlogGitlabRequest(context.params);
+	const response = await fetchBlogGitlab(request);
 	return {
-		props: { slug },
+		props: { request, response },
 		revalidate: 60 * 5, // seconds
 	};
 };

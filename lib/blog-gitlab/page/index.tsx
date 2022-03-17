@@ -1,7 +1,14 @@
+import { BlogResponse } from "@/lib/blog/type";
+import { BlogGitlabRequest } from "../type";
+
 export interface BlogGitlabPageProps {
-	slug: string[];
+	request: BlogGitlabRequest;
+	response: BlogResponse;
 }
 
 export const BlogGitlabPage = (props: BlogGitlabPageProps): JSX.Element => (
-	<div>{JSON.stringify(props.slug)}</div>
+	<div>
+		<div>{JSON.stringify(props.request)}</div>
+		<div>{JSON.stringify(props.response)}</div>
+	</div>
 );
