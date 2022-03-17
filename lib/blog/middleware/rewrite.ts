@@ -24,12 +24,12 @@ const getOwner = (req: NextRequest): string | null => {
 Re-route `foo.memos.pub/bar/baz` into `memos.pub/_tenants/foo/bar/baz`. Extended
 from https://github.com/vercel/platforms/blob/main/pages/_middleware.js
 */
-export const blogMiddleware: NextMiddleware = (req) => {
+export const blogMwRewrite = (req: NextRequest): null | NextResponse => {
 	// e.g. "/blog-slug" (this includes "/")
 	const { pathname } = req.nextUrl;
 	const owner = getOwner(req);
 
-	if (owner === null) return NextResponse.next();
+	if (owner === null) return null;
 
 	// Rewrite blog request to _blog
 	const url = req.nextUrl.clone();

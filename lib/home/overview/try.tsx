@@ -10,10 +10,9 @@ export const HomeOverviewTry = (): JSX.Element => {
 				"focus-within:ring-2 focus-within:ring-indigo-500",
 			].join(" ")}
 			onSubmit={(event) => {
-				if (text === "") return;
 				event.preventDefault();
-				location.assign(`/#${text}`);
-				location.reload();
+				if (text === "") return;
+				location.assign(`/${text}`);
 			}}
 		>
 			<input

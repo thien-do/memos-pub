@@ -1,8 +1,9 @@
-import { blogMiddleware } from "@/lib/blog/middleware";
+import { blogMwRedirect } from "@/lib/blog/middleware/redirect";
+import { blogMwRewrite } from "@/lib/blog/middleware/rewrite";
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextMiddleware, NextResponse } from "next/server";
 
-export const appMiddleware: NextMiddleware = (req, event) => {
+export const appMiddleware: NextMiddleware = (req) => {
 	// host: e.g. "thien-do.memos.pub"
 	const { pathname } = req.nextUrl; // e.g. "/blog-slug" (this includes "/")
 
@@ -13,5 +14,11 @@ export const appMiddleware: NextMiddleware = (req, event) => {
 	if (pathname.startsWith(`/_blog`))
 		return new NextResponse(null, { status: 404 });
 
-	return blogMiddleware(req, event);
+	const redirect = blogMwRedirect(req);
+	if (redirect !== null) return redirect;
+
+	const rewrite = blogMwRewrite(req);
+	if (rewrite !== null) return rewrite;
+
+	return NextResponse.next();
 };
