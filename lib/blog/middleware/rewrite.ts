@@ -1,5 +1,5 @@
 // eslint-disable-next-line @next/next/no-server-import-in-page
-import { NextMiddleware, NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Get owner info from host. E.g.:
@@ -8,7 +8,7 @@ import { NextMiddleware, NextRequest, NextResponse } from "next/server";
  * - thien-do.localhost:3000 -> "thien-do"
  * - localhost:3000 -> null
  */
-const getOwner = (req: NextRequest): string | null => {
+export const blogMwGetOwner = (req: NextRequest): string | null => {
 	// Get host from headers to have subdomain. nextUrl.host doesn't have
 	// sub-domain.
 	const host = req.headers.get("host");
@@ -21,13 +21,13 @@ const getOwner = (req: NextRequest): string | null => {
 };
 
 /*
-Re-route `foo.memos.pub/bar/baz` into `memos.pub/_tenants/foo/bar/baz`. Extended
+Re-route `foo.memos.pub/bar/baz` into `memos.pub/_blog/foo/bar/baz`. Extended
 from https://github.com/vercel/platforms/blob/main/pages/_middleware.js
 */
 export const blogMwRewrite = (req: NextRequest): null | NextResponse => {
 	// e.g. "/blog-slug" (this includes "/")
 	const { pathname } = req.nextUrl;
-	const owner = getOwner(req);
+	const owner = blogMwGetOwner(req);
 
 	if (owner === null) return null;
 
