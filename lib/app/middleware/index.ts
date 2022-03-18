@@ -17,6 +17,16 @@ export const appMiddleware: NextMiddleware = (req) => {
 	if (pathname.startsWith(`/_blog-gitlab`))
 		return new NextResponse(null, { status: 404 });
 
+	// Test
+	const { host } = req.nextUrl;
+	if (host === "memo.mocmeo.blog") {
+		const url = req.nextUrl.clone();
+		// https://huyng12.memos.pub/blog/posts/hello-world.mdx
+		url.pathname = `/_blog/huyng12/blog/posts/${url.pathname}`;
+		url.pathname = url.pathname.replaceAll("//", "/");
+		return NextResponse.rewrite(url);
+	}
+
 	const redirect = blogMwRedirect(req);
 	if (redirect !== null) return redirect;
 
