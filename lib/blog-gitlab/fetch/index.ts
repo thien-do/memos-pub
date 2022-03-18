@@ -9,9 +9,9 @@ export const fetchBlogGitlab = async (
 ): Promise<BlogResponse> => {
 	try {
 		if (request.type === "tree") {
-			return await fetchBlogGitlabDir({ request });
+			return await fetchBlogGitlabDir(request);
 		} else {
-			return await fetchBlogGitlabFile({ request });
+			return await fetchBlogGitlabFile(request);
 		}
 	} catch (error) {
 		return parseBlogGitlabError({ request, error });

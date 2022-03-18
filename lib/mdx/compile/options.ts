@@ -1,4 +1,5 @@
-import { BlogRequest } from "@/lib/blog/type";
+import { BlogGitlabRequest } from "@/lib/blog-gitlab/type";
+import { BlogRequestWithRef } from "@/lib/blog/type";
 import rehypeUrl from "@jsdevtools/rehype-url-inspector";
 import { CompileOptions } from "@mdx-js/mdx";
 import * as runtimeRaw from "react/jsx-runtime.js";
@@ -26,10 +27,7 @@ import { getRehypeUrlOptions } from "./url";
 // https://mdxjs.com/packages/mdx/#optionsjsx-1
 const runtime = runtimeRaw as any;
 
-export interface MdxCompileParams {
-	request: BlogRequest;
-	ref: string;
-}
+type CommonRequest = BlogRequestWithRef | BlogGitlabRequest;
 
 const getRehypeCodeOptions = (): Partial<rehypeCodeOptions> => ({
 	// Need to use a custom highlighter because rehype-pretty-code doesn't
@@ -38,8 +36,8 @@ const getRehypeCodeOptions = (): Partial<rehypeCodeOptions> => ({
 	getHighlighter: getMdxHighlighter as unknown as () => Highlighter,
 });
 
-const getFormat = (params: MdxCompileParams): CompileOptions["format"] => {
-	const path = params.request.path;
+const getFormat = (request: CommonRequest): CompileOptions["format"] => {
+	const path = request.path;
 	const fileName = path.split("/").pop();
 	if (fileName === undefined) throw Error(`No file found: "${path}"`);
 	if (fileName.endsWith(".mdx")) return "mdx";
@@ -64,11 +62,10 @@ const getRehypeTitleOptions = (): rehypeTitleOptions => ({
 });
 
 export const getMdxCompileOptions = (
-	params: MdxCompileParams
+	request: CommonRequest
 ): CompileOptions => {
-	const { ref, request } = params;
 	return {
-		format: getFormat(params),
+		format: getFormat(request),
 		outputFormat: "function-body",
 		remarkPlugins: [
 			remarkGfm,
@@ -83,7 +80,7 @@ export const getMdxCompileOptions = (
 			[rehypeInferTitleMeta, getRehypeTitleOptions()],
 			rehypeMeta,
 			[rehypeAutolinkHeadings, getRehypeLinkOptions()],
-			[rehypeUrl, getRehypeUrlOptions({ ref, request })],
+			[rehypeUrl, getRehypeUrlOptions(request)],
 		],
 	};
 };

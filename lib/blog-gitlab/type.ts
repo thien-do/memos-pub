@@ -3,10 +3,10 @@
  */
 export interface BlogGitlabRequest {
 	source: "gitlab";
-	/** URL-encoded path of project */
+	/** path to project */
 	project: string;
-	/** URL-encoded path to resource */
-	path: string | null;
+	/** path to resource, "" when at repo root */
+	path: string;
 	/** The name of branch, tag or commit */
 	ref: string | null;
 	type: "tree" | "blob";
