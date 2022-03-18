@@ -12,6 +12,6 @@ export const rewriteBlogGitLabUrl = (req: NextRequest): null | NextResponse => {
 
 	// Rewrite requests to gitlab controller
 	const url = req.nextUrl.clone();
-	url.pathname = `/_blog-gitlab/${url.pathname}`.replaceAll("//", "/");
+	url.pathname = `/_blog-gitlab${url.pathname}`;
 	return NextResponse.rewrite(url);
 };

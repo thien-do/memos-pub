@@ -15,9 +15,7 @@ const fetchContent = async (request: BlogGitLabRequest): Promise<string> => {
 		"/repository/files",
 		`/${encodeURIComponent(request.path)}`,
 		`?ref=${request.ref}`,
-	]
-		.join("")
-		.replaceAll("//", "/"); // path could be ""
+	].join("");
 	const raw = await fetch(url);
 	const response = (await raw.json()) as Response;
 	const content = Buffer.from(response.content, "base64").toString();

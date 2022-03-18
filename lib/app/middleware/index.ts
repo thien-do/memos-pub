@@ -22,8 +22,7 @@ export const appMiddleware: NextMiddleware = (req) => {
 	if (host === "memo.mocmeo.blog") {
 		const url = req.nextUrl.clone();
 		// https://huyng12.memos.pub/blog/posts/hello-world.mdx
-		url.pathname = `/_blog/huyng12/blog/posts/${url.pathname}`;
-		url.pathname = url.pathname.replaceAll("//", "/");
+		url.pathname = `/_blog/huyng12/blog/posts${url.pathname}`;
 		return NextResponse.rewrite(url);
 	}
 

@@ -7,9 +7,9 @@ const getHref = (props: Props): string => {
 	const { entry, request } = props;
 	// don't need "user" here because we redirect inside subdomain
 	const { repo, path } = request;
-	let href = `/${repo}/${path}/${entry.name}`;
-	// "path" may be empty ("") result in double slash
-	href = href.replaceAll("//", "/");
+	const href = [repo, path, entry.name]
+		.filter((part) => part !== "") // avoid double slash
+		.join("/");
 	return href;
 };
 
