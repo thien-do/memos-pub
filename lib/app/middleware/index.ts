@@ -17,7 +17,7 @@ export const appMiddleware: NextMiddleware = (req) => {
 	if (pathname.startsWith(`/_blog-gitlab`))
 		return new NextResponse(null, { status: 404 });
 
-	// Test
+	// Custom domain experiment
 	const { host } = req.nextUrl;
 	if (host === "memo.mocmeo.blog") {
 		const url = req.nextUrl.clone();

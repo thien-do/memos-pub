@@ -1,29 +1,41 @@
 import * as type from "../type";
 import Link from "next/link";
 
-interface Props {
+interface BaseProps<R> {
 	entry: type.BlogDirEntry;
-	request: type.BlogRequest;
+	request: R;
 }
 
-const getHref = (props: Props): string => {
+type GetHref<R> = (getHref: BaseProps<R>) => string;
+export type BlogDirEntryGetHref<R> = GetHref<R>;
+
+const getHref: GetHref<type.BlogRequest> = (props): string => {
 	const { entry, request } = props;
 	// don't need "user" here because we redirect inside subdomain
 	const { repo, path } = request;
-	// "path" is the only part that may be empty
-	const pathSegment = path === "" ? "" : `/${path}`;
-	const href = `/${repo}${pathSegment}/${entry.name}`;
+	let href = `/${repo}/${path}/${entry.name}`;
+	// "path" may be empty ("") result in double slash
+	href = href.replaceAll("//", "/");
 	return href;
 };
 
-export const BlogDirEntry = (props: Props): JSX.Element => (
-	<li
-		className={props.entry.type === "dir" ? "list-[disclosure-closed]" : ""}
-	>
-		<Link href={getHref(props)}>
-			<a target="_self" className="font-normal no-underline">
-				{props.entry.name}
-			</a>
-		</Link>
-	</li>
-);
+type Component<R> = (props: BaseProps<R>) => JSX.Element;
+export type BlogDirEntryComponent<R> = Component<R>;
+
+export const makeBlogDirEntry = <R,>(getHref: GetHref<R>) => {
+	const BlogDirEntry: Component<R> = (props) => {
+		const isDir = props.entry.type === "dir";
+		return (
+			<li className={isDir ? "list-[disclosure-closed]" : ""}>
+				<Link href={getHref(props)}>
+					<a target="_self" className="font-normal no-underline">
+						{props.entry.name}
+					</a>
+				</Link>
+			</li>
+		);
+	};
+	return BlogDirEntry;
+};
+
+export const BlogDirEntry = makeBlogDirEntry<type.BlogRequest>(getHref);

@@ -1,8 +1,8 @@
 import { Fragment } from "react";
+import { BlogFile } from "../file";
 import * as type from "../type";
 import { BlogDirBody } from "./body";
 import { BlogDirOverview } from "./overview";
-import { BlogDirReadme } from "./readme";
 
 interface Props {
 	dir: type.BlogDir;
@@ -24,6 +24,10 @@ export const BlogDir = (props: Props): JSX.Element => (
 				<BlogDirBody {...props} />
 			</Fragment>
 		)}
-		<BlogDirReadme dir={props.dir} />
+		{props.dir.readme === null ? null : (
+			<div className="mt-16">
+				<BlogFile file={props.dir.readme} />
+			</div>
+		)}
 	</div>
 );
