@@ -7,6 +7,7 @@ interface BaseProps<R> {
 }
 
 type GetTitle<R> = (props: BaseProps<R>) => string;
+export type BlogDirOverviewGetTitle<R> = GetTitle<R>;
 
 const getTitle: GetTitle<type.BlogRequest> = (props): string => {
 	const { repo, path } = props.request;
@@ -17,8 +18,11 @@ const getTitle: GetTitle<type.BlogRequest> = (props): string => {
 	return repo;
 };
 
+type Component<R> = (props: BaseProps<R>) => JSX.Element;
+export type BlogDirOverviewComponent<R> = Component<R>;
+
 export const makeBlogDirOverview = <R,>(getTitle: GetTitle<R>) => {
-	const BlogDirOverview = (props: BaseProps<R>): JSX.Element | null => {
+	const BlogDirOverview: Component<R> = (props) => {
 		const title = getTitle(props);
 		return (
 			<div>

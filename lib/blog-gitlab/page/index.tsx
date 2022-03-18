@@ -1,5 +1,6 @@
-import { BlogFile } from "@/lib/blog/file";
+import { makeBlogPage } from "@/lib/blog/page";
 import { BlogResponse } from "@/lib/blog/type";
+import { BlogGitlabDir } from "../dir";
 import { BlogGitlabRequest } from "../type";
 
 export interface BlogGitlabPageProps {
@@ -7,12 +8,6 @@ export interface BlogGitlabPageProps {
 	response: BlogResponse;
 }
 
-export const BlogGitlabPage = (props: BlogGitlabPageProps): JSX.Element => {
-	const { request, response } = props;
-	switch (response.type) {
-		case "file":
-			return <BlogFile file={response} />;
-		default:
-			return <p>WIP for {response.type}</p>;
-	}
-};
+export const BlogGitlabPage = makeBlogPage<BlogGitlabRequest>({
+	BlogDir: BlogGitlabDir,
+});
