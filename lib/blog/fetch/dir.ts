@@ -49,11 +49,10 @@ const fetchReadme = async (
 ): Promise<BlogDir["readme"]> => {
 	const readme = entries.find(isReadmeFile);
 	if (readme === undefined) return null;
-	if (readme.type === "dir") throw Error("README file cannot be dir (1)");
+	if (readme.type === "dir") throw Error("README file is not file (1)");
 	const path = nodepath.join(request.path, readme.name);
 	const content = await fetchBlog({ ...request, path });
-	if (content.type === "dir") throw Error("README file cannot be dir (2)");
-	if (content.type === "error") throw Error(content.message);
+	if (content.type !== "file") throw Error("README file is not file (2)");
 	return content;
 };
 

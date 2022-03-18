@@ -24,7 +24,6 @@ export const parseBlogGitlabRequest = (page: PageParams): BlogGitlabRequest => {
 
 	// Default to repo root
 	const request: BlogGitlabRequest = {
-		source: "gitlab",
 		project,
 		path: "",
 		ref: null,

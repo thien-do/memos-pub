@@ -1,5 +1,7 @@
 import { BlogFile } from "@/lib/blog/type";
 import { compileMdx } from "@/lib/mdx/compile";
+import { GetMdxCompileOptionsProps } from "@/lib/mdx/compile/options";
+import { resolveBlogGitlabMdxUrl } from "../mdx/url";
 import { BlogGitlabRequest } from "../type";
 
 interface Response {
@@ -25,7 +27,9 @@ export const fetchBlogGitlabFile = async (
 	request: BlogGitlabRequest
 ): Promise<BlogFile> => {
 	const content = await fetchContent(request);
-	const code = await compileMdx({ content, request });
+	const resolveUrl = resolveBlogGitlabMdxUrl;
+	const options = { request, resolveUrl };
+	const code = await compileMdx({ content, options });
 	const file: BlogFile = { type: "file", code };
 	return file;
 };

@@ -26,11 +26,14 @@ export interface BlogError {
 
 export type BlogResponse = BlogDir | BlogFile | BlogError;
 
+export interface BlogRequestBase {
+	path: string;
+}
+
 /**
  * Params to get a resource from GitHub
  */
-export interface BlogRequest {
-	source: "github";
+export interface BlogRequest extends BlogRequestBase {
 	/** e.g. "thien-do" */
 	owner: string;
 	/** e.g. "notes" */

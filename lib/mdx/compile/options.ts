@@ -1,8 +1,6 @@
-import { BlogGitlabRequest } from "@/lib/blog-gitlab/type";
-import { BlogRequestWithRef } from "@/lib/blog/type";
+import { BlogRequestBase } from "@/lib/blog/type";
 import rehypeUrl from "@jsdevtools/rehype-url-inspector";
 import { CompileOptions } from "@mdx-js/mdx";
-import * as runtimeRaw from "react/jsx-runtime.js";
 import rehypeAutolinkHeadings, {
 	Options as rehypeLinkOptions,
 } from "rehype-autolink-headings";
@@ -21,13 +19,7 @@ import { remarkMdxFrontmatter } from "remark-mdx-frontmatter";
 import remarkToc from "remark-toc";
 import { Highlighter } from "shiki";
 import { getMdxHighlighter } from "./highlight";
-import { getRehypeUrlOptions } from "./url";
-
-// Will pass this directly to evaluate function
-// https://mdxjs.com/packages/mdx/#optionsjsx-1
-const runtime = runtimeRaw as any;
-
-type CommonRequest = BlogRequestWithRef | BlogGitlabRequest;
+import { getRehypeUrlOptions, MdxResolveUrl } from "./url";
 
 const getRehypeCodeOptions = (): Partial<rehypeCodeOptions> => ({
 	// Need to use a custom highlighter because rehype-pretty-code doesn't
@@ -36,8 +28,7 @@ const getRehypeCodeOptions = (): Partial<rehypeCodeOptions> => ({
 	getHighlighter: getMdxHighlighter as unknown as () => Highlighter,
 });
 
-const getFormat = (request: CommonRequest): CompileOptions["format"] => {
-	const path = request.path;
+const getFormat = (path: string): CompileOptions["format"] => {
 	const fileName = path.split("/").pop();
 	if (fileName === undefined) throw Error(`No file found: "${path}"`);
 	if (fileName.endsWith(".mdx")) return "mdx";
@@ -61,11 +52,18 @@ const getRehypeTitleOptions = (): rehypeTitleOptions => ({
 	selector: "h1,h2,h3",
 });
 
-export const getMdxCompileOptions = (
-	request: CommonRequest
+interface Props<R> {
+	request: R;
+	resolveUrl: MdxResolveUrl<R>;
+}
+export type GetMdxCompileOptionsProps<R> = Props<R>;
+
+export const getMdxCompileOptions = <R extends BlogRequestBase>(
+	props: Props<R>
 ): CompileOptions => {
+	const { resolveUrl, request } = props;
 	return {
-		format: getFormat(request),
+		format: getFormat(request.path),
 		outputFormat: "function-body",
 		remarkPlugins: [
 			remarkGfm,
@@ -80,7 +78,7 @@ export const getMdxCompileOptions = (
 			[rehypeInferTitleMeta, getRehypeTitleOptions()],
 			rehypeMeta,
 			[rehypeAutolinkHeadings, getRehypeLinkOptions()],
-			[rehypeUrl, getRehypeUrlOptions(request)],
+			[rehypeUrl, getRehypeUrlOptions({ resolveUrl, request })],
 		],
 	};
 };

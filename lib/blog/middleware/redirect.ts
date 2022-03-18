@@ -10,7 +10,7 @@ const getRequest = (pathname: string): BlogRequest | null => {
 	const parts = pathname.split("/");
 	const [_1, _protocol, host, owner, repo, _blob, _branch, ...paths] = parts;
 	if (host !== "github.com") return null;
-	return { source: "github", owner, repo, path: paths.join("/") };
+	return { owner, repo, path: paths.join("/") };
 };
 
 /**

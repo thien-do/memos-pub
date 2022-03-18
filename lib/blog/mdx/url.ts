@@ -1,13 +1,11 @@
+import { MdxResolveUrl } from "@/lib/mdx/compile/url";
 import nodepath from "path";
 import { BlogRequestWithRef } from "../type";
 
-interface Props {
-	url: string;
-	request: BlogRequestWithRef;
-}
+type Resolve = MdxResolveUrl<BlogRequestWithRef>;
 
 /** Rewrite relative url to absolute */
-export const resolveBlogMdxUrl = (props: Props): string => {
+export const resolveBlogMdxUrl: Resolve = (props): string => {
 	const { url, request } = props;
 	const { owner, repo, ref, path: mdPath } = request;
 	const dirname = nodepath.dirname(mdPath);

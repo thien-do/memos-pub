@@ -1,23 +1,23 @@
-import { BlogGitlabRequest } from "@/lib/blog-gitlab/type";
-import { BlogRequestWithRef } from "@/lib/blog/type";
+import { BlogRequestBase } from "@/lib/blog/type";
 import { compile } from "@mdx-js/mdx";
-import { getMdxCompileOptions } from "./options";
+import { getMdxCompileOptions, GetMdxCompileOptionsProps } from "./options";
 
-interface Props {
+interface Props<R> {
+	options: GetMdxCompileOptionsProps<R>;
 	content: string;
-	request: BlogRequestWithRef | BlogGitlabRequest;
 }
 
 /**
  * Evaluate mdx string to code (that is serializable)
  */
-export const compileMdx = async (props: Props): Promise<string> => {
+export const compileMdx = async <R extends BlogRequestBase>(
+	props: Props<R>
+): Promise<string> => {
 	if (typeof window !== "undefined")
 		throw Error("evaluateMdx should run on server only");
 
-	const { content, request } = props;
-	const options = getMdxCompileOptions(request);
-	const code = await compile(content, options);
+	const options = getMdxCompileOptions<R>(props.options);
+	const code = await compile(props.content, options);
 	const text = String(code);
 	return text;
 };
