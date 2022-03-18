@@ -1,18 +1,18 @@
 import { BlogDirBody, BlogDirBodyProps } from "@/lib/blog/dir/body";
 import { BlogDirEntry } from "@/lib/blog/type";
-import { BlogGitLabRequest } from "../type";
-import { BlogGitLabDirEntry } from "./entry";
+import { BlogGitHubRequest } from "../type";
+import { BlogGitHubDirEntry } from "./entry";
 
-type Props = BlogDirBodyProps<BlogGitLabRequest>;
+type Props = BlogDirBodyProps<BlogGitHubRequest>;
 
 const toEntry = (props: Props, entry: BlogDirEntry) => (
-	<BlogGitLabDirEntry
+	<BlogGitHubDirEntry
 		entry={entry}
 		request={props.request}
 		key={entry.name}
 	/>
 );
 
-export const BlogGitLabDirBody = (props: Props): JSX.Element => (
+export const BlogGitHubDirBody = (props: Props): JSX.Element => (
 	<BlogDirBody dir={props.dir} request={props.request} toEntry={toEntry} />
 );

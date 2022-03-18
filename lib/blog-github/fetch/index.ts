@@ -1,9 +1,10 @@
+import { BlogResponse } from "@/lib/blog/type";
 import { components, operations } from "@octokit/openapi-types";
 import { Octokit } from "octokit";
-import { BlogRequest, BlogResponse } from "../type";
-import { parseBlogDir } from "./dir";
-import { parseBlogError } from "./error";
-import { parseBlogFile } from "./file";
+import { BlogGitHubRequest } from "../type";
+import { parseBlogGitHubDir } from "./dir";
+import { parseBlogGitHubError } from "./error";
+import { parseBlogGitHubFile } from "./file";
 
 const octokit = new Octokit({
 	auth: process.env.MP_GH_AUTH,
@@ -13,12 +14,12 @@ type RawResponse =
 	operations["repos/get-content"]["responses"]["200"]["content"]["application/json"];
 
 const parseResponse = async (
-	request: BlogRequest,
+	request: BlogGitHubRequest,
 	response: RawResponse
 ): Promise<BlogResponse> => {
 	// Directory
 	if (Array.isArray(response)) {
-		return await parseBlogDir({ request, response });
+		return await parseBlogGitHubDir({ request, response });
 	}
 
 	// Single file raw
@@ -29,14 +30,14 @@ const parseResponse = async (
 	// Single file json
 	if (response.type === "file") {
 		const r = response as components["schemas"]["content-file"];
-		return parseBlogFile({ request, response: r });
+		return parseBlogGitHubFile({ request, response: r });
 	}
 
 	throw Error(`Unknown content type "${response.type}"`);
 };
 
-export const fetchBlog = async (
-	request: BlogRequest
+export const fetchBlogGitHub = async (
+	request: BlogGitHubRequest
 ): Promise<BlogResponse> => {
 	try {
 		const raw = await octokit.rest.repos.getContent({
@@ -48,6 +49,6 @@ export const fetchBlog = async (
 		const response = parseResponse(request, raw.data);
 		return response;
 	} catch (error) {
-		return parseBlogError(request, error);
+		return parseBlogGitHubError(request, error);
 	}
 };

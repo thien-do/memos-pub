@@ -1,19 +1,19 @@
 import { BlogResponse } from "@/lib/blog/type";
-import { BlogGitlabRequest } from "../type";
-import { fetchBlogGitlabDir } from "./dir";
-import { parseBlogGitlabError } from "./error";
-import { fetchBlogGitlabFile } from "./file";
+import { BlogGitLabRequest } from "../type";
+import { fetchBlogGitLabDir } from "./dir";
+import { parseBlogGitLabError } from "./error";
+import { fetchBlogGitLabFile } from "./file";
 
-export const fetchBlogGitlab = async (
-	request: BlogGitlabRequest
+export const fetchBlogGitLab = async (
+	request: BlogGitLabRequest
 ): Promise<BlogResponse> => {
 	try {
 		if (request.type === "tree") {
-			return await fetchBlogGitlabDir(request);
+			return await fetchBlogGitLabDir(request);
 		} else {
-			return await fetchBlogGitlabFile(request);
+			return await fetchBlogGitLabFile(request);
 		}
 	} catch (error) {
-		return parseBlogGitlabError({ request, error });
+		return parseBlogGitLabError({ request, error });
 	}
 };

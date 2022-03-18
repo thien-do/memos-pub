@@ -1,4 +1,4 @@
-export const BlogGitlabHome = (): JSX.Element => (
+export const BlogGitLabHome = (): JSX.Element => (
 	<div>
 		<p>WIP GitLab support</p>
 		<p>Format: gitlabhq.memos.pub/{"<url>"}</p>

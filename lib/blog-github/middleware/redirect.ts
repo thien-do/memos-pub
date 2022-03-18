@@ -1,12 +1,12 @@
+import { BlogGitHubRequest } from "@/lib/blog-github/type";
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextRequest, NextResponse } from "next/server";
-import { BlogRequest } from "../type";
 
 // > "/https:/github.com/axieinfinity/festival/blob/master/component_export.md".split("/");
 // ['', 'https:', 'github.com', 'axieinfinity', 'festival', 'blob', 'master', 'component_export.md']
 // > "/https:/github.com/axieinfinity/festival/".split("/");
 // [ '', 'https:', 'github.com', 'axieinfinity', 'festival', '' ]
-const getRequest = (pathname: string): BlogRequest | null => {
+const getRequest = (pathname: string): BlogGitHubRequest | null => {
 	const parts = pathname.split("/");
 	const [_1, _protocol, host, owner, repo, _blob, _branch, ...paths] = parts;
 	if (host !== "github.com") return null;
@@ -17,7 +17,9 @@ const getRequest = (pathname: string): BlogRequest | null => {
  * Redirect memos.pub/https:/github.com/... to <owner>.memos.pub/...
  * Return null if should skip
  */
-export const blogMwRedirect = (req: NextRequest): NextResponse | null => {
+export const redirectBlogGitHubUrl = (
+	req: NextRequest
+): NextResponse | null => {
 	// e.g. "/blog-slug" (this includes "/")
 	const { pathname } = req.nextUrl;
 

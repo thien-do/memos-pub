@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { BlogRequest } from "../type";
+import { BlogGitHubRequest } from "../type";
 
 interface Props {
-	request: BlogRequest;
+	request: BlogGitHubRequest;
 }
 
 /**
@@ -56,11 +56,9 @@ const Owner = (props: Props): JSX.Element => (
 	</Link>
 );
 
-export const BlogBreadcrumb = (props: Props): JSX.Element => {
-	return (
-		<div className="flex items-center">
-			<Owner {...props} />
-			{getItems(props).map(renderItem)}
-		</div>
-	);
-};
+export const BlogGitHubBreadcrumb = (props: Props): JSX.Element => (
+	<div className="flex items-center">
+		<Owner {...props} />
+		{getItems(props).map(renderItem)}
+	</div>
+);

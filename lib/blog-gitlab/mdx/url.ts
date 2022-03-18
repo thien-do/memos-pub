@@ -1,8 +1,8 @@
 import { MdxResolveUrl } from "@/lib/mdx/compile/url";
 import nodepath from "path";
-import { BlogGitlabRequest } from "../type";
+import { BlogGitLabRequest } from "../type";
 
-type Resolve = MdxResolveUrl<BlogGitlabRequest>;
+type Resolve = MdxResolveUrl<BlogGitLabRequest>;
 
 /**
  * Resolve gitlab relative url to absolute
@@ -12,7 +12,7 @@ type Resolve = MdxResolveUrl<BlogGitlabRequest>;
  * To:
  * - https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/development/cicd/img/ci_architecture.png
  */
-export const resolveBlogGitlabMdxUrl: Resolve = (props) => {
+export const resolveBlogGitLabMdxUrl: Resolve = (props) => {
 	const { url, request } = props;
 	const { project, ref, path: mdPath } = request;
 	const dirname = nodepath.dirname(mdPath);

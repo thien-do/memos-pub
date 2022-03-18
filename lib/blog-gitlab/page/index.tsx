@@ -1,13 +1,26 @@
-import { makeBlogPage } from "@/lib/blog/page";
-import { BlogResponse } from "@/lib/blog/type";
-import { BlogGitlabDir } from "../dir";
-import { BlogGitlabRequest } from "../type";
+import { BlogPage, BlogPageProps } from "@/lib/blog/page";
+import { BlogDir } from "@/lib/blog/type";
+import { BlogGitLabDir } from "../dir";
+import { BlogGitLabRequest } from "../type";
 
-export interface BlogGitlabPageProps {
-	request: BlogGitlabRequest;
-	response: BlogResponse;
-}
+type Props = BlogPageProps<BlogGitLabRequest>;
 
-export const BlogGitlabPage = makeBlogPage<BlogGitlabRequest>({
-	BlogDir: BlogGitlabDir,
-});
+const getDir = (request: BlogGitLabRequest, dir: BlogDir): JSX.Element => (
+	<BlogGitLabDir dir={dir} request={request} />
+);
+
+const getFavicon = (): string => {
+	return "https://gitlab.com/favicon.png";
+};
+
+const getBreadcrumb = (): JSX.Element => <div>breadcrumb</div>;
+
+export const BlogGitLabPage = (props: Props): JSX.Element => (
+	<BlogPage
+		getDir={getDir}
+		getFavicon={getFavicon}
+		getBreadcrumb={getBreadcrumb}
+		request={props.request}
+		response={props.response}
+	/>
+);

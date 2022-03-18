@@ -1,12 +1,9 @@
-import {
-	BlogDirOverviewGetTitle,
-	makeBlogDirOverview,
-} from "@/lib/blog/dir/overview";
-import { BlogGitlabRequest } from "../type";
+import { BlogDirOverview, BlogDirOverviewProps } from "@/lib/blog/dir/overview";
+import { BlogGitLabRequest } from "../type";
 
-type GetTitle = BlogDirOverviewGetTitle<BlogGitlabRequest>;
+type Props = BlogDirOverviewProps<BlogGitLabRequest>;
 
-const getTitle: GetTitle = (props): string => {
+const getTitle = (props: Props): string => {
 	const { project, path } = props.request;
 	// Use current dir name from path first
 	const dir = path.split("/").pop();
@@ -17,4 +14,10 @@ const getTitle: GetTitle = (props): string => {
 	throw Error(`repo is undefined or empty string`);
 };
 
-export const BlogGitlabDirOverview = makeBlogDirOverview(getTitle);
+export const BlogGitLabDirOverview = (props: Props): JSX.Element => (
+	<BlogDirOverview
+		dir={props.dir}
+		getTitle={getTitle}
+		request={props.request}
+	/>
+);

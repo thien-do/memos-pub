@@ -1,48 +1,49 @@
 import { AppErrorBase } from "@/lib/app/error/base";
-import { BlogDir, BlogDirComponent } from "../dir";
+import Head from "next/head";
 import { BlogFile } from "../file";
-import { BlogRequest, BlogResponse } from "../type";
-import { BlogBreadcrumb } from "./breadcrumb";
-import { BlogFavicon } from "./favicon";
+import { BlogDir, BlogResponse } from "../type";
+// import { BlogGitHubBreadcrumb } from "./breadcrumb";
+// import { BlogGitHubFavicon } from "./favicon";
 
-interface BaseProps<R> {
+export interface BlogPageProps<R> {
 	request: R;
 	response: BlogResponse;
 }
-export type BlogPageBaseProps<R> = BaseProps<R>;
 
-export type BlogPageProps = BaseProps<BlogRequest>;
-
-type Component<R> = (props: BaseProps<R>) => JSX.Element;
-export type BlogPageComponent<R> = Component<R>;
-
-interface MakeProps<R> {
-	BlogDir: BlogDirComponent<R>;
+interface Props<R> extends BlogPageProps<R> {
+	getDir: (request: R, dir: BlogDir) => JSX.Element;
+	getFavicon: (request: R) => string;
+	getBreadcrumb: (request: R) => JSX.Element;
 }
 
-export const makeBlogPage = <R,>(props: MakeProps<R>) => {
-	const { BlogDir } = props;
-	const BlogPage: Component<R> = (props) => {
-		const { request, response } = props;
-		return (
-			<div>
-				{/* <BlogFavicon request={request} />
-				<BlogBreadcrumb request={request} /> */}
-				<div className="mt-16">
-					{response.type === "file" ? (
-						<BlogFile file={response} />
-					) : response.type === "dir" ? (
-						<BlogDir request={request} dir={response} />
-					) : (
-						<AppErrorBase title={response.status.toString()}>
-							{response.message}
-						</AppErrorBase>
-					)}
-				</div>
-			</div>
-		);
-	};
-	return BlogPage;
+const Body = <R,>(props: Props<R>): JSX.Element => {
+	const { getDir, request, response } = props;
+	switch (response.type) {
+		case "file":
+			return <BlogFile file={response} />;
+		case "dir":
+			return getDir(request, response);
+		case "error":
+			return (
+				<AppErrorBase title={response.status.toString()}>
+					{response.message}
+				</AppErrorBase>
+			);
+	}
 };
 
-export const BlogPage = makeBlogPage<BlogRequest>({ BlogDir });
+export const BlogPage = <R,>(props: Props<R>): JSX.Element => (
+	<div>
+		<Head>
+			<link
+				rel="icon"
+				href={props.getFavicon(props.request)}
+				type="image/png"
+			/>
+		</Head>
+		{props.getBreadcrumb(props.request)}
+		<div className="mt-16">
+			<Body {...props} />
+		</div>
+	</div>
+);

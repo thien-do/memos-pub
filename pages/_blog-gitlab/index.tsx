@@ -1,1 +1,1 @@
-export { BlogGitlabHome as default } from "@/lib/blog-gitlab/home";
+export { BlogGitLabHome as default } from "@/lib/blog-gitlab/home";

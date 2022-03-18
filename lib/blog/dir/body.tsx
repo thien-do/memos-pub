@@ -1,7 +1,6 @@
 import * as type from "../type";
-import { BlogDirEntry, BlogDirEntryComponent } from "./entry";
 
-interface BaseProps<R> {
+export interface BlogDirBodyProps<R> {
 	dir: type.BlogDir;
 	request: R;
 }
@@ -12,31 +11,26 @@ const byType = (a: type.BlogDirEntry, b: type.BlogDirEntry): number => {
 	return 1;
 };
 
-const sortEntries = (props: BaseProps<unknown>): type.BlogDirEntry[] => {
+const sortEntries = (props: BlogDirBodyProps<unknown>): type.BlogDirEntry[] => {
 	return props.dir.entries.slice().reverse().sort(byType);
 };
 
-type Component<R> = (props: BaseProps<R>) => JSX.Element;
-export type BlogDirBodyComponent<R> = Component<R>;
+interface Props<R> extends BlogDirBodyProps<R> {
+	toEntry: (
+		props: BlogDirBodyProps<R>,
+		entry: type.BlogDirEntry
+	) => JSX.Element;
+}
 
-export const makeBlogDirBody = <R,>(BlogDirEntry: BlogDirEntryComponent<R>) => {
-	const BlogDirBody: Component<R> = (props) => {
-		const entries = sortEntries(props);
-		return entries.length === 0 ? (
-			<p className="text-gray-400">This folder is empty</p>
-		) : (
-			<ul>
-				{sortEntries(props).map((entry) => (
-					<BlogDirEntry
-						entry={entry}
-						request={props.request}
-						key={entry.name}
-					/>
-				))}
-			</ul>
-		);
-	};
-	return BlogDirBody;
+export const BlogDirBody = <R,>(props: Props<R>): JSX.Element => {
+	const entries = sortEntries(props);
+	return entries.length === 0 ? (
+		<p className="text-gray-400">This folder is empty</p>
+	) : (
+		<ul>
+			{sortEntries(props).map((entry) => {
+				return props.toEntry(props, entry);
+			})}
+		</ul>
+	);
 };
-
-export const BlogDirBody = makeBlogDirBody(BlogDirEntry);

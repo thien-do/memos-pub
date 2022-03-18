@@ -1,6 +1,6 @@
-import { blogGitlabMwRewrite } from "@/lib/blog-gitlab/middleware/rewrite";
-import { blogMwRedirect } from "@/lib/blog/middleware/redirect";
-import { blogMwRewrite } from "@/lib/blog/middleware/rewrite";
+import { redirectBlogGitHubUrl } from "@/lib/blog-github/middleware/redirect";
+import { rewriteBlogGitHubUrl } from "@/lib/blog-github/middleware/rewrite";
+import { rewriteBlogGitLabUrl } from "@/lib/blog-gitlab/middleware/rewrite";
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextMiddleware, NextResponse } from "next/server";
 
@@ -27,14 +27,14 @@ export const appMiddleware: NextMiddleware = (req) => {
 		return NextResponse.rewrite(url);
 	}
 
-	const redirect = blogMwRedirect(req);
+	const redirect = redirectBlogGitHubUrl(req);
 	if (redirect !== null) return redirect;
 
 	// GitLab should be preferred over GitHub rewrite
-	const glRewrite = blogGitlabMwRewrite(req);
+	const glRewrite = rewriteBlogGitLabUrl(req);
 	if (glRewrite !== null) return glRewrite;
 
-	const rewrite = blogMwRewrite(req);
+	const rewrite = rewriteBlogGitHubUrl(req);
 	if (rewrite !== null) return rewrite;
 
 	return NextResponse.next();

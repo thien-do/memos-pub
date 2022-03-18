@@ -1,6 +1,6 @@
-import { BlogGitlabRequest } from "../type";
+import { BlogGitLabRequest } from "../type";
 
-const ensureType = (type: string): type is BlogGitlabRequest["type"] => {
+const ensureType = (type: string): type is BlogGitLabRequest["type"] => {
 	return ["tree", "blob"].includes(type);
 };
 
@@ -15,7 +15,7 @@ type PageParams = { slug: string[] | undefined } | undefined;
 // gitlab-org/gitaly
 // gitlab-org/gitaly/-/blob/master/doc/sidechannel.md
 // gitlab-org/gitlab/-/tree/master/doc
-export const parseBlogGitlabRequest = (page: PageParams): BlogGitlabRequest => {
+export const parseBlogGitLabRequest = (page: PageParams): BlogGitLabRequest => {
 	if (page === undefined) throw Error("page params is undefined");
 	const { slug } = page;
 	if (slug === undefined) throw Error("slug is undefined");
@@ -23,10 +23,10 @@ export const parseBlogGitlabRequest = (page: PageParams): BlogGitlabRequest => {
 	const [project, resource] = slug.join("/").split("/-/");
 
 	// Default to repo root
-	const request: BlogGitlabRequest = {
+	const request: BlogGitLabRequest = {
 		project,
 		path: "",
-		ref: null,
+		ref: "HEAD",
 		type: "tree",
 	};
 

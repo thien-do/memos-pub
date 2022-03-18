@@ -1,12 +1,12 @@
 import { BlogError } from "@/lib/blog/type";
-import { BlogGitlabRequest } from "../type";
+import { BlogGitLabRequest } from "../type";
 
 interface Props {
-	request: BlogGitlabRequest;
+	request: BlogGitLabRequest;
 	error: unknown;
 }
 
-export const parseBlogGitlabError = (props: Props): BlogError => {
+export const parseBlogGitLabError = (props: Props): BlogError => {
 	const { error, request } = props;
 	// @TODO
 	throw error;

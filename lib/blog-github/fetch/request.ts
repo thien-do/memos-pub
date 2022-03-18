@@ -1,14 +1,16 @@
-import { BlogRequest } from "../type";
+import { BlogGitHubRequest } from "../type";
 
 /**
  * PageRequest comes from outside so it's expectedly loose (fields are optional,
  * and the request itself may also be undefined)
  */
-export type BlogPageParams =
+export type BlogGitHubPageParams =
 	| { slug: string[] | undefined; owner: string | undefined }
 	| undefined;
 
-export const parseBlogRequest = (page: BlogPageParams): BlogRequest => {
+export const parseBlogGitHubRequest = (
+	page: BlogGitHubPageParams
+): BlogGitHubRequest => {
 	if (page === undefined) throw Error("request is undefined");
 	const { owner } = page;
 	if (owner === undefined) throw Error("owner is undefined");
@@ -20,6 +22,6 @@ export const parseBlogRequest = (page: BlogPageParams): BlogRequest => {
 	const [repo, ...parts] = slug;
 	const path = parts.join("/");
 
-	const request: BlogRequest = { owner, path, repo };
+	const request: BlogGitHubRequest = { owner, path, repo };
 	return request;
 };
