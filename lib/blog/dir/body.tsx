@@ -25,7 +25,7 @@ interface Props<R> extends BlogDirBodyProps<R> {
 export const BlogDirBody = <R,>(props: Props<R>): JSX.Element => {
 	const entries = sortEntries(props);
 	return entries.length === 0 ? (
-		<p className="text-gray-400">This folder is empty</p>
+		<p className="text-gray-400 dark:text-gray-600">This folder is empty</p>
 	) : (
 		<ul>
 			{sortEntries(props).map((entry) => {

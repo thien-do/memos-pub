@@ -1,8 +1,8 @@
 import { BlogPage, BlogPageProps } from "@/lib/blog/page";
 import { BlogDir } from "@/lib/blog/type";
+import { BlogGitHubBreadcrumb } from "../breadcrumb";
 import { BlogGitHubDir } from "../dir";
 import { BlogGitHubRequest } from "../type";
-import { BlogGitHubBreadcrumb } from "./breadcrumb";
 
 type Props = BlogPageProps<BlogGitHubRequest>;
 

@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { BlogGitHubRequest } from "../type";
+import { BlogGitLabRequest } from "../type";
 
 interface Props {
-	request: BlogGitHubRequest;
+	request: BlogGitLabRequest;
 }
 
 /**
@@ -13,6 +13,8 @@ interface Props {
  * ]
  */
 const getItems = (props: Props): string[] => {
+	return [];
+	/*
 	const { path, repo } = props.request;
 	let last = `/${repo}`;
 	const items: string[] = [last];
@@ -25,6 +27,7 @@ const getItems = (props: Props): string[] => {
 		});
 	items.pop();
 	return items;
+	*/
 };
 
 const renderItem = (href: string): JSX.Element => (
@@ -45,18 +48,18 @@ const Owner = (props: Props): JSX.Element => (
 			].join(" ")}
 		>
 			<img
-				src={`https://github.com/${props.request.owner}.png?size=64`}
+				src="https://gitlab.com/uploads/-/system/project/avatar/278964/logo-extra-whitespace.png?width=64"
 				alt=""
 				width="32"
 				height="32"
 				className="rounded-full"
 			/>
-			<span className="ml-3">{props.request.owner}</span>
+			<span className="ml-3">{props.request.project}</span>
 		</a>
 	</Link>
 );
 
-export const BlogGitHubBreadcrumb = (props: Props): JSX.Element => (
+export const BlogGitLabBreadcrumb = (props: Props): JSX.Element => (
 	<div className="flex items-center">
 		<Owner {...props} />
 		{getItems(props).map(renderItem)}

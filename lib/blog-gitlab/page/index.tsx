@@ -2,6 +2,7 @@ import { BlogPage, BlogPageProps } from "@/lib/blog/page";
 import { BlogDir } from "@/lib/blog/type";
 import { BlogGitLabDir } from "../dir";
 import { BlogGitLabRequest } from "../type";
+import { BlogGitLabBreadcrumb } from "./breadcrumb";
 
 type Props = BlogPageProps<BlogGitLabRequest>;
 
@@ -13,7 +14,9 @@ const getFavicon = (): string => {
 	return "https://gitlab.com/favicon.png";
 };
 
-const getBreadcrumb = (): JSX.Element => <div>breadcrumb</div>;
+const getBreadcrumb = (request: BlogGitLabRequest): JSX.Element => (
+	<BlogGitLabBreadcrumb request={request} />
+);
 
 export const BlogGitLabPage = (props: Props): JSX.Element => (
 	<BlogPage
