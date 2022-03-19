@@ -23,14 +23,16 @@ const touchShikiPath = (): void => {
 	touched.current = true;
 };
 
-export const getMdxHighlighter = (): Promise<shiki.Highlighter> => {
+export const getMdxHighlighter = async (): Promise<shiki.Highlighter> => {
 	touchShikiPath();
 
-	return shiki.getHighlighter({
+	const highlighter = await shiki.getHighlighter({
 		theme: "github-dark",
 		paths: {
 			languages: `${getShikiPath()}/languages/`,
 			themes: `${getShikiPath()}/themes/`,
 		},
 	});
+
+	return highlighter;
 };
