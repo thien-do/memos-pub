@@ -2,7 +2,7 @@ import { BlogPage, BlogPageProps } from "@/lib/blog/page";
 import { BlogDir } from "@/lib/blog/type";
 import { BlogGitLabDir } from "../dir";
 import { BlogGitLabRequest } from "../type";
-import { BlogGitLabBreadcrumb } from "./breadcrumb";
+import { BlogGitLabBreadcrumb } from "../breadcrumb";
 
 type Props = BlogPageProps<BlogGitLabRequest>;
 

@@ -19,7 +19,7 @@ interface Props<R> extends BlogBreadcrumbProps<R> {
 
 export const BlogBreadcrumb = <R,>(props: Props<R>): JSX.Element => (
 	<div className="flex items-center">
-		{props.getItems(props.request).map((item, index) => (
+		{props.getItems(props.request).map((item) => (
 			<Fragment key={item.href}>
 				<BlogBreadcrumbItem {...item} />
 				<Separator />
