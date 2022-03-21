@@ -10,37 +10,32 @@ interface Props<R> extends BlogDirEntryProps<R> {
 	getHref: (props: BlogDirEntryProps<R>) => string;
 }
 
-const DateFormatter = new Intl.DateTimeFormat("default", {
-	year: "2-digit",
-	month: "short",
-	day: "2-digit",
-});
-
-export const BlogDirEntry = <R,>(props: Props<R>): JSX.Element => {
-	const { type, date, title } = props.entry;
-	const body = (
-		<a
-			target="_self"
-			className={["flex items-start", "font-normal no-underline"].join(
-				" "
-			)}
-		>
-			{date !== null && (
-				<span
-					className={[
-						"flex-0 mr-6",
-						"text-gray-500 dark:text-gray-400",
-					].join(" ")}
-				>
-					{DateFormatter.format(date)}
-				</span>
-			)}
-			<span className="flex-1 overflow-hidden">{title}</span>
-		</a>
-	);
+const Prefix = <R,>(props: Props<R>): JSX.Element | null => {
+	const date = props.entry.date;
+	if (date === null) return null;
+	let text = date.toISOString();
+	text = text.slice(0, text.indexOf("T"));
 	return (
-		<li className={type === "dir" ? "list-[disclosure-closed]" : ""}>
-			<Link href={props.getHref(props)}>{body}</Link>
-		</li>
+		<span className="flex-0 mr-6 text-gray-500 dark:text-gray-400">
+			{text}
+		</span>
 	);
 };
+
+export const BlogDirEntry = <R,>(props: Props<R>): JSX.Element => (
+	<li
+		className={props.entry.type === "dir" ? "list-[disclosure-closed]" : ""}
+	>
+		<Link href={props.getHref(props)}>
+			<a
+				target="_self"
+				className="flex items-baseline font-normal no-underline"
+			>
+				<Prefix {...props} />
+				<span className="flex-1 overflow-hidden">
+					{props.entry.title}
+				</span>
+			</a>
+		</Link>
+	</li>
+);

@@ -24,10 +24,10 @@ const byType = (a: Entry, b: Entry): number => {
 };
 
 interface Props<R> extends BlogDirBodyProps<R> {
-	toEntry: (
-		props: BlogDirBodyProps<R>,
-		entry: type.BlogDirEntryDisplay
-	) => JSX.Element;
+	toEntry: (params: {
+		props: BlogDirBodyProps<R>;
+		entry: type.BlogDirEntryDisplay;
+	}) => JSX.Element;
 }
 
 export const BlogDirBody = <R,>(props: Props<R>): JSX.Element => {
@@ -37,7 +37,7 @@ export const BlogDirBody = <R,>(props: Props<R>): JSX.Element => {
 	) : (
 		<ul>
 			{entries.sort(byType).map((entry) => {
-				return props.toEntry(props, entry);
+				return props.toEntry({ props, entry });
 			})}
 		</ul>
 	);

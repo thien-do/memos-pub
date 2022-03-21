@@ -5,11 +5,11 @@ import { BlogGitLabDirEntry } from "./entry";
 
 type Props = BlogDirBodyProps<BlogGitLabRequest>;
 
-const toEntry = (props: Props, entry: BlogDirEntryDisplay) => (
+const toEntry = (params: { props: Props; entry: BlogDirEntryDisplay }) => (
 	<BlogGitLabDirEntry
-		entry={entry}
-		request={props.request}
-		key={entry.name}
+		entry={params.entry}
+		request={params.props.request}
+		key={params.entry.name}
 	/>
 );
 
