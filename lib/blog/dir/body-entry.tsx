@@ -1,14 +1,15 @@
 import { BlogDirEntry, BlogDirEntryDisplay } from "../type";
 
-// Between y m d, "-" or "/" or "."
-const d = "[-/.]";
-// Between date and title, " " or " - "
-const t = " (?:- )?";
+// Separator between y m d, "-" or "/" or "."
+const sd = "[-/.]";
+// Separator between date and title, " " or " - "
+const st = " (?:- )?";
+const ext = ".(?:md|mdx|markdown)$";
 
 const FORMATS: string[] = [
-	`^(\\d{2}${d}\\d{2}${d}\\d{2})${t}(.+)`, // yymmdd title
-	`^(\\d{4}${d}\\d{2}${d}\\d{2})${t}(.+)`, // yyyymmdd title
-	`^(\\d{2}${d}\\d{2}${d}\\d{4})${t}(.+)`, // ddmmyyyy title
+	`^(\\d{2}${sd}\\d{2}${sd}\\d{2})${st}(.+)${ext}`, // yymmdd title
+	`^(\\d{4}${sd}\\d{2}${sd}\\d{2})${st}(.+)${ext}`, // yyyymmdd title
+	`^(\\d{2}${sd}\\d{2}${sd}\\d{4})${st}(.+)${ext}`, // ddmmyyyy title
 ];
 
 interface Name {

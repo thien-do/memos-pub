@@ -26,7 +26,7 @@ const byType = (a: Entry, b: Entry): number => {
 interface Props<R> extends BlogDirBodyProps<R> {
 	toEntry: (
 		props: BlogDirBodyProps<R>,
-		entry: type.BlogDirEntry
+		entry: type.BlogDirEntryDisplay
 	) => JSX.Element;
 }
 
