@@ -19,7 +19,7 @@ export const HomeOverviewTry = (): JSX.Element => {
 				className={[
 					"flex-1 px-4 py-3 border-none",
 					"bg-white dark:bg-gray-900",
-					"placeholder-gray-400 dark:placeholder-gray-600",
+					"placeholder-gray-400 dark:placeholder-gray-500",
 					"focus:ring-0 text-base",
 				].join(" ")}
 				type="text"

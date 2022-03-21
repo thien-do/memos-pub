@@ -42,7 +42,7 @@ const getRehypeLinkOptions = (): Partial<rehypeLinkOptions> => ({
 	content: { type: "text", value: "# " },
 	properties: {
 		class: [
-			"text-gray-400 dark:text-gray-600 no-underline",
+			"text-gray-300 dark:text-gray-600 no-underline",
 			"sm:absolute sm:right-full sm:top-0 sm:mr-3",
 		].join(" "),
 	},

@@ -34,8 +34,8 @@ const FigureCaption = (props: Props): JSX.Element => (
 					key={index}
 					className={
 						part[1] === "light"
-							? "text-gray-400 dark:text-gray-600"
-							: "text-gray-700 dark:text-gray-300"
+							? "text-gray-500 dark:text-gray-400"
+							: "text-gray-900 dark:text-white"
 					}
 				>
 					{part[0]}
