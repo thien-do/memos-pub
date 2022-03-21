@@ -1,6 +1,6 @@
 import * as shiki from "shiki";
 import { join as pathJoin } from "path";
-import { readdir as fsReaddir } from "fs/promises";
+import * as fs from "fs/promises";
 
 // Shiki loads languages and themes using "fs" instead of "import", so Next.js
 // doesn't bundle them into production build. To work around, we manually copy
@@ -19,7 +19,7 @@ const touched = { current: false };
 // so Vercel doesn't know about them by default
 const touchShikiPath = (): void => {
 	if (touched.current) return; // only need to do once
-	fsReaddir(getShikiPath()); // fire and forget
+	fs.readdir(getShikiPath()); // fire and forget
 	touched.current = true;
 };
 
@@ -32,6 +32,15 @@ export const getMdxHighlighter = async (): Promise<shiki.Highlighter> => {
 			languages: `${getShikiPath()}/languages/`,
 			themes: `${getShikiPath()}/themes/`,
 		},
+	});
+
+	// Manual path for Mermaid while waiting for Shiki to release or having a
+	// way to catch syntax highlight error individually
+	// - https://github.com/atomiks/rehype-pretty-code/issues/25
+	highlighter.loadLanguage({
+		id: "mermaid",
+		scopeName: "markdown.mermaid.codeblock",
+		path: `${getShikiPath()}/languages/mermaid.tmLanguage.json`,
 	});
 
 	return highlighter;

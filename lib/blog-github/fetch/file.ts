@@ -16,8 +16,10 @@ export const parseBlogGitHubFile = async (props: Props): Promise<BlogFile> => {
 
 	if (!("content" in response)) throw Error("File doesn't have content");
 
+	const content = Buffer.from(response.content, "base64").toString();
+
 	const code = await compileMdx<BlogGitHubRequest>({
-		content: Buffer.from(response.content, "base64").toString(),
+		content: content,
 		options: { request, resolveUrl: resolveBlogGitHubMdxUrl },
 	});
 
