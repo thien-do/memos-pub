@@ -21,7 +21,7 @@ export const getStaticProps: GetProps = async (context) => {
 	const response = await fetchBlogGitLab(request);
 	return {
 		props: { request, response },
-		revalidate: 60 * 60, // seconds
+		revalidate: 5 * 60, // seconds
 	};
 };
 
