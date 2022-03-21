@@ -17,7 +17,7 @@ export const AppProse = (props: Props): JSX.Element => (
 			"prose-headings:xl:leading-tight",
 			"prose-headings:2xl:leading-tight",
 			// Links
-			"prose-a:decoration-gray-400 dark:prose-a:decoration-gray-600",
+			"prose-a:decoration-gray-400 dark:prose-a:decoration-gray-500",
 			"prose-a:underline-offset-2",
 			// Layout
 			"mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32",

@@ -1,34 +1,42 @@
 import * as type from "../type";
+import { toBlogDirEntryDisplay } from "./body-entry";
+
+type Entry = type.BlogDirEntryDisplay;
 
 export interface BlogDirBodyProps<R> {
 	dir: type.BlogDir;
 	request: R;
 }
 
-const byType = (a: type.BlogDirEntry, b: type.BlogDirEntry): number => {
-	if (a.type === b.type) return 0;
-	if (a.type === "dir") return -1;
-	return 1;
+const byName = (a: Entry, b: Entry): number => {
+	return a.name.localeCompare(b.name);
 };
 
-const sortEntries = (props: BlogDirBodyProps<unknown>): type.BlogDirEntry[] => {
-	return props.dir.entries.slice().reverse().sort(byType);
+const byDate = (a: Entry, b: Entry): number => {
+	if (a.date === null || b.date === null) return byName(a, b);
+	return b.date.getTime() - a.date.getTime();
+};
+
+const byType = (a: Entry, b: Entry): number => {
+	if (a.type === b.type) return byDate(a, b);
+	if (a.type === "dir") return -1;
+	return 1;
 };
 
 interface Props<R> extends BlogDirBodyProps<R> {
 	toEntry: (
 		props: BlogDirBodyProps<R>,
-		entry: type.BlogDirEntry
+		entry: type.BlogDirEntryDisplay
 	) => JSX.Element;
 }
 
 export const BlogDirBody = <R,>(props: Props<R>): JSX.Element => {
-	const entries = sortEntries(props);
+	const entries = props.dir.entries.map(toBlogDirEntryDisplay);
 	return entries.length === 0 ? (
-		<p className="text-gray-400 dark:text-gray-600">This folder is empty</p>
+		<p className="text-gray-300 dark:text-gray-600">This folder is empty</p>
 	) : (
 		<ul>
-			{sortEntries(props).map((entry) => {
+			{entries.sort(byType).map((entry) => {
 				return props.toEntry(props, entry);
 			})}
 		</ul>

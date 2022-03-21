@@ -10,7 +10,7 @@ export type BlogBreadcrumbGetItems<R> = (
 ) => BlogBreadcrumbItemProps[];
 
 const Separator = (): JSX.Element => (
-	<span className="px-2 text-gray-400 dark:text-gray-600">/</span>
+	<span className="px-2 text-gray-300 dark:text-gray-600">/</span>
 );
 
 interface Props<R> extends BlogBreadcrumbProps<R> {

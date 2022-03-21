@@ -4,7 +4,9 @@ import { HomeOverviewTry } from "./try";
 export const HomeOverview = (): JSX.Element => (
 	<AppProse>
 		<h1>
-			<span className="text-gray-500">Markdown Blogging,</span>
+			<span className="text-gray-500 dark:text-gray-400">
+				Markdown Blogging,
+			</span>
 			<br />
 			<span>Without Setup or Signup</span>
 		</h1>

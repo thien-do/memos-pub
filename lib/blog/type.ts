@@ -3,6 +3,11 @@ export interface BlogDirEntry {
 	name: string;
 }
 
+export interface BlogDirEntryDisplay extends BlogDirEntry {
+	title: string;
+	date: Date | null;
+}
+
 export interface BlogDir {
 	type: "dir";
 	entries: BlogDirEntry[];
