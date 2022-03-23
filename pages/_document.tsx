@@ -6,6 +6,11 @@ import { Html, Head, Main, NextScript } from "next/document";
 const AppDocument = (): JSX.Element => (
 	<Html lang="en-US">
 		<Head>
+			<script
+				defer
+				data-domain="memos.pub"
+				src="https://plausible.io/js/plausible.js"
+			></script>
 			{/* https://nextjs.org/docs/basic-features/font-optimization#usage */}
 			<link rel="preconnect" href="https://fonts.googleapis.com" />
 			<link
