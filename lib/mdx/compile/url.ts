@@ -1,4 +1,7 @@
-import { Options as rehypeUrlOptions } from "@jsdevtools/rehype-url-inspector";
+import {
+	Options as rehypeUrlOptions,
+	UrlMatch,
+} from "@jsdevtools/rehype-url-inspector";
 
 export type MdxResolveUrl<R> = (props: { url: string; request: R }) => string;
 
@@ -7,18 +10,22 @@ interface Props<R> {
 	resolveUrl: MdxResolveUrl<R>;
 }
 
-export const getRehypeUrlOptions = <R>(props: Props<R>): rehypeUrlOptions => {
+const rewriteImageSrc = <R>(props: Props<R>, match: UrlMatch): void => {
 	const { resolveUrl, request } = props;
+	const { url, node, propertyName } = match;
+	if (node.tagName !== "img") return;
+	if (propertyName !== "src") return;
+	if (url.startsWith("http")) return;
+	const raw = resolveUrl({ request, url });
+	node.properties = node.properties ?? {};
+	node.properties["src"] = raw;
+};
+
+export const getRehypeUrlOptions = <R>(props: Props<R>): rehypeUrlOptions => {
 	return {
 		selectors: ["img[src]"],
 		inspectEach: (match) => {
-			const { url, node, propertyName } = match;
-			if (node.tagName !== "img") return;
-			if (propertyName !== "src") return;
-			if (url.startsWith("http")) return;
-			const raw = resolveUrl({ request, url });
-			node.properties = node.properties ?? {};
-			node.properties["src"] = raw;
+			rewriteImageSrc(props, match);
 		},
 	};
 };
