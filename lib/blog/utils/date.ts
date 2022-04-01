@@ -3,8 +3,8 @@
  * @param d
  */
 export const toISOString = (d: Date): string => {
-	function f(n: number) {
-		return n < 10 ? "0" + n : n;
+	function f(n: number): string {
+		return n < 10 ? "0" + n : String(n);
 	}
 
 	// YYYY-MM-DDTHH:mm:ss.sssZ
@@ -14,6 +14,5 @@ export const toISOString = (d: Date): string => {
 		f(d.getHours()) + ":" +
 		f(d.getMinutes()) + ":" +
 		f(d.getSeconds()) + "." +
-		(d.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) + "Z";
-
+		(d.getMilliseconds() / 1000).toFixed(3).slice(2, 5) + "Z";
 };
