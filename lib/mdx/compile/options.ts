@@ -17,15 +17,13 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
 import { remarkMdxFrontmatter } from "remark-mdx-frontmatter";
 import remarkToc from "remark-toc";
-import { Highlighter } from "shiki";
 import { getMdxHighlighter } from "./highlight";
 import { getRehypeUrlOptions, MdxResolveUrl } from "./url";
 
 const getRehypeCodeOptions = (): Partial<rehypeCodeOptions> => ({
 	// Need to use a custom highlighter because rehype-pretty-code doesn't
-	// let us customize "paths". Also wrong typing by rehype-pretty-code
-	// See: https://github.com/atomiks/rehype-pretty-code/pull/24
-	getHighlighter: getMdxHighlighter as unknown as () => Highlighter,
+	// let us customize "paths".
+	getHighlighter: getMdxHighlighter,
 });
 
 const getFormat = (path: string): CompileOptions["format"] => {
