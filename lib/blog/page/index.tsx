@@ -2,8 +2,6 @@ import { AppErrorBase } from "@/lib/app/error/base";
 import Head from "next/head";
 import { BlogFile } from "../file";
 import { BlogDir, BlogResponse } from "../type";
-// import { BlogGitHubBreadcrumb } from "./breadcrumb";
-// import { BlogGitHubFavicon } from "./favicon";
 
 export interface BlogPageProps<R> {
 	request: R;

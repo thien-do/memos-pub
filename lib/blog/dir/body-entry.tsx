@@ -1,16 +1,17 @@
 import { BlogDirEntry, BlogDirEntryDisplay } from "../type";
 
-// Separator between y m d, "-" or "/" or "."
-const sd = "[-/.]";
-// Separator between date and title, " " or " - "
-const st = " (?:- )?";
-const ext = ".(?:md|mdx|markdown)$";
-
-const FORMATS: string[] = [
-	`^(\\d{2}${sd}\\d{2}${sd}\\d{2})${st}(.+)${ext}`, // yymmdd title
-	`^(\\d{4}${sd}\\d{2}${sd}\\d{2})${st}(.+)${ext}`, // yyyymmdd title
-	`^(\\d{2}${sd}\\d{2}${sd}\\d{4})${st}(.+)${ext}`, // ddmmyyyy title
-];
+// Only support ISO format by default. Other formats will be supported via
+// config file in the future.
+const dateRegExp = (() => {
+	// Separator between date and title, " " or " - "
+	const sep = " (?:- )?";
+	const ext = ".(?:md|mdx|markdown)$";
+	// yyyymmdd title
+	const date = `\\d{4}-\\d{2}-\\d{2}`;
+	const pattern = `^(${date})${sep}(.+)${ext}`;
+	const exp = new RegExp(pattern);
+	return exp;
+})();
 
 interface Name {
 	title: string;
@@ -23,16 +24,14 @@ interface Name {
  */
 const parseName = (name: string): Name => {
 	const result: Name = { title: name, date: null };
-	FORMATS.forEach((format) => {
-		if (result.date !== null) return;
-		const regex = new RegExp(format);
-		const matches = name.match(regex);
-		if (matches === null) return;
-		const date = new Date(matches[1]);
-		if (Number.isNaN(date.getTime())) return;
-		result.date = date;
-		result.title = matches[2];
-	});
+	if (result.date !== null) return result;
+	const matches = name.match(dateRegExp);
+	if (matches === null) return result;
+	const dateString = `${matches[1]}T00:00:00Z`; // Ensure UTC timezone
+	const date = new Date(dateString);
+	if (Number.isNaN(date.getTime())) return result;
+	result.date = date;
+	result.title = matches[2];
 	return result;
 };
 
