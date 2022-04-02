@@ -13,6 +13,7 @@ interface Props<R> extends BlogDirEntryProps<R> {
 const Prefix = <R,>(props: Props<R>): JSX.Element | null => {
 	const date = props.entry.date;
 	if (date === null) return null;
+
 	let text = date.toISOString();
 	text = text.slice(0, text.indexOf("T"));
 	return (
