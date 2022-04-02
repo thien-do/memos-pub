@@ -11,7 +11,7 @@ const getDir = (request: BlogGitHubRequest, dir: BlogDir): JSX.Element => (
 );
 
 const getFavicon = (request: BlogGitHubRequest): string => {
-	return `https://github.com/${request.owner}.png?size=48`;
+	return `https://funcs.dev/api/favicon?user=${request.owner}&size=48`;
 };
 
 const getBreadcrumb = (request: BlogGitHubRequest): JSX.Element => (
