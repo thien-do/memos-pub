@@ -1,4 +1,4 @@
-import { redirectBlogGitHubUrl } from "@/lib/blog-github/middleware/redirect";
+import { redirectGitHubFullUrl } from "@/lib/blog-github/middleware/full-url";
 import { rewriteBlogGitHubUrl } from "@/lib/blog-github/middleware/rewrite";
 import { rewriteBlogGitLabUrl } from "@/lib/blog-gitlab/middleware/rewrite";
 // eslint-disable-next-line @next/next/no-server-import-in-page
@@ -26,7 +26,7 @@ export const appMiddleware: NextMiddleware = (req) => {
 		return NextResponse.rewrite(url);
 	}
 
-	const redirect = redirectBlogGitHubUrl(req);
+	const redirect = redirectGitHubFullUrl(req);
 	if (redirect !== null) return redirect;
 
 	// GitLab should be preferred over GitHub rewrite
