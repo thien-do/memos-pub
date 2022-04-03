@@ -1,6 +1,7 @@
 import { redirectGitHubFullUrl } from "@/lib/blog-github/middleware/full-url";
 import { rewriteBlogGitHubUrl } from "@/lib/blog-github/middleware/rewrite";
 import { rewriteBlogGitLabUrl } from "@/lib/blog-gitlab/middleware/rewrite";
+import { rewriteMemberRequest } from "@/lib/blog-member/middleware/rewrite";
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextMiddleware, NextResponse } from "next/server";
 
@@ -12,19 +13,13 @@ export const appMiddleware: NextMiddleware = (req) => {
 	if (pathname.startsWith("/api")) return NextResponse.next();
 
 	// Avoid direct access to internal routing
-	if (pathname.startsWith(`/_blog`))
+	if (pathname.startsWith(`/_blog-github`))
 		return new NextResponse(null, { status: 404 });
 	if (pathname.startsWith(`/_blog-gitlab`))
 		return new NextResponse(null, { status: 404 });
 
-	// Custom domain experiment
-	const { host } = req.nextUrl;
-	if (host === "memo.mocmeo.blog") {
-		const url = req.nextUrl.clone();
-		// https://huyng12.memos.pub/blog/posts/hello-world.mdx
-		url.pathname = `/_blog/huyng12/blog/posts${url.pathname}`;
-		return NextResponse.rewrite(url);
-	}
+	const memberRewrite = rewriteMemberRequest(req);
+	if (memberRewrite !== null) return memberRewrite;
 
 	const redirect = redirectGitHubFullUrl(req);
 	if (redirect !== null) return redirect;
