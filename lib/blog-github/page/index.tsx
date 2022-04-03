@@ -10,7 +10,7 @@ const getDir = (request: BlogGitHubRequest, dir: BlogDir): JSX.Element => (
 	<BlogGitHubDir dir={dir} request={request} />
 );
 
-const getFavicon = (request: BlogGitHubRequest): string => {
+export const gitHubBlogGetFavicon = (request: BlogGitHubRequest): string => {
 	return `https://funcs.dev/api/favicon?user=${request.owner}&size=48`;
 };
 
@@ -21,7 +21,7 @@ const getBreadcrumb = (request: BlogGitHubRequest): JSX.Element => (
 export const BlogGitHubPage = (props: Props): JSX.Element => (
 	<BlogPage
 		getDir={getDir}
-		getFavicon={getFavicon}
+		getFavicon={gitHubBlogGetFavicon}
 		getBreadcrumb={getBreadcrumb}
 		request={props.request}
 		response={props.response}

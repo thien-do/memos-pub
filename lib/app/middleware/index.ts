@@ -13,6 +13,8 @@ export const appMiddleware: NextMiddleware = (req) => {
 	if (pathname.startsWith("/api")) return NextResponse.next();
 
 	// Avoid direct access to internal routing
+	if (pathname.startsWith(`/_blog-member`))
+		return new NextResponse(null, { status: 404 });
 	if (pathname.startsWith(`/_blog-github`))
 		return new NextResponse(null, { status: 404 });
 	if (pathname.startsWith(`/_blog-gitlab`))
