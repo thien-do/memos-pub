@@ -10,8 +10,16 @@ export const rewriteBlogGitHubUrl = (req: NextRequest): null | NextResponse => {
 	// e.g. "/blog-slug" (this includes "/")
 	const { pathname } = req.nextUrl;
 	const owner = getBlogOwner(req);
-
+	// owner is null when we are at root -> null to skip to other middleware
 	if (owner === null) return null;
+
+	// Redirect to profile repo if no repo exists in pathname
+	// https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme
+	if (pathname === "/") {
+		const url = req.nextUrl.clone();
+		url.pathname = `/${owner}/`;
+		return NextResponse.redirect(url);
+	}
 
 	// Rewrite blog request to _blog
 	const url = req.nextUrl.clone();

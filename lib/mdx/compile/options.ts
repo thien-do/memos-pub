@@ -18,7 +18,7 @@ import remarkGfm from "remark-gfm";
 import { remarkMdxFrontmatter } from "remark-mdx-frontmatter";
 import remarkToc from "remark-toc";
 import { getMdxHighlighter } from "./highlight";
-import { getRehypeUrlOptions, MdxResolveUrl } from "./url";
+import { getRehypeUrlOptions, MdxUrlResolvers } from "./url";
 
 const getRehypeCodeOptions = (): Partial<rehypeCodeOptions> => ({
 	// Need to use a custom highlighter because rehype-pretty-code doesn't
@@ -52,14 +52,14 @@ const getRehypeTitleOptions = (): rehypeTitleOptions => ({
 
 interface Props<R> {
 	request: R;
-	resolveUrl: MdxResolveUrl<R>;
+	resolvers: MdxUrlResolvers<R>;
 }
 export type GetMdxCompileOptionsProps<R> = Props<R>;
 
 export const getMdxCompileOptions = <R extends BlogRequestBase>(
 	props: Props<R>
 ): CompileOptions => {
-	const { resolveUrl, request } = props;
+	const { resolvers, request } = props;
 	return {
 		format: getFormat(request.path),
 		outputFormat: "function-body",
@@ -76,7 +76,7 @@ export const getMdxCompileOptions = <R extends BlogRequestBase>(
 			[rehypeInferTitleMeta, getRehypeTitleOptions()],
 			rehypeMeta,
 			[rehypeAutolinkHeadings, getRehypeLinkOptions()],
-			[rehypeUrl, getRehypeUrlOptions({ resolveUrl, request })],
+			[rehypeUrl, getRehypeUrlOptions({ resolvers, request })],
 		],
 	};
 };
