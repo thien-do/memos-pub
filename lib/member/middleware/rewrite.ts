@@ -1,9 +1,10 @@
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextRequest, NextResponse } from "next/server";
-import path, { join as pathJoin } from "path";
+import { join as pathJoin } from "path";
 
 const MEMBERS: { from: string; to: string }[] = [
 	{ from: "thien.do", to: "thien-do/thien-do" },
+	{ from: "notes.ancaois.me", to: "kcjpop/kcjpop" },
 ];
 
 /*
