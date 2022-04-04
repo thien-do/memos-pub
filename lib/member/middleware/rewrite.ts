@@ -1,5 +1,6 @@
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextRequest, NextResponse } from "next/server";
+import path, { join as pathJoin } from "path";
 
 const MEMBERS: { from: string; to: string }[] = [
 	{ from: "thien.do", to: "thien-do/thien-do" },
@@ -23,6 +24,6 @@ export const rewriteMemberRequest = (req: NextRequest): null | NextResponse => {
 	const { from, to } = member;
 	const url = req.nextUrl.clone();
 	const { pathname } = req.nextUrl;
-	url.pathname = `/_member/${from}/${to}${pathname}`;
+	url.pathname = `/_member/${pathJoin(from, to, pathname)}`;
 	return NextResponse.rewrite(url);
 };

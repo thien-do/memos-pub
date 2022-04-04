@@ -1,7 +1,7 @@
 import { redirectGitHubFullUrl } from "@/lib/github/middleware/full-url";
 import { rewriteBlogGitHubUrl } from "@/lib/github/middleware/rewrite";
 // import { rewriteBlogGitLabUrl } from "@/lib/blog-gitlab/middleware/rewrite";
-// import { rewriteMemberRequest } from "@/lib/blog-member/middleware/rewrite";
+import { rewriteMemberRequest } from "@/lib/member/middleware/rewrite";
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextMiddleware, NextResponse } from "next/server";
 
@@ -20,8 +20,8 @@ export const appMiddleware: NextMiddleware = (req) => {
 	// if (pathname.startsWith(`/_blog-gitlab`))
 	// 	return new NextResponse(null, { status: 404 });
 
-	// const memberRewrite = rewriteMemberRequest(req);
-	// if (memberRewrite !== null) return memberRewrite;
+	const memberRewrite = rewriteMemberRequest(req);
+	if (memberRewrite !== null) return memberRewrite;
 
 	const redirect = redirectGitHubFullUrl(req);
 	if (redirect !== null) return redirect;

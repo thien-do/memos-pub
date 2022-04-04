@@ -14,15 +14,15 @@ const octokit = new Octokit({
 type RawResponse =
 	operations["repos/get-content"]["responses"]["200"]["content"]["application/json"];
 
-const parseResponse = async (
-	props: Props,
+const parseResponse = async <R extends GitHubBlogRequest>(
+	props: Props<R>,
 	response: RawResponse
 ): Promise<BlogResponse> => {
 	const { request, resolvers } = props;
 
 	// Directory
 	if (Array.isArray(response)) {
-		return await parseGitHubBlogDir({ request, response });
+		return await parseGitHubBlogDir({ request, response, resolvers });
 	}
 
 	// Single file raw
@@ -39,12 +39,14 @@ const parseResponse = async (
 	throw Error(`Unknown content type "${response.type}"`);
 };
 
-interface Props {
-	request: GitHubBlogRequest;
-	resolvers: MdxUrlResolvers<GitHubBlogRequest>;
+interface Props<R extends GitHubBlogRequest> {
+	request: R;
+	resolvers: MdxUrlResolvers<R>;
 }
 
-export const fetchGitHubBlog = async (props: Props): Promise<BlogResponse> => {
+export const fetchGitHubBlog = async <R extends GitHubBlogRequest>(
+	props: Props<R>
+): Promise<BlogResponse> => {
 	const { owner, path, repo } = props.request;
 	try {
 		const get = octokit.rest.repos.getContent;

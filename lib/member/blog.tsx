@@ -1,53 +1,43 @@
-import { BlogPage, GetBlogFavicon } from "@/lib/blog";
+import { BlogPage } from "@/lib/blog";
 import { BlogResponse } from "@/lib/blog/type";
 import { join as pathJoin } from "path";
 import { GetBlogBreadcrumbItems } from "../blog/breadcrumb";
 import { BlogBreadcrumbItem } from "../blog/breadcrumb/item";
 import { GetBlogDirEntryHref } from "../blog/dir/entry";
 import { GetBlogDirTitle } from "../blog/dir/overview";
-import { GitHubBlogRequest as Request } from "./type";
+import { getGitHubBlogFavicon } from "../github/blog";
+import { MemberBlogRequest as Request } from "./type";
 
 interface Props {
 	request: Request;
 	response: BlogResponse;
 }
 
-const getFavicon: GetBlogFavicon<Request> = (request): string => {
-	return `https://funcs.dev/api/favicon?user=${request.owner}&size=48`;
-};
-
-export { getFavicon as getGitHubBlogFavicon };
-
 const getDirTitle: GetBlogDirTitle<Request> = (props) => {
-	const { repo, path } = props.request;
+	const { host, path } = props.request;
 	// Use current dir name from path first
 	const dir = path.split("/").pop();
 	if (dir !== "" && dir !== undefined) return dir;
-	// Else (path is empty -> at repo root) we use repo
-	return repo;
+	// Else (path is empty -> at repo root) we use host
+	return host;
 };
 
 const getDirEntryHref: GetBlogDirEntryHref<Request> = (props) => {
 	const { entry, request } = props;
-	// don't need "user" here because we redirect inside subdomain
-	const { repo, path } = request;
-	const href = `/${pathJoin(repo, path, entry.name)}`;
+	const href = `/${pathJoin(request.path, entry.name)}`;
 	return href;
 };
 
-const getBreadcrumbItems: GetBlogBreadcrumbItems<Request> = (request) => {
-	const { path, repo, owner } = request;
+const getBreadcrumbItems: GetBlogBreadcrumbItems<Request> = (props) => {
+	const { path, owner, host } = props;
 
 	const items: BlogBreadcrumbItem[] = [];
 
-	// Owner
+	// Host
 	const image = `https://github.com/${owner}.png?size=64`;
-	items.push({ image, href: "/", children: owner });
+	items.push({ image, href: "/", children: host });
 
-	// Repo
-	let href = `/${repo}`;
-	items.push({ href, children: repo });
-
+	let href = "";
 	if (path !== "") {
 		path.split("/").forEach((name) => {
 			href = `${href}/${name}`;
@@ -63,13 +53,13 @@ const getBreadcrumbItems: GetBlogBreadcrumbItems<Request> = (request) => {
 	return items;
 };
 
-export const GitHubBlogPage = (props: Props): JSX.Element => (
+export const MemberBlogPage = (props: Props): JSX.Element => (
 	<BlogPage<Request>
 		request={props.request}
 		response={props.response}
 		getBreadcrumbItems={getBreadcrumbItems}
 		getDirEntryHref={getDirEntryHref}
 		getDirTitle={getDirTitle}
-		getFavicon={getFavicon}
+		getFavicon={getGitHubBlogFavicon}
 	/>
 );

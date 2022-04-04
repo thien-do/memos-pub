@@ -1,6 +1,7 @@
 import { filterBlogDirEntries } from "@/lib/blog/dir/utils/filter";
 import { findBlogDirReadme } from "@/lib/blog/dir/utils/readme";
 import { BlogDir, BlogDirEntry } from "@/lib/blog/type";
+import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
 import { components } from "@octokit/openapi-types";
 import nodepath from "path";
 import { GitHubBlogRequest } from "../type";
@@ -19,28 +20,32 @@ const toDirEntry = (raw: RawDirEntry): BlogDirEntry | null => {
 	return { name: raw.name, type: raw.type };
 };
 
-const fetchReadme = async (
-	request: GitHubBlogRequest,
+const fetchReadme = async <R extends GitHubBlogRequest>(
+	props: Props<R>,
 	entries: BlogDir["entries"]
 ): Promise<BlogDir["readme"]> => {
+	const request = { ...props.request };
+	const { resolvers } = props;
 	const readme = findBlogDirReadme(entries);
 	if (readme === null) return null;
-	const path = nodepath.join(request.path, readme.name);
-	const file = await fetchGitHubBlog({ ...request, path });
+	request.path = nodepath.join(request.path, readme.name);
+	const file = await fetchGitHubBlog({ request, resolvers });
 	if (file.type !== "file") throw Error("README file is not file (2)");
 	return file;
 };
 
-interface Props {
-	request: GitHubBlogRequest;
+interface Props<R extends GitHubBlogRequest> {
+	request: R;
 	response: RawDir;
+	resolvers: MdxUrlResolvers<R>;
 }
 
-export const parseGitHubBlogDir = async (props: Props): Promise<BlogDir> => {
-	const { request, response } = props;
-	const raw = response.map(toDirEntry);
+export const parseGitHubBlogDir = async <R extends GitHubBlogRequest>(
+	props: Props<R>
+): Promise<BlogDir> => {
+	const raw = props.response.map(toDirEntry);
 	const entries = filterBlogDirEntries(raw);
-	const readme = await fetchReadme(request, entries);
+	const readme = await fetchReadme(props, entries);
 	const dir: BlogDir = { type: "dir", entries, readme };
 	return dir;
 };

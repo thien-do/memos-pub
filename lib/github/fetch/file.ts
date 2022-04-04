@@ -6,13 +6,15 @@ import { GitHubBlogRequest } from "../type";
 
 type RawFile = components["schemas"]["content-file"];
 
-interface Props {
+interface Props<R extends GitHubBlogRequest> {
 	response: RawFile;
-	request: GitHubBlogRequest;
-	resolvers: MdxUrlResolvers<GitHubBlogRequest>;
+	request: R;
+	resolvers: MdxUrlResolvers<R>;
 }
 
-export const parseGitHubBlogFile = async (props: Props): Promise<BlogFile> => {
+export const parseGitHubBlogFile = async <R extends GitHubBlogRequest>(
+	props: Props<R>
+): Promise<BlogFile> => {
 	const { response, request } = props;
 
 	if (!("content" in response)) throw Error("File doesn't have content");
@@ -20,7 +22,7 @@ export const parseGitHubBlogFile = async (props: Props): Promise<BlogFile> => {
 	const content = Buffer.from(response.content, "base64").toString();
 
 	const resolvers = props.resolvers;
-	const code = await compileMdx<GitHubBlogRequest>({
+	const code = await compileMdx<R>({
 		content: content,
 		options: { request, resolvers },
 	});

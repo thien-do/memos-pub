@@ -1,6 +1,6 @@
-import { gitHubMdxResolvers } from "@/lib/blog-github/mdx/url";
+import { gitHubMdxResolvers } from "@/lib/github/mdx";
 import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
-import { MemberBlogRequest } from "../type";
+import { MemberBlogRequest } from "./type";
 
 export const memberMdxResolvers: MdxUrlResolvers<MemberBlogRequest> = {
 	// This is just GitHub's absolute asset path
