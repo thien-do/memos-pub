@@ -1,6 +1,6 @@
 import { BlogRequestBase } from "../blog/type";
 
-export interface BlogGitHubRequest extends BlogRequestBase {
+export interface GitHubBlogRequest extends BlogRequestBase {
 	/** e.g. "thien-do" */
 	owner: string;
 	/** e.g. "notes" */

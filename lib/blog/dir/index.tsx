@@ -2,25 +2,26 @@ import { Fragment } from "react";
 import { BlogFile } from "../file";
 import * as type from "../type";
 import { BlogDirBody } from "./body";
-import { BlogDirOverview } from "./overview";
+import { GetBlogDirEntryHref } from "./entry";
+import { BlogDirOverview, GetBlogDirTitle } from "./overview";
 
 interface Props<R> {
 	dir: type.BlogDir;
 	request: R;
-	getTitle: Parameters<typeof BlogDirOverview>[0]["getTitle"];
-	getEntryHref: Parameters<typeof BlogDirBody>[0]["getEntryHref"];
+	getTitle: GetBlogDirTitle<R>;
+	getEntryHref: GetBlogDirEntryHref<R>;
 }
 
 // If dir has only 1 file and that file is README (or index) then we can skip
 // the dir title and entry list
-const shouldSkip = (props: Props<unknown>): boolean => {
-	const { entries, readme } = props.dir;
+const shouldSkip = (dir: type.BlogDir): boolean => {
+	const { entries, readme } = dir;
 	return entries.length === 1 && readme !== null;
 };
 
 export const BlogDir = <R,>(props: Props<R>): JSX.Element => (
 	<div>
-		{shouldSkip(props) ? null : (
+		{shouldSkip(props.dir) ? null : (
 			<Fragment>
 				<BlogDirOverview
 					dir={props.dir}

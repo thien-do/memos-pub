@@ -1,6 +1,6 @@
-import { BlogGitHubRequest } from "@/lib/blog-github/type";
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextRequest, NextResponse } from "next/server";
+import { GitHubBlogRequest } from "../type";
 
 // > "/https:/github.com/axieinfinity/festival/blob/master/component_export.md".split("/");
 // ['', 'https:', 'github.com', 'axieinfinity', 'festival', 'blob', 'master', 'component_export.md']
@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 // [ '', 'https:', 'github.com', 'axieinfinity', 'festival', '' ]
 // > "/https:/github.com/axieinfinity/".split("/");
 // [ '', 'https:', 'github.com', 'axieinfinity', '' ]
-const getRequest = (pathname: string): BlogGitHubRequest | null => {
+const getRequest = (pathname: string): GitHubBlogRequest | null => {
 	const parts = pathname.split("/");
 	const [_blank, _protocol, host, owner, oRepo, _blob, _branch, ...paths] =
 		parts;

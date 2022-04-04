@@ -1,6 +1,6 @@
-import { getBlogOwner } from "@/lib/blog/middleware/owner";
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextRequest, NextResponse } from "next/server";
+import { getRequestSubdomain } from "@/lib/middleware/subdomain";
 
 /*
 Re-route `foo.memos.pub/bar/baz` into `memos.pub/_blog/foo/bar/baz`. Extended
@@ -9,7 +9,7 @@ from https://github.com/vercel/platforms/blob/main/pages/_middleware.js
 export const rewriteBlogGitHubUrl = (req: NextRequest): null | NextResponse => {
 	// e.g. "/blog-slug" (this includes "/")
 	const { pathname } = req.nextUrl;
-	const owner = getBlogOwner(req);
+	const owner = getRequestSubdomain(req);
 	// owner is null when we are at root -> null to skip to other middleware
 	if (owner === null) return null;
 

@@ -1,5 +1,5 @@
 import { BlogError } from "@/lib/blog/type";
-import { BlogGitHubRequest } from "../type";
+import { GitHubBlogRequest } from "../type";
 
 interface HasStatus {
 	status: number;
@@ -15,7 +15,7 @@ const hasStatus = (raw: unknown): raw is HasStatus => {
 	}
 };
 
-const get404 = (request: BlogGitHubRequest): string => {
+const get404 = (request: GitHubBlogRequest): string => {
 	const { owner, path, repo } = request;
 	const paths = path === "" ? "nothing" : `no "${path}"`;
 	const href = `https://github.com/${owner}/${repo}`;
@@ -23,7 +23,7 @@ const get404 = (request: BlogGitHubRequest): string => {
 	return `Looks like there is ${paths} at ${repos}.`;
 };
 
-const getMessage = (request: BlogGitHubRequest, error: HasStatus): string => {
+const getMessage = (request: GitHubBlogRequest, error: HasStatus): string => {
 	switch (error.status) {
 		case 404:
 			return get404(request);
@@ -33,7 +33,7 @@ const getMessage = (request: BlogGitHubRequest, error: HasStatus): string => {
 };
 
 export const parseBlogGitHubError = (
-	request: BlogGitHubRequest,
+	request: GitHubBlogRequest,
 	error: unknown
 ): BlogError => {
 	if (hasStatus(error)) {

@@ -1,8 +1,13 @@
 import Head from "next/head";
 import * as type from "../type";
 
+export type GetBlogDirTitle<R> = (props: {
+	dir: type.BlogDir;
+	request: R;
+}) => string;
+
 interface Props<R> {
-	getTitle: (props: { dir: type.BlogDir; request: R }) => string;
+	getTitle: GetBlogDirTitle<R>;
 	dir: type.BlogDir;
 	request: R;
 }

@@ -3,7 +3,7 @@ import { findBlogDirReadme } from "@/lib/blog/fetch/dir-readme";
 import { BlogDir, BlogDirEntry } from "@/lib/blog/type";
 import { components } from "@octokit/openapi-types";
 import nodepath from "path";
-import { BlogGitHubRequest } from "../type";
+import { GitHubBlogRequest } from "../type";
 import { fetchBlogGitHub } from "./index";
 
 type RawDir = components["schemas"]["content-directory"];
@@ -20,7 +20,7 @@ const toDirEntry = (raw: RawDirEntry): BlogDirEntry | null => {
 };
 
 const fetchReadme = async (
-	request: BlogGitHubRequest,
+	request: GitHubBlogRequest,
 	entries: BlogDir["entries"]
 ): Promise<BlogDir["readme"]> => {
 	const readme = findBlogDirReadme(entries);
@@ -32,7 +32,7 @@ const fetchReadme = async (
 };
 
 interface Props {
-	request: BlogGitHubRequest;
+	request: GitHubBlogRequest;
 	response: RawDir;
 }
 

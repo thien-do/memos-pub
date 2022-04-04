@@ -1,5 +1,5 @@
 import * as type from "../type";
-import { BlogDirEntry } from "./entry";
+import { BlogDirEntry, GetBlogDirEntryHref } from "./entry";
 import { toBlogDirEntryDisplay } from "./entry/display";
 
 type Entry = type.BlogDirEntryDisplay;
@@ -22,7 +22,7 @@ const byType = (a: Entry, b: Entry): number => {
 interface Props<R> {
 	dir: type.BlogDir;
 	request: R;
-	getEntryHref: Parameters<typeof BlogDirEntry>[0]["getHref"];
+	getEntryHref: GetBlogDirEntryHref<R>;
 }
 
 export const BlogDirBody = <R,>(props: Props<R>): JSX.Element => {

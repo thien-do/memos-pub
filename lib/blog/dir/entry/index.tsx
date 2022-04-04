@@ -1,10 +1,15 @@
 import Link from "next/link";
 import * as type from "../../type";
 
+export type GetBlogDirEntryHref<R> = (props: {
+	entry: type.BlogDirEntry;
+	request: R;
+}) => string;
+
 interface Props<R> {
 	entry: type.BlogDirEntryDisplay;
 	request: R;
-	getHref: (props: { entry: type.BlogDirEntry; request: R }) => string;
+	getHref: GetBlogDirEntryHref<R>;
 }
 
 export const BlogDirEntry = <R,>(props: Props<R>): JSX.Element => {

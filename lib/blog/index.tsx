@@ -1,17 +1,21 @@
 import Head from "next/head";
 import { ErrorBase } from "../error/base";
-import { BlogBreadcrumb } from "./breadcrumb";
+import { BlogBreadcrumb, GetBlogBreadcrumbItems } from "./breadcrumb";
 import { BlogDir } from "./dir";
+import { GetBlogDirEntryHref } from "./dir/entry";
+import { GetBlogDirTitle } from "./dir/overview";
 import { BlogFile } from "./file";
 import { BlogResponse } from "./type";
+
+export type GetBlogFavicon<R> = (request: R) => string;
 
 interface Props<R> {
 	request: R;
 	response: BlogResponse;
-	getFavicon: (request: R) => string;
-	getBreadcrumbItems: Parameters<typeof BlogBreadcrumb>[0]["getItems"];
-	getDirTitle: Parameters<typeof BlogDir>[0]["getTitle"];
-	getDirEntryHref: Parameters<typeof BlogDir>[0]["getEntryHref"];
+	getFavicon: GetBlogFavicon<R>;
+	getBreadcrumbItems: GetBlogBreadcrumbItems<R>;
+	getDirTitle: GetBlogDirTitle<R>;
+	getDirEntryHref: GetBlogDirEntryHref<R>;
 }
 
 const Body = <R,>(props: Props<R>): JSX.Element => {

@@ -3,14 +3,14 @@ import { compileMdx } from "@/lib/mdx/compile";
 import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
 import { components } from "@octokit/openapi-types";
 import { gitHubMdxResolvers } from "../mdx/url";
-import { BlogGitHubRequest } from "../type";
+import { GitHubBlogRequest } from "../type";
 
 type RawFile = components["schemas"]["content-file"];
 
 interface Props {
 	response: RawFile;
-	request: BlogGitHubRequest;
-	resolvers?: MdxUrlResolvers<BlogGitHubRequest>;
+	request: GitHubBlogRequest;
+	resolvers?: MdxUrlResolvers<GitHubBlogRequest>;
 }
 
 export const parseBlogGitHubFile = async (props: Props): Promise<BlogFile> => {
@@ -21,7 +21,7 @@ export const parseBlogGitHubFile = async (props: Props): Promise<BlogFile> => {
 	const content = Buffer.from(response.content, "base64").toString();
 
 	const resolvers = props.resolvers ?? gitHubMdxResolvers;
-	const code = await compileMdx<BlogGitHubRequest>({
+	const code = await compileMdx<GitHubBlogRequest>({
 		content: content,
 		options: { request, resolvers },
 	});
