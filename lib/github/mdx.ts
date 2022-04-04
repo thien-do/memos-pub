@@ -1,6 +1,6 @@
 import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
 import nodepath from "path";
-import { GitHubBlogRequest } from "../type";
+import { GitHubBlogRequest } from "./type";
 
 export const gitHubMdxResolvers: MdxUrlResolvers<GitHubBlogRequest> = {
 	asset: (props) => {

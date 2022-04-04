@@ -24,6 +24,6 @@ export const rewriteBlogGitHubUrl = (req: NextRequest): null | NextResponse => {
 	// Rewrite blog request to _blog
 	const url = req.nextUrl.clone();
 	// No "/" between owner and pathname because pathname includes "/"
-	url.pathname = `/_blog-github/${owner}${pathname}`;
+	url.pathname = `/_github/${owner}${pathname}`;
 	return NextResponse.rewrite(url);
 };

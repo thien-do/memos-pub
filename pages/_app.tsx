@@ -1,1 +1,1 @@
-export { AppMain as default } from "@/lib/app/main";
+export { AppMain as default } from "@/lib/app";

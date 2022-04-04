@@ -23,6 +23,6 @@ export const rewriteMemberRequest = (req: NextRequest): null | NextResponse => {
 	const { from, to } = member;
 	const url = req.nextUrl.clone();
 	const { pathname } = req.nextUrl;
-	url.pathname = `/_blog-member/${from}/${to}${pathname}`;
+	url.pathname = `/_member/${from}/${to}${pathname}`;
 	return NextResponse.rewrite(url);
 };
