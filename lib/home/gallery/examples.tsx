@@ -28,8 +28,8 @@ export const HomeGalleryExamples = (): JSX.Element => (
 				<Link url="https://mquy.memos.pub/mquy/notes" />
 			</li>
 			<li>
-				<span>Profile: </span>
-				<Link url="https://thien-do.memos.pub" />
+				<span>Profile (custom domain): </span>
+				<Link url="https://thien.do" />
 			</li>
 			<li>
 				<span>Magazine: </span>

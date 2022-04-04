@@ -12,8 +12,8 @@ export const HomeOverview = (): JSX.Element => (
 		</h1>
 		<p>
 			<strong>Memos.pub</strong> instantly makes a blog out of any public
-			GitHub repo, with beautiful typography, MDX support, and more. Try
-			it:
+			GitHub repo, with beautiful typography, MDX support, custom domain,
+			and more. Try it:
 		</p>
 		<HomeOverviewTry />
 		<p>Or see some examples below ↓</p>
