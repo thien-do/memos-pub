@@ -1,10 +1,10 @@
-import { filterBlogDirEntry } from "@/lib/blog/fetch/dir-filter";
-import { findBlogDirReadme } from "@/lib/blog/fetch/dir-readme";
+import { filterBlogDirEntries } from "@/lib/blog/dir/utils/filter";
+import { findBlogDirReadme } from "@/lib/blog/dir/utils/readme";
 import { BlogDir, BlogDirEntry } from "@/lib/blog/type";
 import { components } from "@octokit/openapi-types";
 import nodepath from "path";
 import { GitHubBlogRequest } from "../type";
-import { fetchBlogGitHub } from "./index";
+import { fetchGitHubBlog } from "./index";
 
 type RawDir = components["schemas"]["content-directory"];
 type RawDirEntry = RawDir[number];
@@ -26,7 +26,7 @@ const fetchReadme = async (
 	const readme = findBlogDirReadme(entries);
 	if (readme === null) return null;
 	const path = nodepath.join(request.path, readme.name);
-	const file = await fetchBlogGitHub({ ...request, path });
+	const file = await fetchGitHubBlog({ ...request, path });
 	if (file.type !== "file") throw Error("README file is not file (2)");
 	return file;
 };
@@ -36,10 +36,10 @@ interface Props {
 	response: RawDir;
 }
 
-export const parseBlogGitHubDir = async (props: Props): Promise<BlogDir> => {
+export const parseGitHubBlogDir = async (props: Props): Promise<BlogDir> => {
 	const { request, response } = props;
 	const raw = response.map(toDirEntry);
-	const entries = filterBlogDirEntry(raw);
+	const entries = filterBlogDirEntries(raw);
 	const readme = await fetchReadme(request, entries);
 	const dir: BlogDir = { type: "dir", entries, readme };
 	return dir;

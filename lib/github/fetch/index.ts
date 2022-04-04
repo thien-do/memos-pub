@@ -1,10 +1,11 @@
 import { BlogResponse } from "@/lib/blog/type";
+import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
 import { components, operations } from "@octokit/openapi-types";
 import { Octokit } from "octokit";
 import { GitHubBlogRequest } from "../type";
-import { parseBlogGitHubDir } from "./dir";
-import { parseBlogGitHubError } from "./error";
-import { parseBlogGitHubFile } from "./file";
+import { parseGitHubBlogDir } from "./dir";
+import { parseGitHubBlogError } from "./error";
+import { parseGitHubBlogFile } from "./file";
 
 const octokit = new Octokit({
 	auth: process.env.MP_GH_AUTH,
@@ -14,12 +15,14 @@ type RawResponse =
 	operations["repos/get-content"]["responses"]["200"]["content"]["application/json"];
 
 const parseResponse = async (
-	request: GitHubBlogRequest,
+	props: Props,
 	response: RawResponse
 ): Promise<BlogResponse> => {
+	const { request, resolvers } = props;
+
 	// Directory
 	if (Array.isArray(response)) {
-		return await parseBlogGitHubDir({ request, response });
+		return await parseGitHubBlogDir({ request, response });
 	}
 
 	// Single file raw
@@ -30,25 +33,26 @@ const parseResponse = async (
 	// Single file json
 	if (response.type === "file") {
 		const r = response as components["schemas"]["content-file"];
-		return parseBlogGitHubFile({ request, response: r });
+		return parseGitHubBlogFile({ request, response: r, resolvers });
 	}
 
 	throw Error(`Unknown content type "${response.type}"`);
 };
 
-export const fetchBlogGitHub = async (
-	request: GitHubBlogRequest
-): Promise<BlogResponse> => {
+interface Props {
+	request: GitHubBlogRequest;
+	resolvers: MdxUrlResolvers<GitHubBlogRequest>;
+}
+
+export const fetchGitHubBlog = async (props: Props): Promise<BlogResponse> => {
+	const { owner, path, repo } = props.request;
 	try {
-		const raw = await octokit.rest.repos.getContent({
-			owner: request.owner,
-			repo: request.repo,
-			path: request.path,
-			mediaType: { format: "json" },
-		});
-		const response = parseResponse(request, raw.data);
+		const get = octokit.rest.repos.getContent;
+		const mediaType = { format: "json" };
+		const raw = await get({ owner, path, repo, mediaType });
+		const response = parseResponse(props, raw.data);
 		return response;
 	} catch (error) {
-		return parseBlogGitHubError(request, error);
+		return parseGitHubBlogError(props.request, error);
 	}
 };

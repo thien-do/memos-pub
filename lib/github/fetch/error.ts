@@ -32,7 +32,7 @@ const getMessage = (request: GitHubBlogRequest, error: HasStatus): string => {
 	}
 };
 
-export const parseBlogGitHubError = (
+export const parseGitHubBlogError = (
 	request: GitHubBlogRequest,
 	error: unknown
 ): BlogError => {

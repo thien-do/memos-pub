@@ -1,25 +1,28 @@
-import { fetchBlogGitHub } from "@/lib/blog-github/fetch";
-import { parseBlogGitHubRequest } from "@/lib/blog-github/fetch/request";
-import { BlogGitHubRequest } from "@/lib/blog-github/type";
-import { BlogPageProps } from "@/lib/blog/page";
+import { BlogResponse } from "@/lib/blog/type";
+import { fetchGitHubBlog } from "@/lib/github/fetch";
+import { gitHubMdxResolvers } from "@/lib/github/mdx/url";
+import { parseGitHubBlogRequest } from "@/lib/github/request";
+import { GitHubBlogRequest } from "@/lib/github/type";
 import type { GetStaticPaths, GetStaticProps } from "next";
 
-export { BlogGitHubPage as default } from "@/lib/blog-github/page";
+export { GitHubBlogPage as default } from "@/lib/github/blog";
 
 interface PageParams extends NodeJS.Dict<string | string[]> {
 	owner: string | undefined;
 	slug: string[] | undefined;
 }
 
-type GetProps = GetStaticProps<BlogPageProps<BlogGitHubRequest>, PageParams>;
-
 // getStaticProps and getStaticPaths cannot be re-export like BlogPage as it
 // would break Next's tree-shaking resolving and result in a module-not-found
 // error
 // - https://nextjs.org/docs/messages/module-not-found#the-module-youre-trying-to-import-uses-nodejs-specific-modules
-export const getStaticProps: GetProps = async (context) => {
-	const request = parseBlogGitHubRequest(context.params);
-	const response = await fetchBlogGitHub(request);
+export const getStaticProps: GetStaticProps<
+	{ request: GitHubBlogRequest; response: BlogResponse },
+	PageParams
+> = async (context) => {
+	const request = parseGitHubBlogRequest(context.params);
+	const resolvers = gitHubMdxResolvers;
+	const response = await fetchGitHubBlog({ request, resolvers });
 	return {
 		props: { response, request },
 		revalidate: 5 * 60, // seconds

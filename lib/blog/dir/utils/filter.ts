@@ -24,7 +24,7 @@ const isValid = (entry: BlogDirEntry): boolean => {
 	}
 };
 
-export const filterBlogDirEntry = (
+export const filterBlogDirEntries = (
 	entries: (BlogDirEntry | null)[]
 ): BlogDirEntry[] => {
 	return entries.filter(isNotNull).filter(isValid);

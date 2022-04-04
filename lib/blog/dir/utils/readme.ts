@@ -1,4 +1,4 @@
-import { BlogDirEntry } from "@/lib/blog/type";
+import { BlogDirEntry, BlogDirEntryFile } from "@/lib/blog/type";
 
 /** Case in-sensitive */
 const README_FILES = ["readme.md", "readme.mdx", "index.md", "index.mdx"];
@@ -12,7 +12,7 @@ const isReadme = (entry: BlogDirEntry): boolean => {
 
 export const findBlogDirReadme = (
 	entries: BlogDirEntry[]
-): BlogDirEntry | null => {
+): BlogDirEntryFile | null => {
 	const found = entries.find(isReadme);
 	if (found === undefined) return null;
 	if (found.type === "dir") throw Error("Found README file is not file");
