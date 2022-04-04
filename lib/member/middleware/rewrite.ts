@@ -6,7 +6,7 @@ const MEMBERS: { from: string; to: string }[] = [
 	{ from: "thien.do", to: "thien-do/thien-do" },
 	{ from: "notes.ancaois.me", to: "kcjpop/kcjpop" },
 	{ from: "mquy.dev", to: "mquy/mquy" },
-	{ from: "notes.huy.rocks", to: "huytd/everyday" },
+	{ from: "notes.snacky.blog", to: "huytd/git-notes" },
 	{ from: "notes.minhle.space", to: "monodyle/monodyle" },
 ];
 
