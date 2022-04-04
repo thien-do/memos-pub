@@ -5,6 +5,7 @@ import { join as pathJoin } from "path";
 const MEMBERS: { from: string; to: string }[] = [
 	{ from: "thien.do", to: "thien-do/thien-do" },
 	{ from: "notes.ancaois.me", to: "kcjpop/kcjpop" },
+	{ from: "mquy.dev", to: "mquy/mquy" },
 ];
 
 /*
