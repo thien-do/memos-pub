@@ -1,12 +1,8 @@
 import * as type from "../type";
-import { toBlogDirEntryDisplay } from "./body-entry";
+import { BlogDirEntry } from "./entry";
+import { toBlogDirEntryDisplay } from "./entry/display";
 
 type Entry = type.BlogDirEntryDisplay;
-
-export interface BlogDirBodyProps<R> {
-	dir: type.BlogDir;
-	request: R;
-}
 
 const byName = (a: Entry, b: Entry): number => {
 	return a.name.localeCompare(b.name);
@@ -23,11 +19,10 @@ const byType = (a: Entry, b: Entry): number => {
 	return 1;
 };
 
-interface Props<R> extends BlogDirBodyProps<R> {
-	toEntry: (params: {
-		props: BlogDirBodyProps<R>;
-		entry: type.BlogDirEntryDisplay;
-	}) => JSX.Element;
+interface Props<R> {
+	dir: type.BlogDir;
+	request: R;
+	getEntryHref: Parameters<typeof BlogDirEntry>[0]["getHref"];
 }
 
 export const BlogDirBody = <R,>(props: Props<R>): JSX.Element => {
@@ -36,9 +31,14 @@ export const BlogDirBody = <R,>(props: Props<R>): JSX.Element => {
 		<p className="text-gray-300 dark:text-gray-600">This folder is empty</p>
 	) : (
 		<ul>
-			{entries.sort(byType).map((entry) => {
-				return props.toEntry({ props, entry });
-			})}
+			{entries.sort(byType).map((entry) => (
+				<BlogDirEntry
+					key={entry.name}
+					entry={entry}
+					getHref={props.getEntryHref}
+					request={props.request}
+				/>
+			))}
 		</ul>
 	);
 };

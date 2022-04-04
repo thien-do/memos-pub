@@ -1,20 +1,13 @@
 import { Fragment } from "react";
-import { BlogBreadcrumbItem, BlogBreadcrumbItemProps } from "./item";
-
-export interface BlogBreadcrumbProps<R> {
-	request: R;
-}
-
-export type BlogBreadcrumbGetItems<R> = (
-	request: R
-) => BlogBreadcrumbItemProps[];
+import { BlogBreadcrumbItem } from "./item";
 
 const Separator = (): JSX.Element => (
 	<span className="px-2 text-gray-300 dark:text-gray-600">/</span>
 );
 
-interface Props<R> extends BlogBreadcrumbProps<R> {
-	getItems: BlogBreadcrumbGetItems<R>;
+interface Props<R> {
+	request: R;
+	getItems: (request: R) => Parameters<typeof BlogBreadcrumbItem>[0][];
 }
 
 export const BlogBreadcrumb = <R,>(props: Props<R>): JSX.Element => (

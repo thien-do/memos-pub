@@ -2,13 +2,13 @@
 import { NextRequest } from "next/server";
 
 /**
- * Get owner info from host. E.g.:
+ * Get subdomain info from host. E.g.:
  * - thien-do.memos.pub -> "thien-do"
  * - memos.pub -> null
  * - thien-do.localhost:3000 -> "thien-do"
  * - localhost:3000 -> null
  */
-export const getBlogOwner = (req: NextRequest): string | null => {
+export const getRequestSubdomain = (req: NextRequest): string | null => {
 	// Get host from headers to have subdomain. nextUrl.host doesn't have
 	// sub-domain.
 	const host = req.headers.get("host");

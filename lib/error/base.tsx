@@ -7,7 +7,7 @@ interface Props {
 	children: string;
 }
 
-export const AppErrorBase = (props: Props): JSX.Element => (
+export const ErrorBase = (props: Props): JSX.Element => (
 	<Fragment>
 		<Head>
 			<title>{props.title}</title>

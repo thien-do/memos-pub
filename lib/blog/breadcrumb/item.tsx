@@ -1,14 +1,12 @@
 import Link from "next/link";
 
-export interface BlogBreadcrumbItemProps {
+interface Props {
 	href: string;
 	children: string;
 	image?: string;
 }
 
-export const BlogBreadcrumbItem = (
-	props: BlogBreadcrumbItemProps
-): JSX.Element => (
+export const BlogBreadcrumbItem = (props: Props): JSX.Element => (
 	<Link href={props.href}>
 		<a
 			className={[
