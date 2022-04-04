@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Fragment } from "react";
-import { NoLayout } from "../app/main";
+import { NoLayout } from "../app";
 import { HomeDetail } from "./detail";
 import { HomeGallery } from "./gallery";
 import { HomeOverview } from "./overview";

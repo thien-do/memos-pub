@@ -32,6 +32,7 @@ const rewriteLinkHref = <R>(props: Props<R>, match: UrlMatch): void => {
 	if (node.tagName !== "a") return;
 	if (propertyName !== "href") return;
 	if (url.startsWith("http")) return;
+	if (url.startsWith("mailto")) return;
 	const nextUrl = resolvers.link({ url, request });
 	node.properties = node.properties ?? {};
 	node.properties["href"] = nextUrl;

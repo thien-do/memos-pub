@@ -1,12 +1,21 @@
-export interface BlogDirEntry {
-	type: "file" | "dir";
+export interface BlogDirEntryBase {
 	name: string;
 }
 
-export interface BlogDirEntryDisplay extends BlogDirEntry {
+export interface BlogDirEntryFile extends BlogDirEntryBase {
+	type: "file";
+}
+
+export interface BlogDirEntryDir extends BlogDirEntryBase {
+	type: "dir";
+}
+
+export type BlogDirEntry = BlogDirEntryFile | BlogDirEntryDir;
+
+export type BlogDirEntryDisplay = BlogDirEntry & {
 	title: string;
 	date: Date | null;
-}
+};
 
 export interface BlogDir {
 	type: "dir";
