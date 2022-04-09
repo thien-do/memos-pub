@@ -9,6 +9,9 @@ export interface GitHubBlogPageParams extends NodeJS.Dict<string | string[]> {
 	slug: string[] | undefined;
 }
 
+// Trick to avoid %20 (space) in URL
+const EM_DASH = "–";
+
 export const parseGitHubBlogRequest = (
 	page: GitHubBlogPageParams | undefined
 ): GitHubBlogRequest => {
@@ -18,7 +21,7 @@ export const parseGitHubBlogRequest = (
 	if (slug === undefined) throw Error("repo (slug) is undefined");
 
 	const [repo, ...parts] = slug;
-	const path = parts.join("/");
+	const path = parts.join("/").split(EM_DASH).join(" ");
 
 	const request: GitHubBlogRequest = { owner, path, repo };
 	return request;

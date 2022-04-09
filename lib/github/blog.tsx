@@ -31,7 +31,9 @@ const getDirEntryHref: GetBlogDirEntryHref<Request> = (props) => {
 	const { entry, request } = props;
 	// don't need "user" here because we redirect inside subdomain
 	const { repo, path } = request;
-	const href = `/${pathJoin(repo, path, entry.name)}`;
+	// trick to avoid %20 (space) in URL
+	const name = entry.name.split(" ").join("–");
+	const href = `/${pathJoin(repo, path, name)}`;
 	return href;
 };
 
