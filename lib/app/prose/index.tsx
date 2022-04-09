@@ -19,6 +19,9 @@ export const AppProse = (props: Props): JSX.Element => (
 			// Links
 			"prose-a:decoration-gray-400 dark:prose-a:decoration-gray-500",
 			"prose-a:underline-offset-2",
+			// Remove backtick in inline-code
+			// https://github.com/tailwindlabs/tailwindcss-typography/issues/135#issuecomment-991251524
+			"prose-code:before:content-none prose-code:after:content-none",
 			// Layout
 			"mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32",
 		].join(" ")}
