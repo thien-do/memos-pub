@@ -25,6 +25,7 @@ export const AppProse = (props: Props): JSX.Element => (
 			"prose-code:before:content-none prose-code:after:content-none", // Remove backtick in inline-code
 			// Block code
 			"prose-pre:bg-gray-200 dark:prose-pre:bg-gray-900",
+			"prose-pre:text-inherit",
 			// Layout
 			"mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32",
 		].join(" ")}
