@@ -1,4 +1,4 @@
-Inline `js[1, 2, 3].join('-')`{:js}
+Inline `js[1, 2, 3].join('-'){:js}`
 
 Block
 
