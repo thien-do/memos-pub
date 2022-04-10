@@ -11,17 +11,6 @@ const AppDocument = (): JSX.Element => (
 				data-domain="memos.pub"
 				src="https://plausible.io/js/plausible.js"
 			></script>
-			{/* https://nextjs.org/docs/basic-features/font-optimization#usage */}
-			<link rel="preconnect" href="https://fonts.googleapis.com" />
-			<link
-				rel="preconnect"
-				href="https://fonts.gstatic.com"
-				crossOrigin=""
-			/>
-			<link
-				href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-				rel="stylesheet"
-			/>
 		</Head>
 		<body className="bg-gray-100 dark:bg-gray-800">
 			<Main />
