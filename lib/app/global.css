@@ -1,0 +1,7 @@
+/*
+Turn on Cursive in Cascadia
+- https://github.com/microsoft/cascadia-code#font-features
+*/
+.prose code {
+	font-feature-settings: "calt", "ss01";
+}

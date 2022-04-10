@@ -1,3 +1,4 @@
+import { Options as RehypeCodeOptions } from "rehype-pretty-code";
 import * as shiki from "shiki";
 import { join as pathJoin } from "path";
 import * as fs from "fs/promises";
@@ -23,25 +24,29 @@ const touchShikiPath = (): void => {
 	touched.current = true;
 };
 
-export const getMdxHighlighter = async (): Promise<shiki.Highlighter> => {
+const getHighlighter: RehypeCodeOptions["getHighlighter"] = async (options) => {
 	touchShikiPath();
 
 	const highlighter = await shiki.getHighlighter({
-		theme: "github-dark",
+		// This is technically not compatible with shiki's interface but
+		// necessary for rehype-pretty-code to work
+		// - https://rehype-pretty-code.netlify.app/ (see Custom Highlighter)
+		...(options as any),
 		paths: {
 			languages: `${getShikiPath()}/languages/`,
 			themes: `${getShikiPath()}/themes/`,
 		},
 	});
 
-	// Manual path for Mermaid while waiting for Shiki to release or having a
-	// way to catch syntax highlight error individually
-	// - https://github.com/atomiks/rehype-pretty-code/issues/25
-	highlighter.loadLanguage({
-		id: "mermaid",
-		scopeName: "markdown.mermaid.codeblock",
-		path: `${getShikiPath()}/languages/mermaid.tmLanguage.json`,
-	});
-
 	return highlighter;
 };
+
+export const getRehypeCodeOptions = (): Partial<RehypeCodeOptions> => ({
+	// Requirements for theme:
+	// - Has light and dark version
+	// - Uses italic in several places
+	theme: { light: "rose-pine-dawn", dark: "rose-pine-moon" },
+	// Need to use a custom highlighter because rehype-pretty-code doesn't
+	// let us customize "paths".
+	getHighlighter,
+});

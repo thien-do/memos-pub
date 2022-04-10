@@ -9,22 +9,14 @@ import rehypeInferTitleMeta, {
 	Options as rehypeTitleOptions,
 } from "rehype-infer-title-meta";
 import rehypeMeta from "rehype-meta";
-import rehypePrettyCode, {
-	Options as rehypeCodeOptions,
-} from "rehype-pretty-code";
+import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
 import { remarkMdxFrontmatter } from "remark-mdx-frontmatter";
 import remarkToc from "remark-toc";
-import { getMdxHighlighter } from "./highlight";
+import { getRehypeCodeOptions } from "./code";
 import { getRehypeUrlOptions, MdxUrlResolvers } from "./url";
-
-const getRehypeCodeOptions = (): Partial<rehypeCodeOptions> => ({
-	// Need to use a custom highlighter because rehype-pretty-code doesn't
-	// let us customize "paths".
-	getHighlighter: getMdxHighlighter,
-});
 
 const getFormat = (path: string): CompileOptions["format"] => {
 	const fileName = path.split("/").pop();
@@ -54,6 +46,7 @@ interface Props<R> {
 	request: R;
 	resolvers: MdxUrlResolvers<R>;
 }
+
 export type GetMdxCompileOptionsProps<R> = Props<R>;
 
 export const getMdxCompileOptions = <R extends BlogRequestBase>(
