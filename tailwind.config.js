@@ -11,13 +11,16 @@ const typography = (theme) => ({
 	DEFAULT: {
 		css: {
 			code: { padding: "0.4em" },
-			'code[data-theme="dark"]': { display: "none" },
+			// Matches both <pre> and <code>
+			'[data-theme="dark"]': { display: "none" },
 		},
 	},
 	invert: {
 		css: {
-			'code[data-theme="light"]': { display: "none" },
-			'code[data-theme="dark"]': { display: "inline" }, // Reverse the "DEFAULT" style
+			'[data-theme="light"]': { display: "none" },
+			// Reverse the "DEFAULT" style
+			'pre[data-theme="dark"]': { display: "block" },
+			'code[data-theme="dark"]': { display: "inline" },
 		},
 	},
 });
