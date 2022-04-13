@@ -40,7 +40,7 @@ module.exports = {
 		extend: {
 			fontFamily: {
 				sans: ["'Inter'", ...defaultTheme.fontFamily.sans],
-				mono: ["'Cascadia'", ...defaultTheme.fontFamily.mono],
+				mono: ["'Cascadia Mono'", ...defaultTheme.fontFamily.mono],
 			},
 			typography: typography,
 		},
