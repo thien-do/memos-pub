@@ -1,15 +1,7 @@
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextRequest, NextResponse } from "next/server";
 import { join as pathJoin } from "path";
-
-const MEMBERS: { from: string; to: string }[] = [
-	{ from: "thien.do", to: "thien-do/thien-do" },
-	{ from: "notes.ancaois.me", to: "kcjpop/kcjpop" },
-	{ from: "mquy.dev", to: "mquy/mquy" },
-	{ from: "huydx.dev", to: "huydx/notes" },
-	{ from: "notes.snacky.blog", to: "huytd/git-notes" },
-	{ from: "notes.minhle.space", to: "monodyle/monodyle" },
-];
+import { MEMBER_PATHS } from "./path";
 
 /*
 Re-write
@@ -23,7 +15,7 @@ export const rewriteMemberRequest = (req: NextRequest): null | NextResponse => {
 	const host = req.headers.get("host")?.replace(":3000", "");
 	if (host === null) throw Error("Host is not defined");
 
-	const member = MEMBERS.find((member) => member.from === host);
+	const member = MEMBER_PATHS.find((member) => member.from === host);
 	if (member === undefined) return null;
 
 	const { from, to } = member;

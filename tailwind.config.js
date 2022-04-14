@@ -7,7 +7,7 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 // (this uses :where() while modifier uses :is())
 // - https://tailwindcss.com/docs/typography-plugin#element-modifiers
 // - https://tailwindcss.com/docs/typography-plugin#customizing-the-css
-const typography = (theme) => ({
+const typography = (_theme) => ({
 	DEFAULT: {
 		css: {
 			code: { padding: "0.4em" },

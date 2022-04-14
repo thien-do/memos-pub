@@ -1,7 +1,7 @@
 import { redirectGitHubFullUrl } from "@/lib/github/middleware/full-url";
 import { rewriteBlogGitHubUrl } from "@/lib/github/middleware/rewrite";
 // import { rewriteBlogGitLabUrl } from "@/lib/blog-gitlab/middleware/rewrite";
-import { rewriteMemberRequest } from "@/lib/member/middleware/rewrite";
+import { rewriteMemberRequest } from "@/lib/member/middleware";
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextMiddleware, NextResponse } from "next/server";
 

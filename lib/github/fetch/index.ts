@@ -1,4 +1,5 @@
 import { BlogResponse } from "@/lib/blog/type";
+import { getEnvGitHubToken } from "@/lib/env";
 import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
 import { components, operations } from "@octokit/openapi-types";
 import { Octokit } from "octokit";
@@ -8,7 +9,8 @@ import { parseGitHubBlogError } from "./error";
 import { parseGitHubBlogFile } from "./file";
 
 const octokit = new Octokit({
-	auth: process.env.MP_GH_AUTH,
+	// Doesn't really need "auth" but provide to have better rate limit
+	auth: getEnvGitHubToken(),
 });
 
 type RawResponse =

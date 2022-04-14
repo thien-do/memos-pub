@@ -1,5 +1,6 @@
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextRequest } from "next/server";
+import { getEnvRootHost } from "../env";
 
 /**
  * Get subdomain info from host. E.g.:
@@ -14,7 +15,7 @@ export const getRequestSubdomain = (req: NextRequest): string | null => {
 	const host = req.headers.get("host");
 	if (host === null) throw Error("Host is not defined");
 
-	const root = process.env.MP_ROOT_HOST; // part without owner
+	const root = getEnvRootHost();
 	if (host === root) return null; // no owner, we're at root
 	const owner = host.replace(`.${root}`, "");
 	return owner;

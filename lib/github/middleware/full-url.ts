@@ -1,5 +1,6 @@
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextRequest, NextResponse } from "next/server";
+import { getEnvRootHost } from "@/lib/env";
 import { GitHubBlogRequest } from "../type";
 
 // > "/https:/github.com/axieinfinity/festival/blob/master/component_export.md".split("/");
@@ -33,7 +34,7 @@ export const redirectGitHubFullUrl = (
 
 	const { owner, path, repo } = request;
 	const url = req.nextUrl.clone();
-	url.host = `${owner}.${process.env.MP_ROOT_HOST}`;
+	url.host = `${owner}.${getEnvRootHost()}`;
 	url.pathname = `/${repo}/${path}`;
 	return NextResponse.redirect(url);
 };
