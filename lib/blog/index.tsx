@@ -1,25 +1,26 @@
 import Head from "next/head";
-import { ErrorBase } from "../error/base";
 import { BlogBreadcrumb, GetBlogBreadcrumbItems } from "./breadcrumb";
 import { BlogDir } from "./dir";
 import { GetBlogDirEntryHref } from "./dir/entry";
 import { GetBlogDirTitle } from "./dir/overview";
 import { BlogFile } from "./file";
-import { BlogResponse } from "./type";
+import * as type from "./type";
 
 export type GetBlogFavicon<R> = (request: R) => string;
+export type BlogError = (props: { error: type.BlogError }) => JSX.Element;
 
 interface Props<R> {
 	request: R;
-	response: BlogResponse;
+	response: type.BlogResponse;
 	getFavicon: GetBlogFavicon<R>;
 	getBreadcrumbItems: GetBlogBreadcrumbItems<R>;
 	getDirTitle: GetBlogDirTitle<R>;
 	getDirEntryHref: GetBlogDirEntryHref<R>;
+	BlogError: BlogError;
 }
 
 const Body = <R,>(props: Props<R>): JSX.Element => {
-	const { request, response } = props;
+	const { request, response, BlogError } = props;
 	switch (response.type) {
 		case "file":
 			return <BlogFile file={response} />;
@@ -33,11 +34,7 @@ const Body = <R,>(props: Props<R>): JSX.Element => {
 				/>
 			);
 		case "error":
-			return (
-				<ErrorBase title={response.status.toString()}>
-					{response.message}
-				</ErrorBase>
-			);
+			return <BlogError error={response} />;
 	}
 };
 

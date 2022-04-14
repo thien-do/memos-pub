@@ -1,10 +1,11 @@
-import { BlogPage, GetBlogFavicon } from "@/lib/blog";
+import { BlogError, BlogPage, GetBlogFavicon } from "@/lib/blog";
 import { BlogResponse } from "@/lib/blog/type";
 import { join as pathJoin } from "path";
 import { GetBlogBreadcrumbItems } from "../blog/breadcrumb";
 import { BlogBreadcrumbItem } from "../blog/breadcrumb/item";
 import { GetBlogDirEntryHref } from "../blog/dir/entry";
 import { GetBlogDirTitle } from "../blog/dir/overview";
+import { ErrorBase } from "../error/base";
 import { GitHubBlogRequest as Request } from "./type";
 
 interface Props {
@@ -63,6 +64,12 @@ const getBreadcrumbItems: GetBlogBreadcrumbItems<Request> = (request) => {
 	return items;
 };
 
+const BlogError: BlogError = (props) => (
+	<ErrorBase title={props.error.status.toString()}>
+		{props.error.message}
+	</ErrorBase>
+);
+
 export const GitHubBlogPage = (props: Props): JSX.Element => (
 	<BlogPage<Request>
 		request={props.request}
@@ -71,5 +78,6 @@ export const GitHubBlogPage = (props: Props): JSX.Element => (
 		getDirEntryHref={getDirEntryHref}
 		getDirTitle={getDirTitle}
 		getFavicon={getFavicon}
+		BlogError={BlogError}
 	/>
 );

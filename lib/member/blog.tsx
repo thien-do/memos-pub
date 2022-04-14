@@ -1,10 +1,11 @@
-import { BlogPage } from "@/lib/blog";
+import { BlogError, BlogPage } from "@/lib/blog";
 import { BlogResponse } from "@/lib/blog/type";
 import { join as pathJoin } from "path";
 import { GetBlogBreadcrumbItems } from "../blog/breadcrumb";
 import { BlogBreadcrumbItem } from "../blog/breadcrumb/item";
 import { GetBlogDirEntryHref } from "../blog/dir/entry";
 import { GetBlogDirTitle } from "../blog/dir/overview";
+import { ErrorBase } from "../error/base";
 import { getGitHubBlogFavicon } from "../github/blog";
 import { MemberBlogRequest as Request } from "./type";
 
@@ -53,6 +54,15 @@ const getBreadcrumbItems: GetBlogBreadcrumbItems<Request> = (props) => {
 	return items;
 };
 
+const BlogError: BlogError = (props) => (
+	<ErrorBase title={props.error.status.toString()}>
+		{/* Avoid exposing source path */}
+		{props.error.status === 404
+			? "It means this page could not be found."
+			: props.error.message}
+	</ErrorBase>
+);
+
 export const MemberBlogPage = (props: Props): JSX.Element => (
 	<BlogPage<Request>
 		request={props.request}
@@ -61,5 +71,6 @@ export const MemberBlogPage = (props: Props): JSX.Element => (
 		getDirEntryHref={getDirEntryHref}
 		getDirTitle={getDirTitle}
 		getFavicon={getGitHubBlogFavicon}
+		BlogError={BlogError}
 	/>
 );
