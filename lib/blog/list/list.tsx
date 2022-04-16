@@ -1,13 +1,13 @@
 import { Fragment } from "react";
+import { GetBlogEntryHref } from "../entry/entry";
 import { BlogPost } from "../post";
 import { BlogListBody } from "./body";
-import { GetBlogListEntryHref } from "./entry";
 import { BlogListTitle, GetBlogListTitle } from "./title";
 import * as type from "./type";
 
 export interface BlogListConfig<R> {
 	getTitle: GetBlogListTitle<R>;
-	getEntryHref: GetBlogListEntryHref<R>;
+	getEntryHref: GetBlogEntryHref<R>;
 }
 
 interface Props<R> {

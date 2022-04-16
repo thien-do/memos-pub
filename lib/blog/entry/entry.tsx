@@ -1,18 +1,15 @@
 import Link from "next/link";
-import * as type from "../type";
+import { BlogEntry as Entry } from "./type";
 
-export type GetBlogListEntryHref<R> = (props: {
-	entry: type.BlogListEntry;
-	request: R;
-}) => string;
+type GetHref<R> = (props: { entry: Entry; request: R }) => string;
 
 interface Props<R> {
-	entry: type.BlogListEntryDisplay;
+	entry: Entry;
 	request: R;
-	getHref: GetBlogListEntryHref<R>;
+	getHref: GetHref<R>;
 }
 
-export const BlogListEntry = <R,>(props: Props<R>): JSX.Element => {
+export const BlogEntry = <R,>(props: Props<R>): JSX.Element => {
 	const { entry, getHref, request } = props;
 
 	let date: string | null = null;
@@ -36,8 +33,10 @@ export const BlogListEntry = <R,>(props: Props<R>): JSX.Element => {
 	);
 
 	return (
-		<li className={entry.type === "dir" ? "list-[disclosure-closed]" : ""}>
+		<li className={entry.type === "list" ? "list-[disclosure-closed]" : ""}>
 			<Link href={getHref({ entry, request })}>{link}</Link>
 		</li>
 	);
 };
+
+export type { GetHref as GetBlogEntryHref };

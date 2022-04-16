@@ -1,14 +1,14 @@
 import Head from "next/head";
-import { BlogBreadcrumb, BlogBreadcrumbConfig } from "../breadcrumb";
-import { BlogList, BlogListConfig } from "../list";
+import { BlogBreadcrumb, BlogBreadcrumbConfig } from "../breadcrumb/breadcrumb";
+import { BlogList, BlogListConfig } from "../list/list";
 import { BlogPost } from "../post";
 import { BlogContent as Content, BlogContentError } from "./type";
 
 interface Config<R> {
-	list: BlogListConfig<R>;
 	breadcrumb: BlogBreadcrumbConfig<R>;
-	getFavicon: (request: R) => string;
 	Error: (props: { error: BlogContentError }) => JSX.Element;
+	getFavicon: (request: R) => string;
+	list: BlogListConfig<R>;
 }
 
 interface Props<R> {

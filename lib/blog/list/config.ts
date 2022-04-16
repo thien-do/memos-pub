@@ -1,3 +1,5 @@
+import { BlogEntryDateFormat } from "../entry/date";
+
 export interface BlogListConfig {
 	/**
 	 * Control the display of the dir's README file (if exist):
@@ -16,6 +18,11 @@ export interface BlogListConfig {
 	 * the entry list
 	 */
 	entries?: BlogListConfigEntry[];
+	/**
+	 * Recognize the date in an entry's name to improve entry list (e.g.
+	 * sorting and date column)
+	 */
+	dateFormat?: BlogEntryDateFormat;
 }
 
 export interface BlogListConfigEntry {
