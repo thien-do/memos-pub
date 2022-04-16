@@ -1,5 +1,23 @@
-import { BlogError } from "@/lib/blog/type";
-import { GitHubBlogRequest } from "../type";
+import { BlogContentError } from "@/lib/blog/content/type";
+import { GitHubRequest } from "../../type";
+
+interface Props {
+	request: GitHubRequest;
+	error: unknown;
+}
+
+export const parseGitHubBlogError = (props: Props): BlogContentError => {
+	const { error, request } = props;
+	if (hasStatus(error)) {
+		return {
+			type: "error",
+			status: error.status,
+			message: getMessage(request, error),
+		};
+	} else {
+		throw error;
+	}
+};
 
 interface HasStatus {
 	status: number;
@@ -15,7 +33,7 @@ const hasStatus = (raw: unknown): raw is HasStatus => {
 	}
 };
 
-const get404 = (request: GitHubBlogRequest): string => {
+const get404 = (request: GitHubRequest): string => {
 	const { owner, path, repo } = request;
 	const paths = path === "" ? "nothing" : `no "${path}"`;
 	const href = `https://github.com/${owner}/${repo}`;
@@ -23,26 +41,11 @@ const get404 = (request: GitHubBlogRequest): string => {
 	return `Looks like there is ${paths} at ${repos}.`;
 };
 
-const getMessage = (request: GitHubBlogRequest, error: HasStatus): string => {
+const getMessage = (request: GitHubRequest, error: HasStatus): string => {
 	switch (error.status) {
 		case 404:
 			return get404(request);
 		default:
 			throw error;
-	}
-};
-
-export const parseGitHubBlogError = (
-	request: GitHubBlogRequest,
-	error: unknown
-): BlogError => {
-	if (hasStatus(error)) {
-		return {
-			type: "error",
-			status: error.status,
-			message: getMessage(request, error),
-		};
-	} else {
-		throw error;
 	}
 };

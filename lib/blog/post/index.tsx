@@ -1,13 +1,13 @@
 import { runMdx } from "@/lib/mdx/run";
 import { mdxNextComponents } from "@/lib/mdx/utils/components";
-import * as type from "../type";
+import { BlogPost as Post } from "./type";
 
 interface Props {
-	file: type.BlogFile;
+	post: Post;
 }
 
-export const BlogFile = (props: Props): JSX.Element => {
-	const { code } = props.file;
+export const BlogPost = (props: Props): JSX.Element => {
+	const { code } = props.post;
 	const { Content } = runMdx(code);
 	return <Content components={mdxNextComponents} />;
 };

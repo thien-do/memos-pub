@@ -1,4 +1,3 @@
-import { BlogRequestBase } from "@/lib/blog/type";
 import rehypeUrl from "@jsdevtools/rehype-url-inspector";
 import { CompileOptions } from "@mdx-js/mdx";
 import rehypeAutolinkHeadings, {
@@ -49,7 +48,7 @@ interface Props<R> {
 
 export type GetMdxCompileOptionsProps<R> = Props<R>;
 
-export const getMdxCompileOptions = <R extends BlogRequestBase>(
+export const getMdxCompileOptions = <R extends { path: string }>(
 	props: Props<R>
 ): CompileOptions => {
 	const { resolvers, request } = props;

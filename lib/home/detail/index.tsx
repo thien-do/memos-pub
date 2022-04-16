@@ -1,8 +1,8 @@
-import { AppProse } from "@/lib/app/prose";
+import { LayoutProse } from "@/lib/app/layout/prose";
 import Body from "./body.mdx";
 
 export const HomeDetail = (): JSX.Element => (
-	<AppProse>
+	<LayoutProse>
 		<Body />
-	</AppProse>
+	</LayoutProse>
 );

@@ -1,8 +1,8 @@
 import { gitHubMdxResolvers } from "@/lib/github/mdx";
 import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
-import { MemberBlogRequest } from "./type";
+import { MemberRequest } from "./type";
 
-export const memberMdxResolvers: MdxUrlResolvers<MemberBlogRequest> = {
+export const memberMdxResolvers: MdxUrlResolvers<MemberRequest> = {
 	// This is just GitHub's absolute asset path
 	asset: gitHubMdxResolvers.asset,
 	link: (props) => {

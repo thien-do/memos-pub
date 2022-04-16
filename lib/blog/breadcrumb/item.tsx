@@ -1,33 +1,31 @@
 import Link from "next/link";
-
-export interface BlogBreadcrumbItem {
-	href: string;
-	children: string;
-	image?: string;
-}
+import { BlogBreadcrumbItem as Item } from "./type";
 
 interface Props {
-	item: BlogBreadcrumbItem;
+	item: Item;
 }
 
-export const BlogBreadcrumbItemLink = (props: Props): JSX.Element => (
-	<Link href={props.item.href}>
-		<a
-			className={[
-				"font-normal no-underline not-prose",
-				"flex items-center",
-			].join(" ")}
-		>
-			{props.item.image && (
-				<img
-					src={props.item.image}
-					alt=""
-					width="32"
-					height="32"
-					className="rounded-full mr-3"
-				/>
-			)}
-			<span>{props.item.children}</span>
-		</a>
-	</Link>
-);
+export const BlogBreadcrumbItem = (props: Props): JSX.Element => {
+	const { children, href, image } = props.item;
+	return (
+		<Link href={href}>
+			<a
+				className={[
+					"font-normal no-underline not-prose",
+					"flex items-center",
+				].join(" ")}
+			>
+				{image !== null && (
+					<img
+						src={image}
+						alt=""
+						width="32"
+						height="32"
+						className="rounded-full mr-3"
+					/>
+				)}
+				<span>{children}</span>
+			</a>
+		</Link>
+	);
+};

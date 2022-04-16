@@ -1,8 +1,8 @@
-import { AppProse } from "../../app/prose";
+import { LayoutProse } from "@/lib/app/layout/prose";
 import { HomeOverviewTry } from "./try";
 
 export const HomeOverview = (): JSX.Element => (
-	<AppProse>
+	<LayoutProse>
 		<h1>
 			<span className="text-gray-500 dark:text-gray-400">
 				Markdown Blogging,
@@ -17,5 +17,5 @@ export const HomeOverview = (): JSX.Element => (
 		</p>
 		<HomeOverviewTry />
 		<p>Or see some examples below ↓</p>
-	</AppProse>
+	</LayoutProse>
 );

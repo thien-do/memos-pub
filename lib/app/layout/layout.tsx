@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import type { ReactNode } from "react";
-import { AppProse } from "./prose";
+import { LayoutProse } from "./prose";
 
 interface Props {
 	children: ReactNode;
@@ -17,12 +17,12 @@ type AppPropsWithLayout = AppProps & {
 	Component: NextPageWithLayout;
 };
 
-export const NoLayout: Layout = (props) => <>{props.children}</>;
+export const LayoutNone: Layout = (props) => <>{props.children}</>;
 
-export const AppMain = (props: AppPropsWithLayout): JSX.Element => {
+export const LayoutMain = (props: AppPropsWithLayout): JSX.Element => {
 	const { Component, pageProps } = props;
 	// Use the layout defined at the page level, if available
-	const Layout = Component.Layout ?? AppProse;
+	const Layout = Component.Layout ?? LayoutProse;
 	return (
 		<Layout>
 			<Component {...pageProps} />

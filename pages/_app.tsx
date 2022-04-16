@@ -5,4 +5,4 @@ import "tailwindcss/tailwind.css";
 import "@/lib/app/fonts/inter/index.css";
 import "@/lib/app/fonts/ia-writer-duo/index.css";
 
-export { AppMain as default } from "@/lib/app";
+export { LayoutMain as default } from "@/lib/app/layout/layout";
