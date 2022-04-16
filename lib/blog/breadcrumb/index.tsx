@@ -1,24 +1,29 @@
 import { Fragment } from "react";
-import { BlogBreadcrumbItem, BlogBreadcrumbItemLink } from "./item";
+import { BlogBreadcrumbItem } from "./item";
+import { BlogBreadcrumbItem as Item } from "./type";
 
-const Separator = (): JSX.Element => (
-	<span className="px-2 text-gray-300 dark:text-gray-600">/</span>
-);
+type GetItems<R> = (request: R) => Item[];
 
-export type GetBlogBreadcrumbItems<R> = (request: R) => BlogBreadcrumbItem[];
+export interface BlogBreadcrumbConfig<R> {
+	getItems: GetItems<R>;
+}
 
 interface Props<R> {
 	request: R;
-	getItems: GetBlogBreadcrumbItems<R>;
+	config: BlogBreadcrumbConfig<R>;
 }
 
 export const BlogBreadcrumb = <R,>(props: Props<R>): JSX.Element => (
 	<div className="flex items-center">
-		{props.getItems(props.request).map((item) => (
+		{props.config.getItems(props.request).map((item) => (
 			<Fragment key={item.href}>
-				<BlogBreadcrumbItemLink item={item} />
+				<BlogBreadcrumbItem item={item} />
 				<Separator />
 			</Fragment>
 		))}
 	</div>
+);
+
+const Separator = (): JSX.Element => (
+	<span className="px-2 text-gray-300 dark:text-gray-600">/</span>
 );

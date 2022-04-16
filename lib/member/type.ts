@@ -1,6 +1,6 @@
-import { GitHubBlogRequest } from "../github/type";
+import { GitHubRequest } from "../github/type";
 
-export interface MemberBlogRequest extends GitHubBlogRequest {
+export interface MemberBlogRequest extends GitHubRequest {
 	/** e.g. "thien.do" */
 	host: string;
 }

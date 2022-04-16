@@ -1,4 +1,4 @@
-import { GitHubBlogRequest } from "./type";
+import { GitHubRequest } from "./type";
 
 /**
  * PageRequest comes from outside so it's expectedly loose (fields are optional,
@@ -9,9 +9,9 @@ export interface GitHubBlogPageParams extends NodeJS.Dict<string | string[]> {
 	slug: string[] | undefined;
 }
 
-export const parseGitHubBlogRequest = (
+export const parseGitHubRequest = (
 	page: GitHubBlogPageParams | undefined
-): GitHubBlogRequest => {
+): GitHubRequest => {
 	if (page === undefined) throw Error("request is undefined");
 	const { owner, slug } = page;
 	if (owner === undefined) throw Error("owner is undefined");
@@ -20,6 +20,6 @@ export const parseGitHubBlogRequest = (
 	const [repo, ...parts] = slug;
 	const path = parts.join("/");
 
-	const request: GitHubBlogRequest = { owner, path, repo };
+	const request: GitHubRequest = { owner, path, repo };
 	return request;
 };

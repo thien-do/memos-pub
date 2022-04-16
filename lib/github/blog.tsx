@@ -3,10 +3,10 @@ import { BlogResponse } from "@/lib/blog/type";
 import { join as pathJoin } from "path";
 import { GetBlogBreadcrumbItems } from "../blog/breadcrumb";
 import { BlogBreadcrumbItem } from "../blog/breadcrumb/item";
-import { GetBlogDirEntryHref } from "../blog/dir/entry";
-import { GetBlogDirTitle } from "../blog/dir/overview";
+import { GetBlogListEntryHref } from "../blog/list/entry";
+import { GetBlogListTitle } from "../blog/list/overview";
 import { ErrorBase } from "../error/base";
-import { GitHubBlogRequest as Request } from "./type";
+import { GitHubRequest as Request } from "./type";
 
 interface Props {
 	request: Request;
@@ -19,7 +19,7 @@ const getFavicon: GetBlogFavicon<Request> = (request): string => {
 
 export { getFavicon as getGitHubBlogFavicon };
 
-const getDirTitle: GetBlogDirTitle<Request> = (props) => {
+const getDirTitle: GetBlogListTitle<Request> = (props) => {
 	const { repo, path } = props.request;
 	// Use current dir name from path first
 	const dir = path.split("/").pop();
@@ -28,7 +28,7 @@ const getDirTitle: GetBlogDirTitle<Request> = (props) => {
 	return repo;
 };
 
-const getDirEntryHref: GetBlogDirEntryHref<Request> = (props) => {
+const getDirEntryHref: GetBlogListEntryHref<Request> = (props) => {
 	const { entry, request } = props;
 	// don't need "user" here because we redirect inside subdomain
 	const { repo, path } = request;

@@ -1,6 +1,7 @@
-import { BlogDirEntry, GetBlogDirEntryHref } from "./entry";
-import { toBlogDirEntryDisplay } from "./entry/display";
-import { BlogDir, BlogDirEntryDisplay as Entry } from "./type";
+import { BlogListEntry, GetBlogListEntryHref } from "./entry";
+import { toBlogListEntryDisplay } from "./entry/display";
+import { BlogList } from "./type";
+import { BlogListEntry as Entry } from "./entry/type";
 
 const byName = (a: Entry, b: Entry): number => {
 	return a.name.localeCompare(b.name);
@@ -18,19 +19,19 @@ const byType = (a: Entry, b: Entry): number => {
 };
 
 interface Props<R> {
-	dir: BlogDir;
+	list: BlogList;
 	request: R;
-	getEntryHref: GetBlogDirEntryHref<R>;
+	getEntryHref: GetBlogListEntryHref<R>;
 }
 
-export const BlogDirBody = <R,>(props: Props<R>): JSX.Element => {
-	const entries = props.dir.entries.map(toBlogDirEntryDisplay);
+export const BlogListBody = <R,>(props: Props<R>): JSX.Element => {
+	const entries = props.list.entries.map(toBlogListEntryDisplay);
 	return entries.length === 0 ? (
 		<p className="text-gray-300 dark:text-gray-600">This folder is empty</p>
 	) : (
 		<ul>
 			{entries.sort(byType).map((entry) => (
-				<BlogDirEntry
+				<BlogListEntry
 					key={entry.name}
 					entry={entry}
 					getHref={props.getEntryHref}

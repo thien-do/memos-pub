@@ -1,34 +1,36 @@
-import { filterBlogDirEntries } from "@/lib/blog/dir/utils/filter";
-import { findBlogDirReadme } from "@/lib/blog/dir/utils/readme";
-import { BlogDir, BlogDirEntry } from "@/lib/blog/dir/type";
+import { filterBlogListEntries } from "@/lib/blog/list/utils/filter";
+import { findBlogListReadme } from "@/lib/blog/list/utils/readme";
+import { BlogList, BlogListEntry } from "@/lib/blog/list/type";
 import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
 import { components } from "@octokit/openapi-types";
 import nodepath from "path";
-import { GitHubBlogRequest } from "../type";
+import { GitHubRequest } from "../type";
 import { fetchGitHubBlog } from "./index";
 
 type RawDir = components["schemas"]["content-directory"];
 type RawDirEntry = RawDir[number];
 
-interface Props<R extends GitHubBlogRequest> {
+interface Props<R extends GitHubRequest> {
 	request: R;
 	response: RawDir;
 	resolvers: MdxUrlResolvers<R>;
 }
 
-export const parseGitHubBlogDir = async <R extends GitHubBlogRequest>(
+export const parseGitHubBlogList = async <R extends GitHubRequest>(
 	props: Props<R>
-): Promise<BlogDir> => {
+): Promise<BlogList> => {
 	const raw = props.response.map(toDirEntry);
-	const entries = filterBlogDirEntries(raw);
+	const entries = filterBlogListEntries(raw);
 	const readme = await fetchReadme(props, entries);
 	const config = await fetchConfig(props, entries);
-	const dir: BlogDir = { type: "dir", entries, readme, config };
+	const dir: BlogList = { type: "dir", entries, readme, config };
 	return dir;
 };
 
-const toDirEntry = (raw: RawDirEntry): BlogDirEntry | null => {
-	const ensureDirEntryType = (type: string): type is BlogDirEntry["type"] => {
+const toDirEntry = (raw: RawDirEntry): BlogListEntry | null => {
+	const ensureDirEntryType = (
+		type: string
+	): type is BlogListEntry["type"] => {
 		return ["file", "dir"].includes(type);
 	};
 
@@ -37,13 +39,13 @@ const toDirEntry = (raw: RawDirEntry): BlogDirEntry | null => {
 	return { name: raw.name, type: raw.type };
 };
 
-const fetchReadme = async <R extends GitHubBlogRequest>(
+const fetchReadme = async <R extends GitHubRequest>(
 	props: Props<R>,
-	entries: BlogDir["entries"]
-): Promise<BlogDir["readme"]> => {
+	entries: BlogList["entries"]
+): Promise<BlogList["readme"]> => {
 	const request = { ...props.request };
 	const { resolvers } = props;
-	const readme = findBlogDirReadme(entries);
+	const readme = findBlogListReadme(entries);
 	if (readme === null) return null;
 	request.path = nodepath.join(request.path, readme.name);
 	const file = await fetchGitHubBlog({ request, resolvers });

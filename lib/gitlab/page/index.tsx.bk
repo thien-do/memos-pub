@@ -1,12 +1,12 @@
 import { BlogPage, BlogPageProps } from "@/lib/blog/page";
-import { BlogDir } from "@/lib/blog/type";
+import { BlogList } from "@/lib/blog/type";
 import { BlogGitLabDir } from "../dir";
 import { BlogGitLabRequest } from "../type";
 import { BlogGitLabBreadcrumb } from "../breadcrumb";
 
 type Props = BlogPageProps<BlogGitLabRequest>;
 
-const getDir = (request: BlogGitLabRequest, dir: BlogDir): JSX.Element => (
+const getDir = (request: BlogGitLabRequest, dir: BlogList): JSX.Element => (
 	<BlogGitLabDir dir={dir} request={request} />
 );
 

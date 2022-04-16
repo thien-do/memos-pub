@@ -3,8 +3,8 @@ import { getEnvGitHubToken } from "@/lib/env";
 import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
 import { components, operations } from "@octokit/openapi-types";
 import { Octokit } from "octokit";
-import { GitHubBlogRequest } from "../type";
-import { parseGitHubBlogDir } from "./dir";
+import { GitHubRequest } from "../type";
+import { parseGitHubBlogList } from "./dir";
 import { parseGitHubBlogError } from "./error";
 import { parseGitHubBlogFile } from "./file";
 
@@ -16,7 +16,7 @@ const octokit = new Octokit({
 type RawResponse =
 	operations["repos/get-content"]["responses"]["200"]["content"]["application/json"];
 
-const parseResponse = async <R extends GitHubBlogRequest>(
+const parseResponse = async <R extends GitHubRequest>(
 	props: Props<R>,
 	response: RawResponse
 ): Promise<BlogResponse> => {
@@ -24,7 +24,7 @@ const parseResponse = async <R extends GitHubBlogRequest>(
 
 	// Directory
 	if (Array.isArray(response)) {
-		return await parseGitHubBlogDir({ request, response, resolvers });
+		return await parseGitHubBlogList({ request, response, resolvers });
 	}
 
 	// Single file raw
@@ -41,12 +41,12 @@ const parseResponse = async <R extends GitHubBlogRequest>(
 	throw Error(`Unknown content type "${response.type}"`);
 };
 
-interface Props<R extends GitHubBlogRequest> {
+interface Props<R extends GitHubRequest> {
 	request: R;
 	resolvers: MdxUrlResolvers<R>;
 }
 
-export const fetchGitHubBlog = async <R extends GitHubBlogRequest>(
+export const fetchGitHubFile = async <R extends GitHubRequest>(
 	props: Props<R>
 ): Promise<BlogResponse> => {
 	const { owner, path, repo } = props.request;

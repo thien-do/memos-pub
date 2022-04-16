@@ -1,4 +1,4 @@
-import { BlogDirEntry, BlogDirEntryDisplay } from "../type";
+import { BlogListEntry, BlogListEntryDisplay } from "../type";
 
 // Only support ISO format by default. Other formats will be supported via
 // config file in the future.
@@ -35,9 +35,9 @@ const parseName = (name: string): Name => {
 	return result;
 };
 
-export const toBlogDirEntryDisplay = (
-	entry: BlogDirEntry
-): BlogDirEntryDisplay => ({
+export const toBlogListEntryDisplay = (
+	entry: BlogListEntry
+): BlogListEntryDisplay => ({
 	...entry,
 	...parseName(entry.name),
 });

@@ -1,6 +1,6 @@
-import { filterBlogDirEntry } from "@/lib/blog/fetch/dir-filter";
-import { findBlogDirReadme } from "@/lib/blog/fetch/dir-readme";
-import { BlogDir, BlogDirEntry, BlogFile } from "@/lib/blog/type";
+import { filterBlogListEntry } from "@/lib/blog/fetch/dir-filter";
+import { findBlogListReadme } from "@/lib/blog/fetch/dir-readme";
+import { BlogList, BlogListEntry, BlogFile } from "@/lib/blog/type";
 import nodepath from "path";
 import { BlogGitLabRequest } from "../type";
 import { fetchBlogGitLabFile } from "./file";
@@ -12,7 +12,7 @@ interface RawItem {
 
 type RawResponse = RawItem[];
 
-const getEntryType = (raw: string): BlogDirEntry["type"] => {
+const getEntryType = (raw: string): BlogListEntry["type"] => {
 	switch (raw) {
 		case "blob":
 			return "file";
@@ -24,9 +24,9 @@ const getEntryType = (raw: string): BlogDirEntry["type"] => {
 
 const fetchReadme = async (
 	request: BlogGitLabRequest,
-	entries: BlogDirEntry[]
+	entries: BlogListEntry[]
 ): Promise<BlogFile | null> => {
-	const readme = findBlogDirReadme(entries);
+	const readme = findBlogListReadme(entries);
 	if (readme === null) return null;
 	const path = nodepath.join(request.path, readme.name);
 	const file = await fetchBlogGitLabFile({ ...request, path });
@@ -36,16 +36,16 @@ const fetchReadme = async (
 const parse = async (
 	request: BlogGitLabRequest,
 	raw: RawResponse
-): Promise<BlogDir> => {
+): Promise<BlogList> => {
 	// Entries
-	let entries: BlogDirEntry[] = raw.map((item) => ({
+	let entries: BlogListEntry[] = raw.map((item) => ({
 		name: item.name,
 		type: getEntryType(item.type),
 	}));
-	entries = filterBlogDirEntry(entries);
+	entries = filterBlogListEntry(entries);
 	// Readme
 	const readme = await fetchReadme(request, entries);
-	const dir: BlogDir = { type: "dir", readme, entries };
+	const dir: BlogList = { type: "dir", readme, entries };
 	return dir;
 };
 
@@ -67,7 +67,7 @@ const fetchRaw = async (request: BlogGitLabRequest): Promise<RawResponse> => {
 
 export const fetchBlogGitLabDir = async (
 	request: BlogGitLabRequest
-): Promise<BlogDir> => {
+): Promise<BlogList> => {
 	const raw = await fetchRaw(request);
 	const dir = await parse(request, raw);
 	return dir;

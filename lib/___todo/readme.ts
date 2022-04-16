@@ -1,20 +1,21 @@
-import { BlogDirEntry, BlogDirEntryFile } from "../type";
+import { BlogListEntry } from "./entry/type";
 
 /** Case in-sensitive */
 const README_FILES = ["readme.md", "readme.mdx", "index.md", "index.mdx"];
 
-const isReadme = (entry: BlogDirEntry): boolean => {
+const isReadme = (entry: BlogListEntry): boolean => {
 	const found = README_FILES.some((candidate) => {
 		return entry.name.toLowerCase() === candidate;
 	});
 	return found;
 };
 
-export const findBlogDirReadme = (
-	entries: BlogDirEntry[]
-): BlogDirEntryFile | null => {
+export const findBlogListReadme = (
+	entries: BlogListEntry[]
+): BlogListEntryFile | null => {
 	const found = entries.find(isReadme);
 	if (found === undefined) return null;
-	if (found.type === "dir") throw Error("Found README file is not file");
+	if (found.type === "list")
+		throw Error("A README is found but it is a directory");
 	return found;
 };

@@ -1,4 +1,4 @@
-export interface BlogDirConfig {
+export interface BlogListConfig {
 	/**
 	 * Control the display of the dir's README file (if exist):
 	 * - "show": Display the README below the entry list
@@ -15,10 +15,10 @@ export interface BlogDirConfig {
 	 * If not defined, memos.pub uses the original file names to list and sort
 	 * the entry list
 	 */
-	entries?: BlogDirConfigEntry[];
+	entries?: BlogListConfigEntry[];
 }
 
-export interface BlogDirConfigEntry {
+export interface BlogListConfigEntry {
 	/**
 	 * The name to be displayed in the entry list. It can include whitespace,
 	 * punctuation marks or any special characters. This is usually the

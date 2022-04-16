@@ -1,19 +1,19 @@
-import { BlogDirConfig } from "@/lib/blog/dir/config/type";
+import { BlogListConfig } from "@/lib/blog/list/config/type";
 import { operations } from "@octokit/openapi-types";
-import { GitHubBlogRequest } from "../../type";
+import { GitHubRequest } from "../../type";
 import { parseGitHubBlogError } from "../error";
 import { getOctokit } from "../octokit";
 
 type RawResponse =
 	operations["repos/get-content"]["responses"]["200"]["content"]["application/json"];
 
-interface Props<R extends GitHubBlogRequest> {
+interface Props<R extends GitHubRequest> {
 	request: R;
 }
 
-export const fetchGitHubBlogDirConfig = async <R extends GitHubBlogRequest>(
+export const fetchGitHubBlogListConfig = async <R extends GitHubRequest>(
 	props: Props<R>
-): Promise<BlogDirConfig | null> => {
+): Promise<BlogListConfig | null> => {
 	const { owner, path, repo } = props.request;
 	try {
 		const get = getOctokit().rest.repos.getContent;
@@ -23,13 +23,13 @@ export const fetchGitHubBlogDirConfig = async <R extends GitHubBlogRequest>(
 		return response;
 	} catch (raw) {
 		const error = parseGitHubBlogError(props.request, raw);
-		// BlogDirConfig is optional
+		// BlogListConfig is optional
 		if (error.status === 404) return null;
 		throw error;
 	}
 };
 
-const parseResponse = (raw: RawResponse): BlogDirConfig => {
+const parseResponse = (raw: RawResponse): BlogListConfig => {
 	// Directory
 	if (Array.isArray(raw)) throw Error("Config cannot be dir");
 
@@ -40,7 +40,7 @@ const parseResponse = (raw: RawResponse): BlogDirConfig => {
 	if (raw.type === "file") {
 		if (!("content" in raw)) throw Error("File doesn't have content");
 		const content = Buffer.from(raw.content, "base64").toString();
-		const config = JSON.parse(content) as BlogDirConfig;
+		const config = JSON.parse(content) as BlogListConfig;
 		return config;
 	}
 
