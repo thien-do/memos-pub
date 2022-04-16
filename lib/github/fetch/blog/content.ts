@@ -1,5 +1,5 @@
 import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
-import { GitHubRequest } from "../type";
+import { GitHubRequest } from "../../type";
 import { parseGitHubBlogList } from "./list";
 import { parseGitHubBlogError } from "./error";
 import { parseGitHubBlogPost } from "./post";

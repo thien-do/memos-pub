@@ -1,7 +1,7 @@
 import { getEnvGitHubToken } from "@/lib/app/env";
-import { operations } from "@octokit/openapi-types";
 import { Octokit } from "octokit";
-import { GitHubRequest } from "./type";
+import { GitHubRequest } from "../type";
+import { GitHubContent } from "./type";
 
 const _octokit: { current: Octokit | null } = { current: null };
 
@@ -15,12 +15,9 @@ export const getOctokit = (): Octokit => {
 	return _octokit.current;
 };
 
-type Data =
-	operations["repos/get-content"]["responses"]["200"]["content"]["application/json"];
-
 export const fetchGitHubContent = async (
 	request: GitHubRequest
-): Promise<Data> => {
+): Promise<GitHubContent> => {
 	const { owner, path, repo } = request;
 	const response = await getOctokit().rest.repos.getContent({
 		...{ owner, path, repo },

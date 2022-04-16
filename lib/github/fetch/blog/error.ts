@@ -1,5 +1,5 @@
 import { BlogContentError } from "@/lib/blog/content/type";
-import { GitHubRequest } from "../type";
+import { GitHubRequest } from "../../type";
 
 export const parseGitHubBlogError = (
 	request: GitHubRequest,

@@ -1,15 +1,10 @@
-export interface GitHubRequest {
-	/**
-	 * e.g. "thien-do"
-	 */
-	owner: string;
-	/**
-	 * e.g. "notes", "notes/2022"
-	 */
-	repo: string;
-	/**
-	 * - e.g. "dir/foo", "dir/foo/hello.md"
-	 * - "" when at repo root
-	 */
-	path: string;
-}
+import { components, operations } from "@octokit/openapi-types";
+
+export type GitHubContent =
+	operations["repos/get-content"]["responses"]["200"]["content"]["application/json"];
+
+export type GitHubFile = components["schemas"]["content-file"];
+
+export type GitHubDir = components["schemas"]["content-directory"];
+
+export type GitHubDirEntry = GitHubDir[number];

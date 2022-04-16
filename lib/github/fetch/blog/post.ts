@@ -1,13 +1,11 @@
 import { BlogPost } from "@/lib/blog/post/type";
 import { compileMdx } from "@/lib/mdx/compile";
 import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
-import { components } from "@octokit/openapi-types";
-import { GitHubRequest } from "../type";
-
-type RawFile = components["schemas"]["content-file"];
+import { GitHubRequest } from "../../type";
+import { GitHubFile } from "../type";
 
 interface Props<R extends GitHubRequest> {
-	response: RawFile;
+	response: GitHubFile;
 	request: R;
 	resolvers: MdxUrlResolvers<R>;
 }
