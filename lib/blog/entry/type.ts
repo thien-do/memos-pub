@@ -5,7 +5,8 @@ export interface BlogEntryBase {
 	name: string;
 	/** Display, sort */
 	title: string;
-	date: Date | null;
+	/** Always in yyyy-mm-dd if exist */
+	date: string | null;
 }
 
 export interface BlogEntryPost extends BlogEntryBase {

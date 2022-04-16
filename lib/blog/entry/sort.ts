@@ -6,7 +6,7 @@ const byTitle = (a: BlogEntry, b: BlogEntry): number => {
 
 const byDate = (a: BlogEntry, b: BlogEntry): number => {
 	if (a.date === null || b.date === null) return byTitle(a, b);
-	return b.date.getTime() - a.date.getTime();
+	return b.date.localeCompare(a.date);
 };
 
 const byType = (a: BlogEntry, b: BlogEntry): number => {

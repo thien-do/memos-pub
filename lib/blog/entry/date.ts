@@ -1,3 +1,5 @@
+import { BlogEntry } from "./type";
+
 export type BlogEntryDateFormat =
 	| "yyyy-mm-dd " // e.g. https://github.com/MQuy/MQuy/tree/master/notes
 	| "mm.dd.yyyy - "; // e.g. https://github.com/huytd/everyday/tree/main/notes
@@ -25,7 +27,7 @@ interface Props {
 }
 
 interface Output {
-	date: Date | null;
+	date: BlogEntry["date"];
 	rest: string;
 }
 
@@ -37,7 +39,7 @@ export const parseBlogEntryDate = (props: Props): Output => {
 
 	const [yi, mi, di] = ymdIndexes;
 	const [y, m, d] = [match[yi + 1], match[mi + 1], match[di + 1]];
-	const date = new Date(`${y}-${m}-${d}T00:00:00Z`); // Always in UTC
+	const date = `${y}-${m}-${d}`; // Always ISO
 
 	const rest = match[4];
 	return { date, rest };

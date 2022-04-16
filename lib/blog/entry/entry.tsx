@@ -12,20 +12,14 @@ interface Props<R> {
 export const BlogEntry = <R,>(props: Props<R>): JSX.Element => {
 	const { entry, getHref, request } = props;
 
-	let date: string | null = null;
-	if (entry.date !== null) {
-		date = entry.date.toISOString();
-		date = date.slice(0, date.indexOf("T"));
-	}
-
 	const link = (
 		<a
 			target="_self"
 			className="flex items-baseline font-normal no-underline"
 		>
-			{date && (
+			{entry.date && (
 				<span className="flex-0 mr-6 text-gray-500 dark:text-gray-400">
-					{date}
+					{entry.date}
 				</span>
 			)}
 			<span className="flex-1 overflow-hidden">{entry.title}</span>

@@ -1,6 +1,6 @@
 import { parseBlogEntryDate } from "@/lib/blog/entry/date";
 import { BlogEntry } from "@/lib/blog/entry/type";
-import { BlogListConfig } from "@/lib/blog/list/config";
+import { BlogListConfig, BlogListConfigEntry } from "@/lib/blog/list/config";
 import { BlogList } from "@/lib/blog/list/type";
 import { GitHubDir, GitHubDirEntry } from "../../type";
 
@@ -10,10 +10,24 @@ interface Props {
 }
 
 export const getGitHubBlogEntries = (props: Props): BlogList["entries"] => {
-	return props.dir.filter(isValid).map(toEntry(props));
+	if (props.config?.entries) {
+		return props.config.entries.map(fromConfig(props));
+	} else {
+		return props.dir.filter(isFileValid).map(fromFile(props));
+	}
 };
 
-const isValid = (entry: GitHubDirEntry): boolean => {
+const fromConfig =
+	(props: Props) =>
+	(raw: BlogListConfigEntry): BlogEntry => {
+		const name = raw.name;
+		const format = props.config?.dateFormat ?? "yyyy-mm-dd ";
+		const { date, rest } = parseBlogEntryDate({ format, name });
+		const title = date === null ? name : rest;
+		return { date, name: raw.path, title, type: "post" };
+	};
+
+const isFileValid = (entry: GitHubDirEntry): boolean => {
 	const { name, type } = entry;
 
 	if (name.startsWith(".")) return false;
@@ -32,7 +46,7 @@ const isValid = (entry: GitHubDirEntry): boolean => {
 	}
 };
 
-const toEntry =
+const fromFile =
 	(props: Props) =>
 	(raw: GitHubDirEntry): BlogEntry => {
 		const { name, type } = raw;
