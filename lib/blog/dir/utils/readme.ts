@@ -1,4 +1,4 @@
-import { BlogDirEntry, BlogDirEntryFile } from "@/lib/blog/type";
+import { BlogDirEntry, BlogDirEntryFile } from "../type";
 
 /** Case in-sensitive */
 const README_FILES = ["readme.md", "readme.mdx", "index.md", "index.mdx"];

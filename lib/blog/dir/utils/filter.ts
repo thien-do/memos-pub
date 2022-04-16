@@ -1,4 +1,4 @@
-import { BlogDirEntry } from "@/lib/blog/type";
+import { BlogDirEntry } from "../type";
 
 const isNotNull = <Value>(value: Value | null): value is Value => {
 	if (value === null) return false;

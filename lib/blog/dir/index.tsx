@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { BlogFile } from "../file";
-import * as type from "../type";
+import * as type from "./type";
 import { BlogDirBody } from "./body";
 import { GetBlogDirEntryHref } from "./entry";
 import { BlogDirOverview, GetBlogDirTitle } from "./overview";

@@ -1,4 +1,4 @@
-import { BlogDirEntry, BlogDirEntryDisplay } from "../../type";
+import { BlogDirEntry, BlogDirEntryDisplay } from "../type";
 
 // Only support ISO format by default. Other formats will be supported via
 // config file in the future.

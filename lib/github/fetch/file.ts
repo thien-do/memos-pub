@@ -1,4 +1,4 @@
-import { BlogFile } from "@/lib/blog/type";
+import { BlogFile } from "@/lib/blog/file/type";
 import { compileMdx } from "@/lib/mdx/compile";
 import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
 import { components } from "@octokit/openapi-types";

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import * as type from "../../type";
+import * as type from "../type";
 
 export type GetBlogDirEntryHref<R> = (props: {
 	entry: type.BlogDirEntry;

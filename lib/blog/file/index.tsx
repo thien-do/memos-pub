@@ -1,6 +1,6 @@
 import { runMdx } from "@/lib/mdx/run";
 import { mdxNextComponents } from "@/lib/mdx/utils/components";
-import * as type from "../type";
+import * as type from "./type";
 
 interface Props {
 	file: type.BlogFile;

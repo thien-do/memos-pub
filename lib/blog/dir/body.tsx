@@ -1,8 +1,6 @@
-import * as type from "../type";
 import { BlogDirEntry, GetBlogDirEntryHref } from "./entry";
 import { toBlogDirEntryDisplay } from "./entry/display";
-
-type Entry = type.BlogDirEntryDisplay;
+import { BlogDir, BlogDirEntryDisplay as Entry } from "./type";
 
 const byName = (a: Entry, b: Entry): number => {
 	return a.name.localeCompare(b.name);
@@ -20,7 +18,7 @@ const byType = (a: Entry, b: Entry): number => {
 };
 
 interface Props<R> {
-	dir: type.BlogDir;
+	dir: BlogDir;
 	request: R;
 	getEntryHref: GetBlogDirEntryHref<R>;
 }
