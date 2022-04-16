@@ -2,7 +2,7 @@ import { BlogError, BlogPage, GetBlogFavicon } from "@/lib/blog";
 import { join as pathJoin } from "path";
 import { BlogBreadcrumbItem } from "../blog/breadcrumb/item";
 import { GetBlogListTitle } from "../blog/list/title";
-import { ErrorBase } from "../error/base";
+import { ErrorBase } from "../app/error/base";
 import { GitHubRequest as Request } from "./type";
 
 interface Props {

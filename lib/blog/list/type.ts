@@ -1,10 +1,10 @@
+import { BlogEntry } from "../entry/type";
 import { BlogPost } from "../post/type";
-import { BlogListConfig } from "./config/type";
-import { BlogListEntry } from "./entry/type";
+import { BlogListConfig } from "./config";
 
 export interface BlogList {
 	type: "list";
-	entries: BlogListEntry[];
+	entries: BlogEntry[];
 	readme: BlogPost | null;
 	config: BlogListConfig | null;
 }

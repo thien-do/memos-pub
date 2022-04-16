@@ -1,6 +1,6 @@
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextRequest, NextResponse } from "next/server";
-import { getRequestSubdomain } from "@/lib/middleware/subdomain";
+import { getRequestSubdomain } from "@/lib/app/middleware/subdomain";
 
 /*
 Re-route `foo.memos.pub/bar/baz` into `memos.pub/_blog/foo/bar/baz`. Extended

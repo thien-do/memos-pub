@@ -1,10 +1,10 @@
-import { BlogPageError } from "@/lib/blog/page/type";
+import { BlogContentError } from "@/lib/blog/content/type";
 import { GitHubRequest } from "../type";
 
 export const parseGitHubBlogError = (
 	request: GitHubRequest,
 	error: unknown
-): BlogPageError => {
+): BlogContentError => {
 	if (hasStatus(error)) {
 		return {
 			type: "error",

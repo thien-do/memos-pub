@@ -4,8 +4,8 @@ import { join as pathJoin } from "path";
 import { GetBlogBreadcrumbItems } from "../blog/breadcrumb";
 import { BlogBreadcrumbItem } from "../blog/breadcrumb/item";
 import { GetBlogListEntryHref } from "../blog/list/entry";
-import { GetBlogListTitle } from "../blog/list/overview";
-import { ErrorBase } from "../error/base";
+import { GetBlogListTitle } from "../blog/list/title";
+import { ErrorBase } from "../app/error/base";
 import { getGitHubBlogFavicon } from "../github/blog";
 import { MemberBlogRequest as Request } from "./type";
 

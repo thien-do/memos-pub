@@ -1,4 +1,4 @@
-import { getEnvGitHubToken } from "@/lib/env";
+import { getEnvGitHubToken } from "@/lib/app/env";
 import { operations } from "@octokit/openapi-types";
 import { Octokit } from "octokit";
 import { GitHubRequest } from "./type";

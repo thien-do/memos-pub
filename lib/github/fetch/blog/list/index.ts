@@ -6,6 +6,7 @@ import { components } from "@octokit/openapi-types";
 import nodepath from "path";
 import { GitHubRequest } from "../type";
 import { fetchGitHubBlog } from "./index";
+import { BlogListConfig } from "@/lib/blog/list/config";
 
 type RawDir = components["schemas"]["content-directory"];
 type RawDirEntry = RawDir[number];
@@ -52,3 +53,5 @@ const fetchReadme = async <R extends GitHubRequest>(
 	if (file.type !== "file") throw Error("README file is not file (2)");
 	return file;
 };
+
+const fetchConfig = async (): Promise<BlogListConfig>
