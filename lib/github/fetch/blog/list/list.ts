@@ -4,6 +4,7 @@ import { fetchGitHubBlogListReadme } from "./readme";
 import { fetchGitHubBlogListConfig } from "./config";
 import { GitHubRequest } from "@/lib/github/type";
 import { GitHubDir } from "../../type";
+import { getGitHubBlogEntries } from "./entry";
 
 interface Props<R extends GitHubRequest> {
 	request: R;
@@ -16,23 +17,12 @@ export const parseGitHubBlogList = async <R extends GitHubRequest>(
 ): Promise<BlogList> => {
 	const { resolvers, dir, request } = props;
 
-	const raw = props.response.map(toDirEntry);
-	const entries = filterBlogListEntries(raw);
-	const readme = await fetchGitHubBlogListReadme({ dir, request, resolvers });
-	const config = await fetchGitHubBlogListConfig({ request });
+	const [readme, config] = await Promise.all([
+		fetchGitHubBlogListReadme({ dir, request, resolvers }),
+		fetchGitHubBlogListConfig({ request }),
+	]);
+	const entries = getGitHubBlogEntries({ config, dir });
 
 	const list: BlogList = { type: "list", entries, readme, config };
 	return list;
-};
-
-const toDirEntry = (raw: RawDirEntry): BlogListEntry | null => {
-	const ensureDirEntryType = (
-		type: string
-	): type is BlogListEntry["type"] => {
-		return ["file", "dir"].includes(type);
-	};
-
-	// Just skip unknown file types (submodule, symlink)
-	if (!ensureDirEntryType(raw.type)) return null;
-	return { name: raw.name, type: raw.type };
 };

@@ -1,10 +1,13 @@
 import { BlogContentError } from "@/lib/blog/content/type";
 import { GitHubRequest } from "../../type";
 
-export const parseGitHubBlogError = (
-	request: GitHubRequest,
-	error: unknown
-): BlogContentError => {
+interface Props {
+	request: GitHubRequest;
+	error: unknown;
+}
+
+export const parseGitHubBlogError = (props: Props): BlogContentError => {
+	const { error, request } = props;
 	if (hasStatus(error)) {
 		return {
 			type: "error",

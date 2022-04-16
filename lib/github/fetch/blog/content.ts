@@ -1,11 +1,11 @@
-import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
-import { GitHubRequest } from "../../type";
-import { parseGitHubBlogList } from "./list";
-import { parseGitHubBlogError } from "./error";
-import { parseGitHubBlogPost } from "./post";
 import { BlogContent } from "@/lib/blog/content/type";
-import { fetchGitHubContent } from "../content";
+import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
 import { components } from "@octokit/openapi-types";
+import { GitHubRequest } from "../../type";
+import { fetchGitHubContent } from "../content";
+import { parseGitHubBlogError } from "./error";
+import { parseGitHubBlogList } from "./list/list";
+import { parseGitHubBlogPost } from "./post";
 
 interface Props<R extends GitHubRequest> {
 	request: R;
@@ -21,7 +21,8 @@ export const fetchGitHubBlogContent = async <R extends GitHubRequest>(
 
 		// Directory
 		if (Array.isArray(response)) {
-			return await parseGitHubBlogList({ request, response, resolvers });
+			const dir = response;
+			return await parseGitHubBlogList({ request, dir, resolvers });
 		}
 
 		// Single file raw
@@ -31,12 +32,12 @@ export const fetchGitHubBlogContent = async <R extends GitHubRequest>(
 
 		// Single file json
 		if (response.type === "file") {
-			const r = response as components["schemas"]["content-file"];
-			return parseGitHubBlogPost({ request, response: r, resolvers });
+			const file = response as components["schemas"]["content-file"];
+			return parseGitHubBlogPost({ request, file, resolvers });
 		}
 
 		throw Error(`Unknown content type "${response.type}"`);
 	} catch (error) {
-		return parseGitHubBlogError(props.request, error);
+		return parseGitHubBlogError({ request, error });
 	}
 };

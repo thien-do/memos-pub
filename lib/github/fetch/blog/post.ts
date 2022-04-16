@@ -5,7 +5,7 @@ import { GitHubRequest } from "../../type";
 import { GitHubFile } from "../type";
 
 interface Props<R extends GitHubRequest> {
-	response: GitHubFile;
+	file: GitHubFile;
 	request: R;
 	resolvers: MdxUrlResolvers<R>;
 }
@@ -13,11 +13,11 @@ interface Props<R extends GitHubRequest> {
 export const parseGitHubBlogPost = async <R extends GitHubRequest>(
 	props: Props<R>
 ): Promise<BlogPost> => {
-	const { response, request } = props;
+	const { file, request } = props;
 
-	if (!("content" in response)) throw Error("File doesn't have content");
+	if (!("content" in file)) throw Error("File doesn't have content");
 
-	const content = Buffer.from(response.content, "base64").toString();
+	const content = Buffer.from(file.content, "base64").toString();
 
 	const resolvers = props.resolvers;
 	const code = await compileMdx<R>({

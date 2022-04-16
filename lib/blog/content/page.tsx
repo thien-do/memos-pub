@@ -4,7 +4,7 @@ import { BlogList, BlogListConfig } from "../list/list";
 import { BlogPost } from "../post";
 import { BlogContent, BlogContentError } from "./type";
 
-interface Config<R> {
+export interface BlogPageConfig<R> {
 	breadcrumb: BlogBreadcrumbConfig<R>;
 	Error: (props: { error: BlogContentError }) => JSX.Element;
 	getFavicon: (request: R) => string;
@@ -14,7 +14,7 @@ interface Config<R> {
 interface Props<R> {
 	request: R;
 	content: BlogContent;
-	config: Config<R>;
+	config: BlogPageConfig<R>;
 }
 
 const Body = <R,>(props: Props<R>): JSX.Element => {
