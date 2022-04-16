@@ -10,7 +10,11 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 const typography = (_theme) => ({
 	DEFAULT: {
 		css: {
-			code: { padding: "0.4em" },
+			// Define here so that Tailwind's "pre code" can override them
+			code: { padding: "0.2em 0.4em", fontWeight: 400 },
+			"h1 code": { fontWeight: "inherit" },
+			"h2 code": { fontWeight: "inherit" },
+			"h3 code": { fontWeight: "inherit" },
 			// Matches both <pre> and <code>
 			'[data-theme="dark"]': { display: "none" },
 		},
@@ -40,7 +44,7 @@ module.exports = {
 		extend: {
 			fontFamily: {
 				sans: ["'Inter'", ...defaultTheme.fontFamily.sans],
-				mono: ["'Cascadia Mono'", ...defaultTheme.fontFamily.mono],
+				mono: ["'iA Writer Duo'", ...defaultTheme.fontFamily.mono],
 			},
 			typography: typography,
 		},

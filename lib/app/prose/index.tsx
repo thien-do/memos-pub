@@ -20,9 +20,10 @@ export const AppProse = (props: Props): JSX.Element => (
 			"prose-a:decoration-gray-400 dark:prose-a:decoration-gray-500",
 			"prose-a:underline-offset-2",
 			// Inline code
-			"prose-code:font-[350] prose-code:rounded-[0.25em]",
+			"prose-code:rounded-[0.2em]",
 			"prose-code:bg-gray-200 dark:prose-code:bg-gray-900",
-			"prose-code:before:content-none prose-code:after:content-none", // Remove backtick in inline-code
+			// Remove backtick in inline-code
+			"prose-code:before:content-none prose-code:after:content-none",
 			// Block code
 			"prose-pre:bg-gray-200 dark:prose-pre:bg-gray-900",
 			"prose-pre:text-inherit",

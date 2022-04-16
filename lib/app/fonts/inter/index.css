@@ -10,7 +10,7 @@ This CSS comes from the CSS inside Inter's release bundle
 	font-style: normal;
 	font-weight: 100 900;
 	font-display: swap;
-	src: url("./inter.woff2") format("woff2");
+	src: url("./InterRoman.woff2") format("woff2");
 	font-named-instance: "Regular";
 }
 
@@ -19,6 +19,6 @@ This CSS comes from the CSS inside Inter's release bundle
 	font-style: italic;
 	font-weight: 100 900;
 	font-display: swap;
-	src: url("./inter-italic.woff2") format("woff2");
+	src: url("./InterItalic.woff2") format("woff2");
 	font-named-instance: "Italic";
 }
