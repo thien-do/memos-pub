@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Fragment } from "react";
-import { NoLayout } from "../app";
+import { LayoutNone } from "../app/layout/layout";
 import { HomeDetail } from "./detail";
 import { HomeGallery } from "./gallery";
 import { HomeOverview } from "./overview";
@@ -26,4 +26,4 @@ export const Home = (): JSX.Element => {
 	);
 };
 
-Home.Layout = NoLayout;
+Home.Layout = LayoutNone;

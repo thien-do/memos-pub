@@ -1,4 +1,3 @@
-import { BlogRequestBase } from "@/lib/blog/type";
 import { compile } from "@mdx-js/mdx";
 import { getMdxCompileOptions, GetMdxCompileOptionsProps } from "./options";
 
@@ -10,7 +9,7 @@ interface Props<R> {
 /**
  * Evaluate mdx string to code (that is serializable)
  */
-export const compileMdx = async <R extends BlogRequestBase>(
+export const compileMdx = async <R extends { path: string }>(
 	props: Props<R>
 ): Promise<string> => {
 	if (typeof window !== "undefined")

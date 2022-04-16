@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { getEnvRootHost } from "@/lib/env";
+import { getEnvRootHost } from "../env";
 
 interface Props {
 	title: string;

@@ -31,10 +31,10 @@ export const fetchGitHubBlogListConfig = async <R extends GitHubRequest>(
 		}
 
 		throw Error(`Unknown content type "${raw.type}"`);
-	} catch (raw) {
-		const error = parseGitHubBlogError(props.request, raw);
+	} catch (error) {
+		const parsed = parseGitHubBlogError({ error, request });
 		// BlogListConfig is optional
-		if (error.status === 404) return null;
-		throw error;
+		if (parsed.status === 404) return null;
+		throw parsed;
 	}
 };
