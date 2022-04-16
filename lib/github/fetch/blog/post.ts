@@ -1,4 +1,4 @@
-import { BlogFile } from "@/lib/blog/file/type";
+import { BlogPost } from "@/lib/blog/post/type";
 import { compileMdx } from "@/lib/mdx/compile";
 import { MdxUrlResolvers } from "@/lib/mdx/compile/url";
 import { components } from "@octokit/openapi-types";
@@ -12,9 +12,9 @@ interface Props<R extends GitHubRequest> {
 	resolvers: MdxUrlResolvers<R>;
 }
 
-export const parseGitHubBlogFile = async <R extends GitHubRequest>(
+export const parseGitHubBlogPost = async <R extends GitHubRequest>(
 	props: Props<R>
-): Promise<BlogFile> => {
+): Promise<BlogPost> => {
 	const { response, request } = props;
 
 	if (!("content" in response)) throw Error("File doesn't have content");
@@ -27,5 +27,5 @@ export const parseGitHubBlogFile = async <R extends GitHubRequest>(
 		options: { request, resolvers },
 	});
 
-	return { type: "file", code };
+	return { type: "post", code };
 };

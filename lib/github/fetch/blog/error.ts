@@ -1,5 +1,20 @@
-import { BlogError } from "@/lib/blog/type";
+import { BlogPageError } from "@/lib/blog/page/type";
 import { GitHubRequest } from "../type";
+
+export const parseGitHubBlogError = (
+	request: GitHubRequest,
+	error: unknown
+): BlogPageError => {
+	if (hasStatus(error)) {
+		return {
+			type: "error",
+			status: error.status,
+			message: getMessage(request, error),
+		};
+	} else {
+		throw error;
+	}
+};
 
 interface HasStatus {
 	status: number;
@@ -29,20 +44,5 @@ const getMessage = (request: GitHubRequest, error: HasStatus): string => {
 			return get404(request);
 		default:
 			throw error;
-	}
-};
-
-export const parseGitHubBlogError = (
-	request: GitHubRequest,
-	error: unknown
-): BlogError => {
-	if (hasStatus(error)) {
-		return {
-			type: "error",
-			status: error.status,
-			message: getMessage(request, error),
-		};
-	} else {
-		throw error;
 	}
 };

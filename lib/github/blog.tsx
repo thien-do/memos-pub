@@ -1,10 +1,7 @@
 import { BlogError, BlogPage, GetBlogFavicon } from "@/lib/blog";
-import { BlogResponse } from "@/lib/blog/type";
 import { join as pathJoin } from "path";
-import { GetBlogBreadcrumbItems } from "../blog/breadcrumb";
 import { BlogBreadcrumbItem } from "../blog/breadcrumb/item";
-import { GetBlogListEntryHref } from "../blog/list/entry";
-import { GetBlogListTitle } from "../blog/list/overview";
+import { GetBlogListTitle } from "../blog/list/title";
 import { ErrorBase } from "../error/base";
 import { GitHubRequest as Request } from "./type";
 

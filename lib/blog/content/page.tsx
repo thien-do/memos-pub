@@ -2,7 +2,7 @@ import Head from "next/head";
 import { BlogBreadcrumb, BlogBreadcrumbConfig } from "../breadcrumb/breadcrumb";
 import { BlogList, BlogListConfig } from "../list/list";
 import { BlogPost } from "../post";
-import { BlogContent as Content, BlogContentError } from "./type";
+import { BlogContent, BlogContentError } from "./type";
 
 interface Config<R> {
 	breadcrumb: BlogBreadcrumbConfig<R>;
@@ -13,7 +13,7 @@ interface Config<R> {
 
 interface Props<R> {
 	request: R;
-	content: Content;
+	content: BlogContent;
 	config: Config<R>;
 }
 
@@ -35,7 +35,7 @@ const Body = <R,>(props: Props<R>): JSX.Element => {
 	}
 };
 
-export const BlogContent = <R,>(props: Props<R>): JSX.Element => (
+export const BlogContentPage = <R,>(props: Props<R>): JSX.Element => (
 	<div>
 		<Head>
 			<link
