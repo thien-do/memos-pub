@@ -7,9 +7,10 @@ const AppDocument = (): JSX.Element => (
 	<Html lang="en-US">
 		<Head>
 			<script
+				async
 				defer
-				data-domain="memos.pub"
-				src="https://plausible.io/js/plausible.js"
+				data-website-id="f20c04c5-42b6-4803-b440-c0c4a1990de9"
+				src="https://umami-production-d14b.up.railway.app/umami.js"
 			></script>
 		</Head>
 		<body className="bg-gray-100 dark:bg-gray-800">
