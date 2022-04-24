@@ -1,0 +1,33 @@
+/*
+iA Writer has variable fonts but there are no dedicated web version, so it's
+quite large, even larger than invidual woff2 fonts combines
+
+Modified from https://github.com/iaolo/iA-Fonts/blob/master/iA%20Writer%20Monospace/Webfonts/fonts.css
+*/
+@font-face {
+	font-family: "iA Writer Mono";
+	font-weight: normal;
+	font-style: normal;
+	src: url("./iAWriterMonoS-Regular.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "iA Writer Mono";
+	font-weight: normal;
+	font-style: italic;
+	src: url("./iAWriterMonoS-Italic.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "iA Writer Mono";
+	font-weight: bold;
+	font-style: normal;
+	src: url("./iAWriterMonoS-Bold.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "iA Writer Mono";
+	font-weight: bold;
+	font-style: italic;
+	src: url("./iAWriterMonoS-BoldItalic.woff2") format("woff2");
+}

@@ -44,7 +44,7 @@ module.exports = {
 		extend: {
 			fontFamily: {
 				sans: ["'Inter'", ...defaultTheme.fontFamily.sans],
-				mono: ["'iA Writer Duo'", ...defaultTheme.fontFamily.mono],
+				mono: ["'iA Writer Mono'", ...defaultTheme.fontFamily.mono],
 			},
 			typography: typography,
 		},
