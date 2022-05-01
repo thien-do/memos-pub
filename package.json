@@ -14,6 +14,7 @@
 		"@mdx-js/mdx": "2.1.1",
 		"@mdx-js/react": "2.1.1",
 		"@next/mdx": "12.1.5",
+		"@octokit/types": "^6.34.0",
 		"@tailwindcss/forms": "0.5.0",
 		"hast-util-select": "5.0.1",
 		"next": "12.1.5",
