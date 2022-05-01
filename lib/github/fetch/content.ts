@@ -1,9 +1,9 @@
 import { getEnvGitHubToken } from "@/lib/app/env";
+import type { OctokitResponse } from "@octokit/types";
 import { Octokit } from "octokit";
-import { OctokitResponse } from "@octokit/types";
-import { GitHubRequest } from "../type";
-import { GitHubContent } from "./type";
+import type { GitHubRequest } from "../type";
 import { githubErrorHasStatus } from "./blog/error";
+import type { GitHubContent } from "./type";
 
 const _octokit: { current: Octokit | null } = { current: null };
 
@@ -19,6 +19,8 @@ const getOctokit = (): Octokit => {
 
 const cacheMap: Map<string, OctokitResponse<GitHubContent, 200>> = new Map();
 
+export const getGitHubContentCache = () => cacheMap;
+
 export const fetchGitHubContent = async (
 	request: GitHubRequest
 ): Promise<GitHubContent> => {
@@ -31,7 +33,6 @@ export const fetchGitHubContent = async (
 			headers: { "If-None-Match": cached?.headers.etag },
 			mediaType: { format: "json" },
 		});
-		console.info("github cache miss");
 		cacheMap.set(cacheKey, response);
 		return response.data;
 	} catch (error) {
@@ -39,7 +40,6 @@ export const fetchGitHubContent = async (
 		if (!githubErrorHasStatus(error)) throw error;
 		if (error.status !== 304) throw error;
 		if (cached === undefined) throw Error("No cache but 304");
-		console.info("github cache hit");
 		return cached.data;
 	}
 };

@@ -20,7 +20,7 @@ export const getStaticProps: GetStaticProps<
 	const content = await fetchGitHubBlogContent({ request, resolvers });
 	return {
 		props: { content, request },
-		revalidate: 5 * 60, // seconds
+		revalidate: 24 * 60 * 60, // seconds
 	};
 };
 
