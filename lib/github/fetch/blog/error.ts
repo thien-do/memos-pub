@@ -8,7 +8,7 @@ interface Props {
 
 export const parseGitHubBlogError = (props: Props): BlogContentError => {
 	const { error, request } = props;
-	if (hasStatus(error)) {
+	if (githubErrorHasStatus(error)) {
 		return {
 			type: "error",
 			status: error.status,
@@ -23,7 +23,7 @@ interface HasStatus {
 	status: number;
 }
 
-const hasStatus = (raw: unknown): raw is HasStatus => {
+export const githubErrorHasStatus = (raw: unknown): raw is HasStatus => {
 	if (typeof raw !== "object") return false;
 	if (raw === null) throw raw;
 	if ("status" in raw) {
