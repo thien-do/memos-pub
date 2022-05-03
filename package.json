@@ -16,6 +16,7 @@
 		"@next/mdx": "12.1.5",
 		"@octokit/types": "^6.34.0",
 		"@tailwindcss/forms": "0.5.0",
+		"@upstash/redis": "^1.3.1",
 		"hast-util-select": "5.0.1",
 		"next": "12.1.5",
 		"octokit": "1.7.1",
