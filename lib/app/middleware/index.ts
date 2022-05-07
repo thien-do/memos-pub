@@ -11,14 +11,6 @@ export const appMiddleware: NextMiddleware = (req) => {
 	// Skip /api requests
 	if (pathname.startsWith("/api")) return NextResponse.next();
 
-	// Avoid direct access to internal routing
-	if (pathname.startsWith(`/_member`))
-		return new NextResponse(null, { status: 404 });
-	if (pathname.startsWith(`/_github`))
-		return new NextResponse(null, { status: 404 });
-	// if (pathname.startsWith(`/_blog-gitlab`))
-	// 	return new NextResponse(null, { status: 404 });
-
 	const memberRewrite = rewriteMemberRequest(req);
 	if (memberRewrite !== null) return memberRewrite;
 
