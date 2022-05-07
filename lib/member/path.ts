@@ -6,4 +6,5 @@ export const MEMBER_PATHS: { from: string; to: string }[] = [
 	{ from: "notes.snacky.blog", to: "huytd/git-notes" },
 	{ from: "notes.minhle.space", to: "monodyle/monodyle" },
 	{ from: "www.chars.fyi", to: "thien-do/chars.fyi" },
+	{ from: "blog.keva.dev", to: "keva-dev/blog" }
 ];
