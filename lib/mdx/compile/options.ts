@@ -29,6 +29,14 @@ const getFormat = (path: string): CompileOptions["format"] => {
 const getRehypeLinkOptions = (): Partial<rehypeLinkOptions> => ({
 	behavior: "prepend",
 	content: { type: "text", value: "# " },
+	test: [
+		"h1:not(:first-child)",
+		"h2:not(:first-child)",
+		"h3:not(:first-child)",
+		"h4:not(:first-child)",
+		"h5:not(:first-child)",
+		"h6:not(:first-child)",
+	],
 	properties: {
 		class: [
 			"text-gray-300 dark:text-gray-600 no-underline",
