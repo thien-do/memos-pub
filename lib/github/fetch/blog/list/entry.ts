@@ -24,7 +24,6 @@ const isFileValid = (entry: GitHubDirEntry): boolean => {
 			return true;
 		case "file":
 			if (name.endsWith(".md")) return true;
-			if (name.endsWith(".markdown")) return true;
 			if (name.endsWith(".mdx")) return true;
 			return false;
 		default:
@@ -35,15 +34,18 @@ const isFileValid = (entry: GitHubDirEntry): boolean => {
 const fromFile =
 	(props: Props) =>
 	(raw: GitHubDirEntry): BlogEntry => {
-		const { name, type } = raw;
-		if (!ensureType(type)) throw Error("");
+		const { name } = raw;
+		const type = typeMap[raw.type];
+		if (type === undefined) throw Error(`Unknown type "${raw.type}"`);
 		const format = props.config?.dateFormat ?? "yyyy-mm-dd ";
 		const { date, rest } = parseBlogEntryDate({ format, name });
-		const title = date === null ? name : rest;
+		let title = date === null ? name : rest;
+		title = title.replace(".md", "");
 		const entry: BlogEntry = { date, name, title, type };
 		return entry;
 	};
 
-const ensureType = (type: string): type is BlogEntry["type"] => {
-	return ["file", "dir"].includes(type);
+const typeMap: Record<string, BlogEntry["type"] | undefined> = {
+	dir: "list",
+	file: "post",
 };

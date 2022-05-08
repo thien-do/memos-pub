@@ -10,7 +10,7 @@ interface Props<R> {
 
 export const BlogListBody = <R,>(props: Props<R>): JSX.Element => {
 	const entries = props.list.entries
-		.filter((entry) => entry.title !== "README.md")
+		.filter((entry) => entry.name !== "README.md")
 		.sort(compareBlogEntries);
 	return entries.length === 0 ? (
 		<p className="text-gray-300 dark:text-gray-600">This folder is empty</p>
