@@ -8,14 +8,12 @@ interface Props {
 	request: BlogRequest;
 }
 
-export const BlogListBody = (props: Props): JSX.Element => {
+export const BlogListBody = (props: Props): JSX.Element | null => {
 	const entries = props.list.entries
 		// README is already render at top of BlogList
 		.filter((entry) => entry.name !== "README.md")
 		.sort(compareBlogEntries);
-	return entries.length === 0 ? (
-		<p className="text-gray-300 dark:text-gray-600">This folder is empty</p>
-	) : (
+	return entries.length !== 0 ? (
 		<ul>
 			{entries.map((entry) => (
 				<BlogEntryLink
@@ -25,5 +23,7 @@ export const BlogListBody = (props: Props): JSX.Element => {
 				/>
 			))}
 		</ul>
-	);
+	) : props.list.readme === null ? (
+		<p className="text-gray-300 dark:text-gray-600">This folder is empty</p>
+	) : null;
 };
