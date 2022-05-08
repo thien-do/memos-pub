@@ -15,7 +15,10 @@ export const BlogEntry = <R,>(props: Props<R>): JSX.Element => {
 	const link = (
 		<a
 			target="_self"
-			className="flex items-baseline font-normal no-underline"
+			className={[
+				"flex items-baseline font-normal no-underline",
+				"flex-col sm:flex-row",
+			].join(" ")}
 		>
 			{entry.date && (
 				<span className="flex-0 mr-6 text-gray-500 dark:text-gray-400">
