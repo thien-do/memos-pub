@@ -1,5 +1,5 @@
-import { BlogConfig } from "@/lib/config/type";
 import { GitHubEntry } from "@/lib/github/type";
+import { BlogConfig } from "../../config/type";
 import { BlogEntry } from "../type";
 import { parseBlogEntryDate } from "./date";
 

@@ -1,4 +1,4 @@
-import { BlogConfigDate } from "@/lib/config/type";
+import { BlogConfigDate } from "../../config/type";
 import { BlogEntry } from "../type";
 
 const DETAILS: Record<BlogConfigDate, Detail> = {
