@@ -1,1 +1,1 @@
-export { Error404 as default } from "@/lib/app/error/404";
+export { Error404 as default } from "@/lib/error/404";

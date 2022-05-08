@@ -1,15 +1,16 @@
-import { BlogEntry, GetBlogEntryHref } from "../entry/entry";
-import { compareBlogEntries } from "../entry/sort";
+import { BlogRequest } from "../request/type";
+import { BlogEntryLink } from "../entry/link";
+import { compareBlogEntries } from "./sort";
 import { BlogList } from "./type";
 
-interface Props<R> {
+interface Props {
 	list: BlogList;
-	request: R;
-	getEntryHref: GetBlogEntryHref<R>;
+	request: BlogRequest;
 }
 
-export const BlogListBody = <R,>(props: Props<R>): JSX.Element => {
+export const BlogListBody = (props: Props): JSX.Element => {
 	const entries = props.list.entries
+		// README is already render at top of BlogList
 		.filter((entry) => entry.name !== "README.md")
 		.sort(compareBlogEntries);
 	return entries.length === 0 ? (
@@ -17,10 +18,9 @@ export const BlogListBody = <R,>(props: Props<R>): JSX.Element => {
 	) : (
 		<ul>
 			{entries.map((entry) => (
-				<BlogEntry
+				<BlogEntryLink
 					key={entry.name}
 					entry={entry}
-					getHref={props.getEntryHref}
 					request={props.request}
 				/>
 			))}

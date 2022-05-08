@@ -17,15 +17,6 @@ import remarkToc from "remark-toc";
 import { getRehypeCodeOptions } from "./code";
 import { getRehypeUrlOptions, MdxUrlResolvers } from "./url";
 
-const getFormat = (path: string): CompileOptions["format"] => {
-	const fileName = path.split("/").pop();
-	if (fileName === undefined) throw Error(`No file found: "${path}"`);
-	if (fileName.endsWith(".mdx")) return "mdx";
-	if (fileName.endsWith(".md")) return "md";
-	if (fileName.endsWith(".markdown")) return "md";
-	throw Error(`Unknown extension "${fileName}"`);
-};
-
 const getRehypeLinkOptions = (): Partial<rehypeLinkOptions> => ({
 	behavior: "prepend",
 	content: { type: "text", value: "# " },
@@ -49,34 +40,26 @@ const getRehypeTitleOptions = (): rehypeTitleOptions => ({
 	selector: "h1,h2,h3",
 });
 
-interface Props<R> {
-	request: R;
-	resolvers: MdxUrlResolvers<R>;
+interface Props {
+	urlResolvers: MdxUrlResolvers;
 }
 
-export type GetMdxCompileOptionsProps<R> = Props<R>;
-
-export const getMdxCompileOptions = <R extends { path: string }>(
-	props: Props<R>
-): CompileOptions => {
-	const { resolvers, request } = props;
-	return {
-		format: getFormat(request.path),
-		outputFormat: "function-body",
-		remarkPlugins: [
-			remarkGfm,
-			remarkFrontmatter,
-			remarkMdxFrontmatter,
-			remarkToc,
-		],
-		rehypePlugins: [
-			[rehypePrettyCode, getRehypeCodeOptions()],
-			rehypeSlug,
-			rehypeInferDescriptionMeta,
-			[rehypeInferTitleMeta, getRehypeTitleOptions()],
-			rehypeMeta,
-			[rehypeAutolinkHeadings, getRehypeLinkOptions()],
-			[rehypeUrl, getRehypeUrlOptions({ resolvers, request })],
-		],
-	};
-};
+export const getMdxCompileOptions = (props: Props): CompileOptions => ({
+	format: "md",
+	outputFormat: "function-body",
+	remarkPlugins: [
+		remarkGfm,
+		remarkFrontmatter,
+		remarkMdxFrontmatter,
+		remarkToc,
+	],
+	rehypePlugins: [
+		[rehypePrettyCode, getRehypeCodeOptions()],
+		rehypeSlug,
+		rehypeInferDescriptionMeta,
+		[rehypeInferTitleMeta, getRehypeTitleOptions()],
+		rehypeMeta,
+		[rehypeAutolinkHeadings, getRehypeLinkOptions()],
+		[rehypeUrl, getRehypeUrlOptions({ resolvers: props.urlResolvers })],
+	],
+});

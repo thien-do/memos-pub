@@ -1,9 +1,9 @@
 export type BlogEntry = BlogEntryPost | BlogEntryList;
 
 export interface BlogEntryBase {
-	/** Fetch, URL */
+	/** Raw name, use to fetch */
 	name: string;
-	/** Display, sort */
+	/** Clean name, use to display */
 	title: string;
 	/** Always in yyyy-mm-dd if exist */
 	date: string | null;

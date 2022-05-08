@@ -1,1 +1,1 @@
-export { appMiddleware as default } from "@/lib/app/middleware";
+export { appMiddleware as default } from "@/lib/middleware/app";

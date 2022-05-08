@@ -1,19 +1,14 @@
+import { BlogRequest } from "../request/type";
 import Head from "next/head";
 import { BlogList } from "./type";
 
-export type GetBlogListTitle<R> = (props: {
+interface Props {
 	list: BlogList;
-	request: R;
-}) => string;
-
-interface Props<R> {
-	getTitle: GetBlogListTitle<R>;
-	list: BlogList;
-	request: R;
+	request: BlogRequest;
 }
 
-export const BlogListTitle = <R,>(props: Props<R>): JSX.Element => {
-	const { list, getTitle, request } = props;
+export const BlogListTitle = (props: Props): JSX.Element => {
+	const { list, request } = props;
 	const title = getTitle({ list, request });
 	return (
 		<div>
@@ -23,4 +18,13 @@ export const BlogListTitle = <R,>(props: Props<R>): JSX.Element => {
 			<h1>{title}</h1>
 		</div>
 	);
+};
+
+const getTitle = (props: Props): string => {
+	const { domain, path, repo } = props.request;
+	// Use current dir name from path first
+	const dir = path.split("/").pop();
+	if (dir !== "" && dir !== undefined) return dir;
+	// Else (path is empty) we are at home
+	return domain ?? repo;
 };
