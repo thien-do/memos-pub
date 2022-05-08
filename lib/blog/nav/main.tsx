@@ -34,7 +34,7 @@ const getItems = (props: Props): BlogNavItem[] => {
 	});
 
 	// All others
-	let href = domain ? "" : `${repo}`;
+	let href = domain ? "" : `/${repo}`;
 	if (path !== "") {
 		path.split("/").forEach((name) => {
 			href = `${href}/${name}`;
