@@ -9,9 +9,6 @@ interface Props {
 	request: BlogRequest;
 	content: BlogContent;
 }
-
-export type { Props as BlogContentMainProps };
-
 export const BlogContentMain = (props: Props): JSX.Element => (
 	<div>
 		<Head>
