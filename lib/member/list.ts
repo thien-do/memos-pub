@@ -7,4 +7,5 @@ export const MEMBER_LIST: { from: string; to: string }[] = [
 	{ from: "notes.minhle.space", to: "monodyle/monodyle" },
 	{ from: "www.chars.fyi", to: "thien-do/chars.fyi" },
 	{ from: "blog.keva.dev", to: "keva-dev/blog" },
+	{ from: "memo.dev-random.io", to: "unrealhoang/unrealhoang.github.io" },
 ];
