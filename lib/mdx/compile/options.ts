@@ -10,10 +10,9 @@ import rehypeInferTitleMeta, {
 import rehypeMeta from "rehype-meta";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
-import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
-import { remarkMdxFrontmatter } from "remark-mdx-frontmatter";
 import remarkToc from "remark-toc";
+import { mdxFrontmatter } from "../frontmatter";
 import { getRehypeCodeOptions } from "./code";
 import { getRehypeUrlOptions, MdxUrlResolvers } from "./url";
 
@@ -47,12 +46,7 @@ interface Props {
 export const getMdxCompileOptions = (props: Props): CompileOptions => ({
 	format: "md",
 	outputFormat: "function-body",
-	remarkPlugins: [
-		remarkGfm,
-		remarkFrontmatter,
-		remarkMdxFrontmatter,
-		remarkToc,
-	],
+	remarkPlugins: [remarkGfm, ...mdxFrontmatter, remarkToc],
 	rehypePlugins: [
 		[rehypePrettyCode, getRehypeCodeOptions()],
 		rehypeSlug,
