@@ -1,7 +1,6 @@
-import {
-	Options as rehypeUrlOptions,
-	UrlMatch,
-} from "@jsdevtools/rehype-url-inspector";
+import { Options as RehypeUrlOptions, UrlMatch } from "@jsdevtools/rehype-url-inspector";
+import rehypeUrl from "@jsdevtools/rehype-url-inspector";
+import { PluggableList } from "unified";
 
 type ResolverFunc = (url: string) => string;
 
@@ -38,10 +37,12 @@ const rewriteLinkHref = (props: Props, match: UrlMatch): void => {
 	node.properties["href"] = nextUrl;
 };
 
-export const getRehypeUrlOptions = (props: Props): rehypeUrlOptions => ({
+const getRehypeUrlOptions = (props: Props): RehypeUrlOptions => ({
 	selectors: ["img[src]", "a[href]"],
 	inspectEach: (match) => {
 		rewriteImageSrc(props, match);
 		rewriteLinkHref(props, match);
 	},
 });
+
+export const getMdxUrl = (props: Props): PluggableList => [[rehypeUrl, getRehypeUrlOptions(props)]];

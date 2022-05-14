@@ -1,7 +1,8 @@
-import { Options as RehypeCodeOptions } from "rehype-pretty-code";
-import * as shiki from "shiki";
-import { join as pathJoin } from "path";
 import * as fs from "fs/promises";
+import { join as pathJoin } from "path";
+import rehypeCode, { Options as RehypeCodeOptions } from "rehype-pretty-code";
+import * as shiki from "shiki";
+import { PluggableList } from "unified";
 
 // Shiki loads languages and themes using "fs" instead of "import", so Next.js
 // doesn't bundle them into production build. To work around, we manually copy
@@ -41,7 +42,7 @@ const getHighlighter: RehypeCodeOptions["getHighlighter"] = async (options) => {
 	return highlighter;
 };
 
-export const getRehypeCodeOptions = (): Partial<RehypeCodeOptions> => ({
+const getRehypeCodeOptions = (): Partial<RehypeCodeOptions> => ({
 	// Requirements for theme:
 	// - Has light and dark version
 	// - Uses italic in several places
@@ -50,3 +51,5 @@ export const getRehypeCodeOptions = (): Partial<RehypeCodeOptions> => ({
 	// let us customize "paths".
 	getHighlighter,
 });
+
+export const getMdxCode = (): PluggableList => [[rehypeCode, getRehypeCodeOptions()]];
