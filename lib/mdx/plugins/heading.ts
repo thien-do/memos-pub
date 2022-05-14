@@ -5,6 +5,8 @@ import { PluggableList } from "unified";
 const rehypeLinkOptions: RehypeLinkOptions = {
 	behavior: "prepend",
 	content: { type: "text", value: "# " },
+	// Exclude h1 since it should be used for title
+	test: ["h2", "h3", "h4", "h5", "h6"],
 	properties: {
 		class: [
 			"text-gray-300 dark:text-gray-600 no-underline",
