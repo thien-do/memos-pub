@@ -25,8 +25,9 @@ export const compileMdx = async (props: Props): Promise<string> => {
 		remarkPlugins: [remarkGfm, ...mdxFrontmatter, remarkToc],
 		rehypePlugins: [
 			...getMdxCode(),
-			...mdxHeading,
+			// Run meta before heading so it doesn't include the "#"
 			...mdxMeta,
+			...mdxHeading,
 			...getMdxUrl({ resolvers: urlResolvers }),
 		],
 	};
