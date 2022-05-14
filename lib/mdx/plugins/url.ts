@@ -29,7 +29,13 @@ const rewriteLinkHref = (props: Props, match: UrlMatch): void => {
 	const { url, node, propertyName } = match;
 	if (node.tagName !== "a") return;
 	if (propertyName !== "href") return;
-	if (url.startsWith("http")) return;
+	// Open external links in new tab
+	if (url.startsWith("http")) {
+		node.properties = node.properties ?? {};
+		node.properties["target"] = "_blank";
+		node.properties["rel"] = "noreferrer";
+		return;
+	}
 	if (url.startsWith("mailto")) return;
 	if (url.startsWith("#")) return;
 	const nextUrl = resolvers.link(url);
