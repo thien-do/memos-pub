@@ -1,3 +1,4 @@
+import { BlogConfig } from "../config/type";
 import { BlogContent } from "../content/type";
 import { BlogRequest } from "../request/type";
 
@@ -14,4 +15,5 @@ export interface BlogPageParams extends NodeJS.Dict<string | string[]> {
 export interface BlogPageProps {
 	content: BlogContent;
 	request: BlogRequest;
+	config: BlogConfig | null;
 }

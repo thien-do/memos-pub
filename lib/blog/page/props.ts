@@ -8,9 +8,9 @@ export const getBlogPageProps: GetStaticProps<
 	BlogPageParams
 > = async (context) => {
 	const request = parseBlogRequest(context.params);
-	const content = await fetchBlogContent(request);
+	const { content, config } = await fetchBlogContent(request);
 	return {
-		props: { content, request },
+		props: { content, request, config },
 		revalidate: 1 * 60, // seconds
 	};
 };

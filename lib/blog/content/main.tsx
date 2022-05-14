@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { BlogConfig } from "../config/type";
 import { BlogListMain } from "../list/main";
 import { BlogNavMain } from "../nav/main";
 import { BlogPostMain } from "../post/main";
@@ -8,7 +9,9 @@ import { BlogContent } from "./type";
 interface Props {
 	request: BlogRequest;
 	content: BlogContent;
+	config: BlogConfig | null;
 }
+
 export const BlogContentMain = (props: Props): JSX.Element => (
 	<div>
 		<Head>
@@ -27,11 +30,11 @@ const getFavicon = (props: Props): string => {
 };
 
 const Body = (props: Props): JSX.Element => {
-	const { request, content } = props;
+	const { request, content, config } = props;
 	switch (content.type) {
 		case "post":
 			return <BlogPostMain post={content} />;
 		case "list":
-			return <BlogListMain list={content} request={request} />;
+			return <BlogListMain list={content} config={config} request={request} />;
 	}
 };
