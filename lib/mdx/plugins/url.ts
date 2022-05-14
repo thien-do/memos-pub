@@ -31,7 +31,6 @@ const rewriteLinkHref = (props: Props, match: UrlMatch): void => {
 	if (propertyName !== "href") return;
 	// Open external links in new tab
 	if (url.startsWith("http")) {
-		node.properties = node.properties ?? {};
 		node.properties["target"] = "_blank";
 		node.properties["rel"] = "noreferrer";
 		return;
