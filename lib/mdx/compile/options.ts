@@ -1,12 +1,8 @@
 import rehypeUrl from "@jsdevtools/rehype-url-inspector";
 import { CompileOptions } from "@mdx-js/mdx";
-import rehypeAutolinkHeadings, {
-	Options as rehypeLinkOptions,
-} from "rehype-autolink-headings";
+import rehypeAutolinkHeadings, { Options as rehypeLinkOptions } from "rehype-autolink-headings";
 import rehypeInferDescriptionMeta from "rehype-infer-description-meta";
-import rehypeInferTitleMeta, {
-	Options as rehypeTitleOptions,
-} from "rehype-infer-title-meta";
+import rehypeInferTitleMeta, { Options as rehypeTitleOptions } from "rehype-infer-title-meta";
 import rehypeMeta from "rehype-meta";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
@@ -19,14 +15,6 @@ import { getRehypeUrlOptions, MdxUrlResolvers } from "./url";
 const getRehypeLinkOptions = (): Partial<rehypeLinkOptions> => ({
 	behavior: "prepend",
 	content: { type: "text", value: "# " },
-	test: [
-		"h1:not(:first-child)",
-		"h2:not(:first-child)",
-		"h3:not(:first-child)",
-		"h4:not(:first-child)",
-		"h5:not(:first-child)",
-		"h6:not(:first-child)",
-	],
 	properties: {
 		class: [
 			"text-gray-300 dark:text-gray-600 no-underline",
