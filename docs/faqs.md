@@ -1,4 +1,4 @@
-# FAQ
+# FAQs
 
 ### How to have custom domains?
 
@@ -21,7 +21,7 @@ Create a PR to add your domain to ["members.ts"][domain-file] (like [this][domai
 
 ### How long does it take for changes to show?
 
-It should take [1 minute][cache-time]. Memos.pub uses Next.js's [ISR][cache-isr] with [stale-while-revalidate][cache-swr] for caching.
+It should take [1 minute][cache-time]. Memos.pub uses Next.js's [ISR][cache-isr] with [stale-while-revalidate][cache-swr] caching behaviour.
 
 [cache-time]: https://github.com/thien-do/memos.pub/blob/ae56afbb44f94bf25d00b7af90dc2e436e3105de/lib/blog/page/props.ts#L11
 [cache-isr]: https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration
