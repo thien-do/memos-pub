@@ -17,6 +17,7 @@ export const BlogListMain = (props: Props): JSX.Element => (
 		{props.list.readme === null ? (
 			<BlogListTitle list={props.list} request={props.request} />
 		) : null}
+		<hr />
 		<Body {...props} />
 	</div>
 );
@@ -41,7 +42,10 @@ const Body = (props: Props): JSX.Element | null => {
 
 	// Exclude README from file list if necessary
 	let entries = props.list.entries;
-	if (config === "show") entries = entries.filter((entry) => entry.name !== "README.md");
+	if (config === "show")
+		entries = entries.filter(
+			(entry) => entry.name !== "README.md" && !entry.name.startsWith("_")
+		);
 	const list = { ...props.list, entries };
 
 	return <BlogListBody list={list} request={props.request} />;
