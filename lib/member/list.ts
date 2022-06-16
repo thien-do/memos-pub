@@ -12,4 +12,5 @@ export const MEMBER_LIST: MemberPath[] = [
 	{ from: "blog.keva.dev", to: "keva-dev/blog" },
 	{ from: "memo.dev-random.io", to: "unrealhoang/unrealhoang.github.io" },
 	{ from: "j.nguyenrk.com", to: "huyng12/30-days-japanese" },
+	{ from: "notes.vanhtuan0409.com", to: "vanhtuan0409/notes" },
 ];
