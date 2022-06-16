@@ -17,6 +17,7 @@ export const BlogListMain = (props: Props): JSX.Element => (
 		{props.list.readme === null ? (
 			<BlogListTitle list={props.list} request={props.request} />
 		) : null}
+		<hr />
 		<Body {...props} />
 	</div>
 );
