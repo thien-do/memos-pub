@@ -9,7 +9,7 @@ export const appMiddleware: NextMiddleware = (req) => {
 	const { pathname } = req.nextUrl; // e.g. "/blog-slug" (this includes "/")
 
 	// Skip /api requests
-	if (pathname.startsWith("/api")) return NextResponse.next();
+	if (pathname.startsWith("/api/")) return NextResponse.next();
 
 	const member = memberMiddleware(req);
 	if (member !== null) return member;
