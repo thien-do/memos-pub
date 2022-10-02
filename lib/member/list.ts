@@ -14,4 +14,5 @@ export const MEMBER_LIST: MemberPath[] = [
 	{ from: "notes.vanhtuan0409.com", to: "vanhtuan0409/notes" },
 	{ from: "danang.fyi", to: "GraphicDThanh/danang-cuisine" },
 	{ from: "docs.rosepine.dev", to: "thien-do/rosepine.dev" },
+	{ from: "khoale.space", to: "ldakhoa/ldakhoa" },
 ];
