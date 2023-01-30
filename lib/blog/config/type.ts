@@ -39,7 +39,7 @@ export interface BlogConfig {
 	dateFormat?: BlogConfigDate;
 	/**
 	 * Whether to render a README content when a folder has one. This can be
-	 * used to hide the folder's file list. See the type definition aboe for
+	 * used to hide the folder's file list. See the type definition above for
 	 * detail.
 	 */
 	readme?: BlogConfigReadonly;
