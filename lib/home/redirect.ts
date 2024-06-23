@@ -11,7 +11,7 @@ const getLocation = (): Location | null => {
 };
 
 /**
- * Transform full path to our url format (owner.memos.pub/repo/path).
+ * Transform full path to our url format (owner.memos-pub.thien.do/repo/path).
  * Example inputs:
  * - #https://github.com/thien-do/notes/blob/main/hello-world.md
  * - #https://github.com/thien-do/notes

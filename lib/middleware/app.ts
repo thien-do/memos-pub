@@ -5,7 +5,7 @@ import { memberMiddleware } from "./member";
 import { subdomainMiddleware } from "./subdomain";
 
 export const appMiddleware: NextMiddleware = (req) => {
-	// host: e.g. "thien-do.memos.pub"
+	// host: e.g. "thien-do.memos-pub.thien.do"
 	const { pathname } = req.nextUrl; // e.g. "/blog-slug" (this includes "/")
 
 	// Skip /api requests

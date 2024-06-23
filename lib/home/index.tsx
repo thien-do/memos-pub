@@ -11,7 +11,7 @@ export const Home = (): JSX.Element => {
 	return (
 		<Fragment>
 			<Head>
-				<title>Memos.pub</title>
+				<title>memos-pub.thien.do</title>
 				<meta
 					name="description"
 					content="Markdown Blogging, Without Setup or Signup"

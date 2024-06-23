@@ -10,7 +10,7 @@ interface Props {
 const root = getEnvRootHost();
 
 export const ErrorBase = (props: Props): JSX.Element => {
-	// Default to true to avoid showing memos.pub reference in member's page
+	// Default to true to avoid showing memos-pub.thien.do reference in member's page
 	// in first render (or renders without JS)
 	const [isMember, setIsMember] = useState(true);
 

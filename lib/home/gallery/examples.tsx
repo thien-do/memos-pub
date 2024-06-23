@@ -12,20 +12,20 @@ export const HomeGalleryExamples = (): JSX.Element => (
 		<ul>
 			<li>
 				<span>Notes: </span>
-				<Link url="https://keyvanakbary.memos.pub/learning-notes" />
+				<Link url="https://keyvanakbary.memos-pub.thien.do/learning-notes" />
 			</li>
 			<li>
 				<span>Notes: </span>
-				<Link url="https://khaosdoctor.memos.pub/my-notes" />
+				<Link url="https://khaosdoctor.memos-pub.thien.do/my-notes" />
 				<span> (🇵🇹)</span>
 			</li>
 			<li>
 				<span>Notes: </span>
-				<Link url="https://mgp.memos.pub/book-notes" />
+				<Link url="https://mgp.memos-pub.thien.do/book-notes" />
 			</li>
 			<li>
 				<span>Notes: </span>
-				<Link url="https://mquy.memos.pub/mquy/notes" />
+				<Link url="https://mquy.memos-pub.thien.do/mquy/notes" />
 			</li>
 			<li>
 				<span>Profile (custom domain): </span>
@@ -33,7 +33,7 @@ export const HomeGalleryExamples = (): JSX.Element => (
 			</li>
 			<li>
 				<span>Magazine: </span>
-				<Link url="https://ruanyf.memos.pub/weekly/docs" />
+				<Link url="https://ruanyf.memos-pub.thien.do/weekly/docs" />
 				<span> (🇨🇳)</span>
 			</li>
 		</ul>

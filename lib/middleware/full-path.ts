@@ -5,7 +5,7 @@ import { join as pathJoin } from "path";
 import { getEnvRootHost } from "../env";
 
 /**
- * Redirect memos.pub/https:/github.com/... to <owner>.memos.pub/...
+ * Redirect memos-pub.thien.do/https:/github.com/... to <owner>.memos-pub.thien.do/...
  */
 export const fullPathMiddleware = (req: NextRequest): NextResponse | null => {
 	const { pathname } = req.nextUrl;

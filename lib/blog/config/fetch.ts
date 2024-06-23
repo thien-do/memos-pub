@@ -8,7 +8,7 @@ export const fetchBlogConfig = async (
 ): Promise<BlogConfig | null> => {
 	try {
 		const request = { ...originalRequest };
-		request.path = "memos.pub.json";
+		request.path = "memos-pub.thien.do.json";
 		const raw = await fetchGitHubContent(request);
 
 		// Exceptions

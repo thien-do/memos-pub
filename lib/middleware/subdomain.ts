@@ -5,7 +5,7 @@ import { join as pathJoin } from "path";
 
 /**
  * Re-write subdomain requests. E.g.
- * - Request: thien-do.memos.pub/notes/hello.md
+ * - Request: thien-do.memos-pub.thien.do/notes/hello.md
  * - Rewrite: /_blog/_/thien-do/notes/hello/md
  */
 export const subdomainMiddleware = (req: NextRequest): null | NextResponse => {
@@ -30,8 +30,8 @@ export const subdomainMiddleware = (req: NextRequest): null | NextResponse => {
 
 /**
  * Get subdomain info from host. E.g.:
- * - thien-do.memos.pub -> "thien-do"
- * - memos.pub -> null
+ * - thien-do.memos-pub.thien.do -> "thien-do"
+ * - memos-pub.thien.do -> null
  * - thien-do.localhost:3000 -> "thien-do"
  * - localhost:3000 -> null
  */

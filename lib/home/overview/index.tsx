@@ -11,7 +11,7 @@ export const HomeOverview = (): JSX.Element => (
 			<span>Without Setup or Signup</span>
 		</h1>
 		<p>
-			<strong>Memos.pub</strong> instantly makes a blog out of any public
+			<strong>memos-pub.thien.do</strong> instantly makes a blog out of any public
 			GitHub repo, with beautiful typography, MDX support, custom domain,
 			and more. Try it:
 		</p>

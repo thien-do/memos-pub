@@ -16,7 +16,7 @@ export const HomeGalleryDemo = (): JSX.Element => (
 			image={{
 				light: beforeLight,
 				dark: beforeDark,
-				alt: "Beautiful article displayed on memos.pub",
+				alt: "Beautiful article displayed on memos-pub.thien.do",
 			}}
 			caption={[
 				["https://github.com/", "light"],
@@ -33,16 +33,16 @@ export const HomeGalleryDemo = (): JSX.Element => (
 			<div className="block md:hidden">↓</div>
 		</div>
 		<HomeGalleryDemoFigure
-			url="https://axieinfinity.memos.pub/festival/component_export.md"
+			url="https://axieinfinity.memos-pub.thien.do/festival/component_export.md"
 			image={{
 				light: afterLight,
 				dark: afterDark,
-				alt: "Beautiful article displayed on memos.pub",
+				alt: "Beautiful article displayed on memos-pub.thien.do",
 			}}
 			caption={[
 				["https://", "light"],
 				["axieinfinity", "bold"],
-				[".memos.pub", "light"],
+				[".memos-pub.thien.do", "light"],
 				"break",
 				["/", "light"],
 				["festival", "bold"],

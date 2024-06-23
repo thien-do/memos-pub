@@ -5,8 +5,8 @@
 1. Duplicate `.env.sample` to `.env.local` and fill it
 2. `yarn install` then `yarn dev`
 3. Navigating to localhost:3000:
-    - localhost:3000 -> memos.pub
-    - thien-do.localhost:3000 -> thien-do.memos.pub
+    - localhost:3000 -> memos-pub.thien.do
+    - thien-do.localhost:3000 -> thien-do.memos-pub.thien.do
 
 Note:
 

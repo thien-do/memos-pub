@@ -28,7 +28,7 @@ export type BlogConfigReadonly =
 
 export interface BlogConfig {
 	/**
-	 * Memos.pub uses this format to search for a date in file names. If found,
+	 * memos-pub.thien.do uses this format to search for a date in file names. If found,
 	 * the dates will be used to improve list rendering such as sort by date
 	 * and date column.
 	 *
