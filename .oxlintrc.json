@@ -6,7 +6,8 @@
   },
   "rules": {
     "import/no-default-export": "error",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "unicorn/prefer-at": "error"
   },
   "overrides": [
     {

@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
 import type { ReactElement, ReactNode } from "react";
 
-export const metadata = { title: "memos-pub-2026" };
+export const metadata: Metadata = {
+  title: "memos-pub-2026",
+};
 
 export default function RootLayout(props: {
   children: ReactNode;
