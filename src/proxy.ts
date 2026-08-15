@@ -1,23 +1,23 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { getTenantFromHost } from "@/tenant/host";
+import { getOwnerFromHost } from "@/owner/host";
 
 export function proxy(request: NextRequest): NextResponse {
   const { pathname, search } = request.nextUrl;
 
   const host = request.headers.get("host") ?? "";
-  const tenant = getTenantFromHost(host);
+  const owner = getOwnerFromHost(host);
 
-  if (tenant === null) {
-    // The /tenant namespace is reachable only via the rewrite below, never
-    // directly, so tenant pages have exactly one public URL each.
-    if (pathname === "/tenant" || pathname.startsWith("/tenant/")) {
+  if (owner === null) {
+    // The /owner namespace is reachable only via the rewrite below, never
+    // directly, so owner pages have exactly one public URL each.
+    if (pathname === "/owner" || pathname.startsWith("/owner/")) {
       return new NextResponse("Not Found", { status: 404 });
     }
     return NextResponse.next();
   }
 
-  const url = new URL(`/tenant/${tenant}${pathname}${search}`, request.url);
+  const url = new URL(`/owner/${owner}${pathname}${search}`, request.url);
   return NextResponse.rewrite(url);
 }
 

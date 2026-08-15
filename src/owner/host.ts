@@ -1,13 +1,13 @@
 const ROOT_DOMAINS = ["memos.pub", "localhost"];
 
 /**
- * A tenant is the single label in front of a root domain: "a" in
- * a.memos.pub. GitHub usernames cannot contain dots, so a multi-label
- * subdomain like a.b.memos.pub names no tenant.
+ * An owner is the single label in front of a root domain: "a" in
+ * a.memos.pub. GitHub owner names cannot contain dots, so a multi-label
+ * subdomain like a.b.memos.pub names no owner.
  *
- * "null" means no tenant.
+ * "null" means no owner.
  */
-export function getTenantFromHost(host: string): string | null {
+export function getOwnerFromHost(host: string): string | null {
   const hostname = host.split(":").at(0)?.toLowerCase() ?? null;
   if (hostname === null) throw new Error(`Could not parse host "${host}"`);
 

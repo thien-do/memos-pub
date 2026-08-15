@@ -1,14 +1,14 @@
 import type { ReactElement } from "react";
 
-export function TenantPage(props: {
-  tenant: string;
+export function OwnerPage(props: {
+  owner: string;
   path: string[];
 }): ReactElement {
-  const { tenant, path } = props;
+  const { owner, path } = props;
 
   return (
     <main>
-      <h1>{tenant}</h1>
+      <h1>{owner}</h1>
       <p>/{path.join("/")}</p>
     </main>
   );
