@@ -1,0 +1,54 @@
+import { RequestError } from "octokit";
+import { getGit } from "./instance";
+
+export type GitContentEntry = {
+  name: string;
+  path: string;
+  type: "file" | "dir" | "symlink" | "submodule";
+};
+
+export type GitContent =
+  | { kind: "file"; text: string }
+  | { kind: "dir"; entries: GitContentEntry[] };
+
+interface Params {
+  owner: string;
+  repo: string;
+  segments: string[];
+}
+
+async function getStrict(params: Params): Promise<GitContent | null> {
+  const { owner, repo, segments } = params;
+
+  const path = segments.join("/");
+
+  const git = getGit();
+  const { data } = await git.rest.repos.getContent({ owner, repo, path });
+
+  if (Array.isArray(data)) {
+    const entries = data.map((entry): GitContentEntry => ({
+      name: entry.name,
+      path: entry.path,
+      type: entry.type,
+    }));
+    return { kind: "dir", entries };
+  }
+
+  if (data.type === "file" && data.encoding === "base64") {
+    const text = Buffer.from(data.content, "base64").toString("utf8");
+    return { kind: "file", text };
+  }
+
+  return null;
+}
+
+export async function getGitContent(
+  params: Params,
+): Promise<GitContent | null> {
+  try {
+    return await getStrict(params);
+  } catch (error) {
+    if (error instanceof RequestError && error.status === 404) return null;
+    throw error;
+  }
+}

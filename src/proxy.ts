@@ -9,15 +9,15 @@ export function proxy(request: NextRequest): NextResponse {
   const owner = getOwnerFromHost(host);
 
   if (owner === null) {
-    // The /owner namespace is reachable only via the rewrite below, never
-    // directly, so owner pages have exactly one public URL each.
-    if (pathname === "/owner" || pathname.startsWith("/owner/")) {
+    // The /blog namespace is reachable only via the rewrite below, never
+    // directly, so blog pages have exactly one public URL each.
+    if (pathname === "/blog" || pathname.startsWith("/blog/")) {
       return new NextResponse("Not Found", { status: 404 });
     }
     return NextResponse.next();
   }
 
-  const url = new URL(`/owner/${owner}${pathname}${search}`, request.url);
+  const url = new URL(`/blog/${owner}${pathname}${search}`, request.url);
   return NextResponse.rewrite(url);
 }
 

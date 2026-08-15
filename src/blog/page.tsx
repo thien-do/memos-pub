@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 
-export function OwnerPage(props: {
+export function BlogPage(props: {
   owner: string;
   path: string[];
 }): ReactElement {
