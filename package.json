@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "oxlint",
+    "fmt": "oxfmt"
   },
   "dependencies": {
     "next": "16.3.1",
@@ -16,6 +18,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.78.0",
     "typescript": "^5"
   },
   "packageManager": "pnpm@11.9.0"

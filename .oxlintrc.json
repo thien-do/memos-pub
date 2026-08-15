@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "import", "react", "nextjs"],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "import/no-default-export": "error",
+    "react/react-in-jsx-scope": "off"
+  },
+  "overrides": [
+    {
+      "files": ["src/app/**", "next.config.ts"],
+      "rules": { "import/no-default-export": "off" }
+    }
+  ]
+}
