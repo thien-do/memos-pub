@@ -11,13 +11,13 @@ export type GitContent =
   | { kind: "file"; text: string }
   | { kind: "dir"; entries: GitContentEntry[] };
 
-interface Params {
+type GetFn = (params: {
   owner: string;
   repo: string;
   segments: string[];
-}
+}) => Promise<GitContent | null>;
 
-async function getStrict(params: Params): Promise<GitContent | null> {
+const getStrict: GetFn = async (params) => {
   const { owner, repo, segments } = params;
 
   const path = segments.join("/");
@@ -40,15 +40,13 @@ async function getStrict(params: Params): Promise<GitContent | null> {
   }
 
   return null;
-}
+};
 
-export async function getGitContent(
-  params: Params,
-): Promise<GitContent | null> {
+export const getGitContent: GetFn = async (params) => {
   try {
     return await getStrict(params);
   } catch (error) {
     if (error instanceof RequestError && error.status === 404) return null;
     throw error;
   }
-}
+};
