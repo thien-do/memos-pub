@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getBlogContent } from "./content";
 import { BlogFile } from "./file";
 import { BlogList } from "./list";
+import { BlogRepos } from "./repos";
 
 export async function BlogPage(props: {
   owner: string;
@@ -13,9 +14,9 @@ export async function BlogPage(props: {
   const blog = await getBlogContent({ owner, path });
   if (blog === null) notFound();
 
-  // "content" is the only kind until the repo-list rung lands.
-  const { content, linkBase } = blog;
+  if (blog.kind === "repos") return <BlogRepos repos={blog.repos} />;
 
+  const { content, linkBase } = blog;
   switch (content.kind) {
     case "dir":
       return <BlogList linkBase={linkBase} entries={content.entries} />;
