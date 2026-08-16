@@ -46,32 +46,26 @@ export async function getBlogContent(params: {
   // Dot segments could escape the repo in the API URL.
   if (path.some((s) => s === "." || s === "..")) return null;
 
-  // Always try content in profile repo
-  const promises = [getTree({ owner, repo: owner, segments: path })];
-
-  // Head could be a repo, or the whole path is resolved for profile repo
   const [head, ...rest] = path;
+  // This means the path itself is empty.
+  // We are not yet sure (until isRepo) if head is a repo.
+  const noHead = head === undefined;
 
-  if (head !== undefined) {
-    // "tree" doesn't separate if "rest" or "head" doesn't exist
-    const existed = getGitContent({ owner, repo: head, segments: [] });
-    const tree = getTree({ owner, repo: head, segments: rest });
-    promises.push(existed, tree);
-  }
+  const [inProfile, isRepo, inRepo] = await Promise.all([
+    // Always try content in profile repo
+    getTree({ owner, repo: owner, segments: path }),
+    // Need an explicit check if head is a repo
+    noHead ? null : getGitContent({ owner, repo: head, segments: [] }),
+    noHead ? null : getTree({ owner, repo: head, segments: rest }),
+  ]);
 
-  // Careful of the manual order!
-  const results = await Promise.all(promises);
-  const inProfile = results.at(0) ?? null;
-  const isRepo = results.at(1) ?? null;
-  const inRepo = results.at(2) ?? null;
-
-  // If head is repo, it wins, even if the path is empty
+  // If head is repo, repo wins, even if content is empty
   if (isRepo) {
     if (inRepo === null) return null;
     return { kind: "content", content: inRepo, linkBase: `/${head}` };
   }
 
-  // If head is not repo, but profile repo found
+  // If head is not repo, but profile repo found, profile wins
   if (inProfile) {
     return { kind: "content", content: inProfile, linkBase: "" };
   }
