@@ -1,35 +1,39 @@
-import type { GitContent } from "@/git/content";
+import type { GitContent, GitContentEntry } from "@/git/content";
 import { getGitContent } from "@/git/content";
 import type { GitRepo } from "@/git/repos";
 import { getGitRepos } from "@/git/repos";
 import { getBlogTree } from "./tree";
 
-type Content = {
-  kind: "content";
+export type BlogView =
+  | { kind: "file"; text: string }
+  | { kind: "dir"; entries: GitContentEntry[]; linkBase: string }
+  | { kind: "owner"; repos: GitRepo[] };
+
+function fromContent(params: {
   content: GitContent;
-  // Where the tree is mounted in the URL: "" for profile (site root).
   linkBase: string;
-};
+}): BlogView {
+  const { content, linkBase } = params;
 
-type Repos = {
-  kind: "repos";
-  repos: GitRepo[];
-};
+  switch (content.kind) {
+    case "file":
+      return { kind: "file", text: content.text };
+    case "dir":
+      return { kind: "dir", entries: content.entries, linkBase };
+  }
+}
 
-export type BlogContent = Content | Repos;
-
-export async function getBlogContent(params: {
+export async function getBlogView(params: {
   owner: string;
   path: string[];
-}): Promise<BlogContent | null> {
+}): Promise<BlogView | null> {
   const { owner, path } = params;
 
   // Dot segments could escape the repo in the API URL.
   if (path.some((s) => s === "." || s === "..")) return null;
 
+  // Head could be a repo, or the whole path is resolved in profile repo
   const [head, ...rest] = path;
-  // This means the path itself is empty.
-  // We are not yet sure (until isRepo) if head is a repo.
   const noHead = head === undefined;
 
   const [inProfile, isRepo, inRepo, repos] = await Promise.all([
@@ -46,17 +50,17 @@ export async function getBlogContent(params: {
   // If head is repo, repo wins, even if content is empty
   if (isRepo !== null) {
     if (inRepo === null) return null;
-    return { kind: "content", content: inRepo, linkBase: `/${head}` };
+    return fromContent({ content: inRepo, linkBase: `/${head}` });
   }
 
   // If head is not repo, but profile repo found, profile wins
   if (inProfile !== null) {
-    return { kind: "content", content: inProfile, linkBase: "" };
+    return fromContent({ content: inProfile, linkBase: "" });
   }
 
   // Owner root without a profile repo: their repos, forks excluded
   if (repos !== null) {
-    return { kind: "repos", repos: repos.filter((repo) => !repo.fork) };
+    return { kind: "owner", repos: repos.filter((repo) => !repo.fork) };
   }
 
   return null;

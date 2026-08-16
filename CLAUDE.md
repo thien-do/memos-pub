@@ -9,3 +9,5 @@ framework folders stay thin
 prefer .at over []
 
 one thing at a time: write less than 50 lines of code per increment
+
+when there're more than 1 params, use object params

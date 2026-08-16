@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import type { GitContentEntry } from "@/git/content";
 
-export function BlogList(props: {
+export function BlogDir(props: {
   linkBase: string;
   entries: GitContentEntry[];
 }): ReactElement {

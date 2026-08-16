@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import type { GitRepo } from "@/git/repos";
 
-export function BlogRepos(props: { repos: GitRepo[] }): ReactElement {
+export function BlogOwner(props: { repos: GitRepo[] }): ReactElement {
   const { repos } = props;
 
   return (

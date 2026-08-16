@@ -1,9 +1,9 @@
 import type { ReactElement } from "react";
 import { notFound } from "next/navigation";
-import { getBlogContent } from "./content";
+import { BlogDir } from "./dir";
 import { BlogFile } from "./file";
-import { BlogList } from "./list";
-import { BlogRepos } from "./repos";
+import { BlogOwner } from "./owner";
+import { getBlogView } from "./view";
 
 export async function BlogPage(props: {
   owner: string;
@@ -11,16 +11,15 @@ export async function BlogPage(props: {
 }): Promise<ReactElement> {
   const { owner, path } = props;
 
-  const blog = await getBlogContent({ owner, path });
-  if (blog === null) notFound();
+  const view = await getBlogView({ owner, path });
+  if (view === null) notFound();
 
-  if (blog.kind === "repos") return <BlogRepos repos={blog.repos} />;
-
-  const { content, linkBase } = blog;
-  switch (content.kind) {
-    case "dir":
-      return <BlogList linkBase={linkBase} entries={content.entries} />;
+  switch (view.kind) {
     case "file":
-      return <BlogFile text={content.text} />;
+      return <BlogFile text={view.text} />;
+    case "dir":
+      return <BlogDir linkBase={view.linkBase} entries={view.entries} />;
+    case "owner":
+      return <BlogOwner repos={view.repos} />;
   }
 }
