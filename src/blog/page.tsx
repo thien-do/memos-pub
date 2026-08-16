@@ -14,9 +14,9 @@ export async function BlogPage(props: {
   if (path.some((s) => s === "." || s === "..")) notFound();
 
   const [repo, ...segments] = path;
+  if (repo === undefined) notFound();
 
   const content = await getGitContent({ owner, repo, segments });
-
   if (content === null) notFound();
 
   if (content.kind === "file") {

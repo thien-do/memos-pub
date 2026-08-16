@@ -21,7 +21,7 @@
     "@types/react-dom": "^19",
     "oxfmt": "^0.63.0",
     "oxlint": "^1.78.0",
-    "typescript": "^5"
+    "typescript": "^6.0.3"
   },
   "packageManager": "pnpm@11.9.0"
 }
