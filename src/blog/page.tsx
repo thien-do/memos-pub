@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import { notFound } from "next/navigation";
-import { getGitContent } from "@/git/content";
+import { resolveBlogTree } from "./resolve";
 import { BlogFile } from "./file";
 import { BlogListing } from "./listing";
 
@@ -16,7 +16,7 @@ export async function BlogPage(props: {
   const [repo, ...segments] = path;
   if (repo === undefined) notFound();
 
-  const content = await getGitContent({ owner, repo, segments });
+  const content = await resolveBlogTree({ owner, repo, segments });
   if (content === null) notFound();
 
   if (content.kind === "file") {
