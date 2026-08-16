@@ -1,5 +1,5 @@
-import { RequestError } from "octokit";
 import { getGit } from "./instance";
+import { mapGitNotFoundToNull } from "./not-found";
 
 export type GitRepo = {
   name: string;
@@ -28,11 +28,4 @@ const getStrict: GetFn = async (params) => {
   return result;
 };
 
-export const getGitRepos: GetFn = async (params) => {
-  try {
-    return await getStrict(params);
-  } catch (error) {
-    if (error instanceof RequestError && error.status === 404) return null;
-    throw error;
-  }
-};
+export const getGitRepos: GetFn = mapGitNotFoundToNull(getStrict);

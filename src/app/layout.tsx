@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactElement, ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "memos-pub-2026",
+  title: "memos.pub",
 };
 
 export default function RootLayout(props: {

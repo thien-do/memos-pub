@@ -2,6 +2,7 @@ import type { GitContent } from "@/git/content";
 import { getGitContent } from "@/git/content";
 import type { GitRepo } from "@/git/repos";
 import { getGitRepos } from "@/git/repos";
+import { getBlogTree } from "./tree";
 
 type Content = {
   kind: "content";
@@ -16,35 +17,6 @@ type Repos = {
 };
 
 export type BlogContent = Content | Repos;
-
-/**
- * Get content within a specific repo.
- * Include an auto ".md" suffix fetch.
- */
-async function getTree(params: {
-  owner: string;
-  repo: string;
-  segments: string[];
-}): Promise<GitContent | null> {
-  const { owner, repo, segments } = params;
-
-  // Auto ".md" fetch. An empty ".md" at root is wasted 404
-  const last = segments.at(-1);
-  const mdSegments = [...segments.slice(0, -1), `${last ?? ""}.md`];
-
-  const [exact, auto] = await Promise.all([
-    getGitContent({ owner, repo, segments }),
-    getGitContent({ owner, repo, segments: mdSegments }),
-  ]);
-
-  // The exact "bar" — file or folder — beats the auto "bar.md".
-  if (exact !== null) return exact;
-
-  // Only accept auto .md to a file
-  if (auto?.kind === "file") return auto;
-
-  return null;
-}
 
 export async function getBlogContent(params: {
   owner: string;
@@ -62,11 +34,11 @@ export async function getBlogContent(params: {
 
   const [inProfile, isRepo, inRepo, repos] = await Promise.all([
     // Always try content in profile repo
-    getTree({ owner, repo: owner, segments: path }),
+    getBlogTree({ owner, repo: owner, segments: path }),
     // Need an explicit check if head is a repo
     noHead ? null : getGitContent({ owner, repo: head, segments: [] }),
     // Content if head is a repo
-    noHead ? null : getTree({ owner, repo: head, segments: rest }),
+    noHead ? null : getBlogTree({ owner, repo: head, segments: rest }),
     // Root can fall back to repo list
     noHead ? getGitRepos({ owner }) : null,
   ]);
