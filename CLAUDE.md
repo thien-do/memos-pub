@@ -1,13 +1,22 @@
 # memos.pub
 
-use Orwell writing
+## Communication
 
-code lives in business modules under src
+We always use Orwell writing in all communication and copywriting.
 
-framework folders stay thin
+We do one thing at a time.
+You write less than 50 lines of code per increment.
+I'll review and usually rewrite them.
+You always read files after.
 
-prefer .at over []
+## Structure
 
-one thing at a time: write less than 50 lines of code per increment
+We put our business modules under `src`.
+We keep framework files and folders thin.
+E.g., Next.js' `page.tsx` contains only Next.js' details.
 
-when there're more than 1 params, use object params
+## Coding
+
+We prefer `.at` over `[]`.
+
+We use object params when there're more than 1 params.
