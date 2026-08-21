@@ -1,24 +1,25 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { getOwnerFromHost } from "@/owner/host";
+import { routeDomain } from "@/domain/route";
 
-export function proxy(request: NextRequest): NextResponse {
-  const { pathname, search } = request.nextUrl;
-
+export async function proxy(request: NextRequest): Promise<NextResponse> {
+  // This is more reliable than nextUrl.hostname,
+  // which could be overriden by Vercel, both local and remote.
   const host = request.headers.get("host") ?? "";
-  const owner = getOwnerFromHost(host);
+  const { pathname } = request.nextUrl;
+  const route = await routeDomain({ host, pathname });
 
-  if (owner === null) {
-    // The /blog namespace is reachable only via the rewrite below, never
-    // directly, so blog pages have exactly one public URL each.
-    if (pathname === "/blog" || pathname.startsWith("/blog/")) {
-      return new NextResponse("Not Found", { status: 404 });
+  switch (route.kind) {
+    case "rewrite": {
+      const path = `${route.path}${request.nextUrl.search}`;
+      const url = new URL(path, request.url);
+      return NextResponse.rewrite(url);
     }
-    return NextResponse.next();
+    case "next":
+      return NextResponse.next();
+    case "stop":
+      return new NextResponse("Not Found", { status: 404 });
   }
-
-  const url = new URL(`/blog/${owner}${pathname}${search}`, request.url);
-  return NextResponse.rewrite(url);
 }
 
 export const config = {
