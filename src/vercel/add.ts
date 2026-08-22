@@ -1,10 +1,18 @@
 import { getVercel } from "./instance";
+import { getVercelVerify, VercelVerify } from "./verify";
 
-export async function addVercelDomain(host: string): Promise<void> {
+interface Result {
+  verify: VercelVerify
+}
+
+export async function addVercelDomain(domain: string): Promise<Result> {
   const { project, vercel } = getVercel();
 
-  await vercel.projects.addProjectDomain({
+  const body = await vercel.projects.addProjectDomain({
     idOrName: project,
-    requestBody: { name: host },
+    requestBody: { name: domain },
   });
+
+  const verify = getVercelVerify(body)
+  return { verify}
 }

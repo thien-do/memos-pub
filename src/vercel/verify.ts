@@ -1,7 +1,24 @@
-import { getVercel } from "./instance";
+import { Verification } from "@vercel/sdk/models/getprojectdomainop";
 
-export async function verifyVercelDomain(host: string): Promise<void> {
-  const { project: idOrName, vercel } = getVercel();
+export type VercelVerifyChallenge = Verification
 
-  await vercel.projects.verifyProjectDomain({ idOrName, domain: host });
+export type VercelVerify =
+  | { ok: true }
+  | { ok: false; challenges: Verification[] };
+
+/** Common body of Vercel domain operations */
+interface VercelBody {
+  verified: boolean;
+  verification?: Verification[];
+}
+
+export function getVercelVerify(body: VercelBody): VercelVerify {
+  const { verified, verification } = body;
+
+  if (verified === true) return { ok: true };
+
+  if (verification === undefined)
+    throw Error("Domain not verified with no verification");
+
+  return { ok: false, challenges: verification };
 }

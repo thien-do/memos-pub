@@ -12,24 +12,14 @@ export function HomeForm(): ReactElement {
     <form action={action}>
       <label>
         Domain
-        <input name="host" type="text" placeholder="thien.do" />
+        <input name="domain" type="text" placeholder="example.com" />
       </label>
       <button type="submit" disabled={pending}>
-        Continue
+        Connect
       </button>
-      {result?.type === "error" && <p>{result.reason}</p>}
-      {result?.type === "ok" && (
-        <>
-          <p>{result.target}</p>
-          {result.config.cname && <p>CNAME {result.config.cname}</p>}
-          {result.config.ipv4 && <p>A {result.config.ipv4}</p>}
-          {result.txt && (
-            <p>
-              TXT {result.txt.domain} {result.txt.value}
-            </p>
-          )}
-        </>
-      )}
+      <pre>
+        {JSON.stringify(result)}
+      </pre>
     </form>
   );
 }

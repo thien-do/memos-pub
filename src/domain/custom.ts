@@ -6,9 +6,9 @@ const NotFound = z.object({
   code: z.enum([NOTFOUND, NODATA, BADNAME]),
 });
 
-async function resolveTxtSafe(host: string): Promise<string[][] | null> {
+async function resolveTxtSafe(domain: string): Promise<string[][] | null> {
   try {
-    const records = await resolveTxt(`_memos.${host}`);
+    const records = await resolveTxt(`_memos.${domain}`);
     return records;
   } catch (error) {
     if (NotFound.safeParse(error).success) return null;
@@ -28,8 +28,8 @@ function isSafeTarget(target: string): boolean {
  * e.g., "thien.do" to "thien-do/blog/notes",
  * which is the same as "thien-do.memos.pub/blog/notes".
  */
-export async function getDomainCustom(host: string): Promise<string | null> {
-  const records = await resolveTxtSafe(host);
+export async function getDomainCustom(domain: string): Promise<string | null> {
+  const records = await resolveTxtSafe(domain);
   const value = records?.at(0)?.join("") ?? null;
   if (value === null || !isSafeTarget(value)) return null;
   return value;

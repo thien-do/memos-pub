@@ -6,9 +6,7 @@ export async function checkDomainAction(
   _prev: DomainCheck | undefined,
   formData: FormData,
 ): Promise<DomainCheck> {
-  const raw = formData.get("host");
-  if (typeof raw !== "string") {
-    return { type: "error", reason: "Can't use this domain." };
-  }
+  const raw = formData.get("domain");
+  if (typeof raw !== "string")  throw Error("invalid domain input")
   return checkDomain(raw);
 }
