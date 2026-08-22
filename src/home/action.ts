@@ -9,6 +9,8 @@ export type DomainCheck = {
   target: string;
   cname: string | null;
   ipv4: string | null;
+  txtDomain: string | null;
+  txtValue: string | null;
 };
 
 export async function checkDomainAction(
@@ -21,8 +23,9 @@ export async function checkDomainAction(
   if (host === null) return null;
   const target = await getDomainCustom(host);
   if (target === null) return null;
-  await addVercelProjectDomain({ name: host });
+  const project = await addVercelProjectDomain({ name: host });
   const config = await getVercelDomainConfig({ name: host });
   const { cname, ipv4 } = config;
-  return { target, cname, ipv4 };
+  const { txtDomain, txtValue } = project;
+  return { target, cname, ipv4, txtDomain, txtValue };
 }

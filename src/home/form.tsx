@@ -21,6 +21,11 @@ export function HomeForm(): ReactElement {
       {result && <p>{result.target}</p>}
       {result?.cname && <p>CNAME {result.cname}</p>}
       {result?.ipv4 && <p>A {result.ipv4}</p>}
+      {result?.txtDomain && result.txtValue && (
+        <p>
+          TXT {result.txtDomain} {result.txtValue}
+        </p>
+      )}
     </form>
   );
 }
