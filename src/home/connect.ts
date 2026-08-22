@@ -3,12 +3,12 @@ import { cleanHomeDomain, HomeCleanReason } from "./clean";
 import { VercelVerify, VercelVerifyReason } from "@/vercel/verify";
 import { getVercelDomain } from "@/vercel/get";
 import { getVercelDomainConfig, VercelConfigReason } from "@/vercel/config";
-import { addHomeDomain } from "./add";
+import { addHomeDomain, HomeAddReason } from "./add";
 
 type Result =
   | { type: "success" }
   | { type: "custom"; reason: DomainCustomReason }
-  | { type: "apex-limit" }
+  | { type: "add"; reason: HomeAddReason }
   | { type: "clean"; reason: HomeCleanReason }
   | { type: "config"; reason: VercelConfigReason }
   | { type: "verify"; reason: VercelVerifyReason };
@@ -41,7 +41,9 @@ export async function connectHomeDomain(
 
   if (detail.found === false) {
     const result = await addHomeDomain(domain);
-    return result.ok ? pipeVerify(result.verify) : { type: result.reason };
+    return result.ok
+      ? pipeVerify(result.verify)
+      : { type: "add", reason: result.reason };
   }
 
   return pipeVerify(detail.verify);
