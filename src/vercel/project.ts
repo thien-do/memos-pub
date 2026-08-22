@@ -60,3 +60,15 @@ export async function addVercelProjectDomain(params: {
   });
   return fromBody(body);
 }
+
+export async function verifyVercelProjectDomain(params: {
+  name: string;
+}): Promise<void> {
+  const { name } = params;
+  const idOrName = getEnvVar("MEMOS_VERCEL_PROJECT_ID");
+  const vercel = getVercel();
+  await vercel.projects.verifyProjectDomain({
+    idOrName,
+    domain: name,
+  });
+}

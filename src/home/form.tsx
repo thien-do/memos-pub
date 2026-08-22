@@ -17,6 +17,11 @@ export function HomeForm(): ReactElement {
       <button type="submit" disabled={pending}>
         Continue
       </button>
+      {result && (
+        <button type="submit" name="intent" value="verify" disabled={pending}>
+          Check again
+        </button>
+      )}
       {result === null && <p>No TXT record.</p>}
       {result && <p>{result.target}</p>}
       {result?.config.cname && <p>CNAME {result.config.cname}</p>}
