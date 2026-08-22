@@ -1,15 +1,5 @@
-import { Vercel } from "@vercel/sdk";
-import { z } from "zod";
-
-const NotFound = z.object({ statusCode: z.literal(404) });
-
-function getVercel(): Vercel {
-  const token = process.env.VERCEL_TOKEN;
-  if (token === undefined || token === "") {
-    throw new Error("VERCEL_TOKEN is not set");
-  }
-  return new Vercel({ bearerToken: token });
-}
+import { VercelError } from "@vercel/sdk/models/vercelerror.js";
+import { getVercel } from "./instance";
 
 export async function addVercelDomain(params: { name: string }): Promise<void> {
   const { name } = params;
@@ -25,7 +15,8 @@ export async function addVercelDomain(params: { name: string }): Promise<void> {
     await vercel.projects.getProjectDomain({ idOrName, domain: name, teamId });
     return;
   } catch (error) {
-    if (!NotFound.safeParse(error).success) throw error;
+    const missed = error instanceof VercelError && error.statusCode === 404;
+    if (!missed) throw error;
   }
 
   await vercel.projects.addProjectDomain({
