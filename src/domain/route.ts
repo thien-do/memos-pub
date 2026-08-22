@@ -18,9 +18,13 @@ export async function routeDomain(params: {
 
   // Each path returns a target that is safe to splice, or null.
   // A separate platform check saves cost in resolving custom domain.
-  const target = hasPlatform(domain)
-    ? getDomainPlatform(domain)
-    : await getDomainCustom(domain);
+  let target: string | null;
+  if (hasPlatform(domain)) {
+    target = getDomainPlatform(domain);
+  } else {
+    const custom = await getDomainCustom(domain);
+    target = custom.ok ? custom.target : null;
+  }
 
   if (target !== null) {
     return { kind: "rewrite", path: `/blog/${target}${pathname}` };

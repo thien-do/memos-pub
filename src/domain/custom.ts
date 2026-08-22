@@ -22,15 +22,22 @@ function isSafeTarget(target: string): boolean {
   return target.split("/").every((s) => s !== "" && s !== "." && s !== "..");
 }
 
+export type DomainCustomReason = "missing" | "unsafe";
+
+type Result =
+  | { ok: true; target: string }
+  | { ok: false; reason: DomainCustomReason };
+
 /**
  * Get blog path from a custom domain.
  * This could be as long as they want.
  * e.g., "thien.do" to "thien-do/blog/notes",
  * which is the same as "thien-do.memos.pub/blog/notes".
  */
-export async function getDomainCustom(domain: string): Promise<string | null> {
+export async function getDomainCustom(domain: string): Promise<Result> {
   const records = await resolveTxtSafe(domain);
   const value = records?.at(0)?.join("") ?? null;
-  if (value === null || !isSafeTarget(value)) return null;
-  return value;
+  if (value === null) return { ok: false, reason: "missing" };
+  if (!isSafeTarget(value)) return { ok: false, reason: "unsafe" };
+  return { ok: true, target: value };
 }

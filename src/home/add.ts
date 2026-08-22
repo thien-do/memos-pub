@@ -2,9 +2,11 @@ import { addVercelDomain } from "@/vercel/add";
 import { listVercelDomains } from "@/vercel/list";
 import { VercelVerify } from "@/vercel/verify";
 
+export type HomeAddReason = "apex-limit";
+
 type Result =
   | { ok: true; verify: VercelVerify }
-  | { ok: false; reason: "apex-limit" };
+  | { ok: false; reason: HomeAddReason };
 
 export async function addHomeDomain(domain: string): Promise<Result> {
   const exists = await listVercelDomains();
