@@ -1,20 +1,22 @@
 import { hasPlatform } from "./platform";
+import type { Result } from "@/kit/result";
 
 /**
  * Parse a guest-entered domain into a hostname we can claim.
- * Null if empty, unparsable, or one of ours.
  */
-export function parseDomainHost(input: string): string | null {
+export function parseDomainHost(input: string): Result<string> {
   const trimmed = input.trim().toLowerCase();
-  if (trimmed === "") return null;
+  if (trimmed === "") return { ok: false, reason: "Can't use this domain." };
 
   const withScheme = trimmed.includes("://") ? trimmed : `https://${trimmed}`;
 
   try {
     const hostname = new URL(withScheme).hostname;
-    if (hasPlatform(hostname)) return null;
-    return hostname;
+    if (hasPlatform(hostname)) {
+      return { ok: false, reason: "Can't use this domain." };
+    }
+    return { ok: true, value: hostname };
   } catch {
-    return null;
+    return { ok: false, reason: "Can't use this domain." };
   }
 }

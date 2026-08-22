@@ -1,4 +1,5 @@
 import { VercelError } from "@vercel/sdk/models/vercelerror.js";
+import type { Result } from "@/kit/result";
 import { getEnvVar } from "@/kit/env";
 import { getVercel } from "./instance";
 
@@ -14,12 +15,12 @@ interface Body {
 }
 
 export type VercelProjectDomain =
-  | { verified: true; txt: null }
+  | { verified: true }
   | { verified: false; txt: { domain: string; value: string } };
 
 function fromBody(body: Body): VercelProjectDomain {
   const row = body.verification?.find((item) => item.type === "TXT");
-  if (body.verified) return { verified: true, txt: null };
+  if (body.verified) return { verified: true };
   if (row === undefined) {
     throw new Error("Unverified domain has no TXT challenge");
   }
@@ -37,7 +38,7 @@ function getClient() {
 
 export async function getVercelProjectDomain(params: {
   name: string;
-}): Promise<VercelProjectDomain | null> {
+}): Promise<Result<VercelProjectDomain>> {
   const { name } = params;
   const { idOrName, vercel } = getClient();
   try {
@@ -45,11 +46,11 @@ export async function getVercelProjectDomain(params: {
       idOrName,
       domain: name,
     });
-    return fromBody(body);
+    return { ok: true, value: fromBody(body) };
   } catch (error) {
     const missed = error instanceof VercelError && error.statusCode === 404;
     if (!missed) throw error;
-    return null;
+    return { ok: false, reason: "Not on the project" };
   }
 }
 

@@ -17,27 +17,16 @@ export function HomeForm(): ReactElement {
       <button type="submit" disabled={pending}>
         Continue
       </button>
-      {result === null && <p>Can't use this domain.</p>}
-      {result?.kind === "memos" && (
-        <p>
-          Add a TXT record at <code>_memos.{result.host}</code>. Set it to your
-          GitHub path, for example <code>thien-do</code> or{" "}
-          <code>thien-do/blog/notes</code>.
-        </p>
-      )}
-      {result?.kind === "apex" && (
-        <p>
-          Only three names per domain. <code>{result.apex}</code> is full.
-        </p>
-      )}
-      {result?.kind === "ready" && (
+      {result && !result.ok && <p>{result.reason}</p>}
+      {result?.ok && (
         <>
           <p>{result.target}</p>
-          {result.config.cname && <p>CNAME {result.config.cname}</p>}
-          {result.config.apex && <p>A {result.config.apex}</p>}
-          {result.verify.txt && (
+          {result.config.cname.ok && <p>CNAME {result.config.cname.value}</p>}
+          {result.config.apex.ok && <p>A {result.config.apex.value}</p>}
+          {result.verify.txt.ok && (
             <p>
-              TXT {result.verify.txt.domain} {result.verify.txt.value}
+              TXT {result.verify.txt.value.domain}{" "}
+              {result.verify.txt.value.value}
             </p>
           )}
         </>

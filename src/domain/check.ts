@@ -1,3 +1,4 @@
+import type { Result } from "@/kit/result";
 import { getVercelDomainConfig } from "@/vercel/domain";
 import {
   addVercelProjectDomain,
@@ -9,39 +10,50 @@ import { getDomainCustom } from "./custom";
 import { parseDomainHost } from "./host";
 
 export type DomainCheck =
-  | { kind: "memos"; host: string }
-  | { kind: "apex"; apex: string }
   | {
-      kind: "ready";
+      ok: true;
       target: string;
-      config: { cname: string | null; apex: string | null };
-      verify: { txt: { domain: string; value: string } | null };
-    };
+      config: { cname: Result<string>; apex: Result<string> };
+      verify: { txt: Result<{ domain: string; value: string }> };
+    }
+  | { ok: false; reason: string };
 
-export async function checkDomain(input: string): Promise<DomainCheck | null> {
+export async function checkDomain(input: string): Promise<DomainCheck> {
   const host = parseDomainHost(input);
-  if (host === null) return null;
-  const target = await getDomainCustom(host);
-  if (target === null) return { kind: "memos", host };
-  const found = await getVercelProjectDomain({ name: host });
-  if (found === null) {
+  if (!host.ok) return host;
+  const target = await getDomainCustom(host.value);
+  if (target === null) {
+    return {
+      ok: false,
+      reason: `Add a TXT record at _memos.${host.value}. Set it to your GitHub path, for example thien-do or thien-do/blog/notes.`,
+    };
+  }
+  const found = await getVercelProjectDomain({ name: host.value });
+  if (!found.ok) {
     const rows = await listVercelProjectDomains();
     const matched = rows.filter((row) => {
-      return host === row.apex || host.endsWith(`.${row.apex}`);
+      return host.value === row.apex || host.value.endsWith(`.${row.apex}`);
     });
     if (matched.length >= 3) {
-      const apex = matched.at(0)?.apex ?? host;
-      return { kind: "apex", apex };
+      const apex = matched.at(0)?.apex ?? host.value;
+      return {
+        ok: false,
+        reason: `Only three names per domain. ${apex} is full.`,
+      };
     }
-    await addVercelProjectDomain({ name: host });
+    await addVercelProjectDomain({ name: host.value });
   }
-  await verifyVercelProjectDomain({ name: host });
-  const project = await getVercelProjectDomain({ name: host });
-  if (project === null) {
+  await verifyVercelProjectDomain({ name: host.value });
+  const project = await getVercelProjectDomain({ name: host.value });
+  if (!project.ok) {
     throw new Error("Domain is not on the project");
   }
-  const { cname, ipv4 } = await getVercelDomainConfig({ name: host });
-  const config = { cname, apex: ipv4 };
-  const verify = { txt: project.txt };
-  return { kind: "ready", target, config, verify };
+  const dns = await getVercelDomainConfig({ name: host.value });
+  const config = { cname: dns.cname, apex: dns.ipv4 };
+  if (project.value.verified) {
+    const txt = { ok: false as const, reason: "Already verified" };
+    return { ok: true, target, config, verify: { txt } };
+  }
+  const txt = { ok: true as const, value: project.value.txt };
+  return { ok: true, target, config, verify: { txt } };
 }

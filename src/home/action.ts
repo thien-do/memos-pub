@@ -3,10 +3,12 @@
 import { checkDomain, type DomainCheck } from "@/domain/check";
 
 export async function checkDomainAction(
-  _prev: DomainCheck | null | undefined,
+  _prev: DomainCheck | undefined,
   formData: FormData,
-): Promise<DomainCheck | null> {
+): Promise<DomainCheck> {
   const raw = formData.get("host");
-  if (typeof raw !== "string") return null;
+  if (typeof raw !== "string") {
+    return { ok: false, reason: "Can't use this domain." };
+  }
   return checkDomain(raw);
 }
