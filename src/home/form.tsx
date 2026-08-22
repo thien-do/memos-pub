@@ -5,10 +5,8 @@ import { useActionState } from "react";
 import { checkDomainAction } from "./action";
 
 export function HomeForm(): ReactElement {
-  const [target, action, pending] = useActionState(
-    checkDomainAction,
-    undefined,
-  );
+  const state = useActionState(checkDomainAction, undefined);
+  const [target, action, pending] = state;
 
   return (
     <form action={action}>
