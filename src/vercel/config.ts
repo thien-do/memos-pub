@@ -5,9 +5,9 @@ interface Reason {
   ipv4: string | null;
 }
 
-export type VercelConfigReason = Reason
+export type VercelConfigReason = Reason;
 
-type Result = | { ok: true } | { ok: false; reason: Reason };
+type Result = { ok: true } | { ok: false; reason: Reason };
 
 export async function getVercelDomainConfig(domain: string): Promise<Result> {
   const { project, vercel } = getVercel();

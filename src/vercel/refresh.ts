@@ -12,5 +12,5 @@ export async function refreshVercelDomain(domain: string): Promise<boolean> {
     idOrName: project,
   });
 
-  return result.verified
+  return result.verified;
 }

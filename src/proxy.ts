@@ -7,7 +7,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   // which could be overriden by Vercel, both local and remote.
   const host = request.headers.get("host") ?? "";
   // Drop port
-  const domain = host.split(":").at(0) ?? ""
+  const domain = host.split(":").at(0) ?? "";
   const { pathname } = request.nextUrl;
   const route = await routeDomain({ domain, pathname });
 

@@ -2,7 +2,7 @@ import { getVercel } from "./instance";
 import { getVercelVerify, VercelVerify } from "./verify";
 
 interface Result {
-  verify: VercelVerify
+  verify: VercelVerify;
 }
 
 export async function addVercelDomain(domain: string): Promise<Result> {
@@ -13,6 +13,6 @@ export async function addVercelDomain(domain: string): Promise<Result> {
     requestBody: { name: domain },
   });
 
-  const verify = getVercelVerify(body)
-  return { verify}
+  const verify = getVercelVerify(body);
+  return { verify };
 }

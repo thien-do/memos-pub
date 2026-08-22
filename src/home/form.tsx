@@ -17,9 +17,7 @@ export function HomeForm(): ReactElement {
       <button type="submit" disabled={pending}>
         Connect
       </button>
-      <pre>
-        {JSON.stringify(result)}
-      </pre>
+      <pre>{JSON.stringify(result)}</pre>
     </form>
   );
 }

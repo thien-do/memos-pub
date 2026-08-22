@@ -1,6 +1,6 @@
 import { Verification } from "@vercel/sdk/models/getprojectdomainop";
 
-export type VercelVerifyReason = Verification[]
+export type VercelVerifyReason = Verification[];
 
 export type VercelVerify =
   | { ok: true }

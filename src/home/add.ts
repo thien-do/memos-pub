@@ -3,8 +3,8 @@ import { listVercelDomains } from "@/vercel/list";
 import { VercelVerify } from "@/vercel/verify";
 
 type Result =
-    | { ok: true, verify: VercelVerify }
-    | { ok: false, reason: "apex-limit"}
+  | { ok: true; verify: VercelVerify }
+  | { ok: false; reason: "apex-limit" };
 
 export async function addHomeDomain(domain: string): Promise<Result> {
   const exists = await listVercelDomains();
@@ -14,8 +14,8 @@ export async function addHomeDomain(domain: string): Promise<Result> {
     return domain === apex || domain.endsWith(`.${apex}`);
   });
 
-  if (matched.length >= 3) return { ok: false, reason: "apex-limit" }
+  if (matched.length >= 3) return { ok: false, reason: "apex-limit" };
 
   const { verify } = await addVercelDomain(domain);
-  return { ok: true, verify }
+  return { ok: true, verify };
 }
