@@ -1,8 +1,6 @@
 import { Octokit } from "octokit";
+import { getEnvVar } from "@/env";
 
 export function getGit(): Octokit {
-  const token = process.env.GITHUB_TOKEN;
-  const noToken = token === undefined || token === "";
-  if (noToken) throw new Error("GITHUB_TOKEN is not set");
-  return new Octokit({ auth: token });
+  return new Octokit({ auth: getEnvVar("MEMOS_GITHUB_TOKEN") });
 }
