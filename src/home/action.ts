@@ -2,7 +2,8 @@
 
 import { getDomainCustom } from "@/domain/custom";
 import { parseDomainHost } from "@/domain/host";
-import { addVercelDomain, getVercelDomainDns } from "@/vercel/domain";
+import { getVercelDomainConfig } from "@/vercel/domain";
+import { addVercelProjectDomain } from "@/vercel/project";
 
 export type DomainCheck = {
   target: string;
@@ -20,7 +21,7 @@ export async function checkDomainAction(
   if (host === null) return null;
   const target = await getDomainCustom(host);
   if (target === null) return null;
-  await addVercelDomain({ name: host });
-  const dns = await getVercelDomainDns({ name: host });
+  await addVercelProjectDomain({ name: host });
+  const dns = await getVercelDomainConfig({ name: host });
   return { target, cname: dns.cname, ipv4: dns.ipv4 };
 }
