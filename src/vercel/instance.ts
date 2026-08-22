@@ -1,14 +1,15 @@
 import { Vercel } from "@vercel/sdk";
 import { getEnvVar } from "@/kit/env";
 
-export function getVercel(): Vercel {
-  const bearerToken = getEnvVar("MEMOS_VERCEL_TOKEN");
-  const vercel = new Vercel({ bearerToken });
-  return vercel;
+/** We always need project along */
+interface Return {
+  vercel: Vercel
+  project: string;
 }
 
-export function getProject() {
-  const idOrName = getEnvVar("MEMOS_VERCEL_PROJECT_ID");
-  const vercel = getVercel();
-  return { idOrName, vercel };
+export function getVercel(): Return {
+  const bearerToken = getEnvVar("MEMOS_VERCEL_TOKEN");
+  const vercel = new Vercel({ bearerToken });
+  const project = getEnvVar("MEMOS_VERCEL_PROJECT_ID");
+  return { vercel, project};
 }

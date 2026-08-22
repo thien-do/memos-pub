@@ -1,67 +1,45 @@
-import { VercelError } from "@vercel/sdk/models/vercelerror.js";
-import type { Result } from "@/kit/result";
-import { getProject } from "./instance";
+import { VercelError } from "@vercel/sdk/models/vercelerror";
+import { getVercel } from "./instance";
+import {
+  GetProjectDomainResponseBody as VercelBody,
+  Verification as VercelVerification,
+} from "@vercel/sdk/models/getprojectdomainop";
 
-interface Verification {
-  type: string;
-  domain: string;
-  value: string;
-}
+type Result =
+  | { type: "verified" }
+  | { type: "not-found" }
+  | { type: "not-verified"; verification: VercelVerification[] };
 
-interface Body {
-  verified: boolean;
-  verification?: Verification[];
-}
+/** null if not found */
+async function getDetail(domain: string): Promise<VercelBody | null> {
+  const { project, vercel } = getVercel();
 
-export type VercelProjectDomain =
-  | { verified: true }
-  | { verified: false; txt: { domain: string; value: string } };
-
-function fromBody(body: Body): VercelProjectDomain {
-  const row = body.verification?.find((item) => item.type === "TXT");
-  if (body.verified) return { verified: true };
-  if (row === undefined) {
-    throw new Error("Unverified domain has no TXT challenge");
-  }
-  return {
-    verified: false,
-    txt: { domain: row.domain, value: row.value },
-  };
-}
-
-export async function getVercelProjectDomain(params: {
-  name: string;
-}): Promise<Result<VercelProjectDomain>> {
-  const { name } = params;
-  const { idOrName, vercel } = getProject();
   try {
-    const body = await vercel.projects.getProjectDomain({
-      idOrName,
-      domain: name,
+    const detail = await vercel.projects.getProjectDomain({
+      idOrName: project,
+      domain,
     });
-    return { ok: true, value: fromBody(body) };
+    return detail;
   } catch (error) {
     const missed = error instanceof VercelError && error.statusCode === 404;
-    if (!missed) throw error;
-    return { ok: false, reason: "Not on the project" };
+    if (missed) return null;
+    throw error;
   }
 }
 
-export async function listVercelProjectDomains(): Promise<{ apex: string }[]> {
-  const { idOrName, vercel } = getProject();
-  const rows: { apex: string }[] = [];
-  let until: number | undefined;
-  while (true) {
-    const page = await vercel.projects.getProjectDomains({
-      idOrName,
-      limit: 100,
-      until,
-    });
-    for (const domain of page.domains) {
-      rows.push({ apex: domain.apexName });
-    }
-    if (page.pagination.next === null) break;
-    until = page.pagination.next;
+export async function getVercelDomain(domain: string): Promise<Result> {
+  const detail = await getDetail(domain);
+
+  if (detail === null) {
+    return { type: "not-found" };
   }
-  return rows;
+
+  if (detail.verified === false) {
+    const { verification } = detail;
+    if (verification === undefined)
+      throw Error("Domain not verified with no verification");
+    return { type: "not-verified", verification };
+  }
+
+  return { type: "verified" };
 }

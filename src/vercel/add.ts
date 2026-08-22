@@ -1,12 +1,10 @@
-import { getProject } from "./instance";
+import { getVercel } from "./instance";
 
-export async function addVercelProjectDomain(params: {
-  name: string;
-}): Promise<void> {
-  const { name } = params;
-  const { idOrName, vercel } = getProject();
+export async function addVercelDomain(domain: string): Promise<void> {
+  const { project, vercel } = getVercel();
+
   await vercel.projects.addProjectDomain({
-    idOrName,
-    requestBody: { name },
+    idOrName: project,
+    requestBody: { name: domain },
   });
 }
