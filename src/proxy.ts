@@ -6,8 +6,8 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   // This is more reliable than nextUrl.hostname,
   // which could be overriden by Vercel, both local and remote.
   const host = request.headers.get("host") ?? "";
-  // Drop port
-  const domain = host.split(":").at(0) ?? "";
+  // Drop port and case. Host is case-insensitive.
+  const domain = host.split(":").at(0)?.toLowerCase() ?? "";
   const { pathname } = request.nextUrl;
   const route = await routeDomain({ domain, pathname });
 
