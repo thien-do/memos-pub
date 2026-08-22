@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@vercel/sdk':
+        specifier: ^1.28.21
+        version: 1.28.21
       next:
         specifier: 16.3.1
         version: 16.3.1(@types/node@20.19.43)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -645,6 +648,9 @@ packages:
   '@types/react@19.2.18':
     resolution: {integrity: sha512-AnzbBERsrLKtk2XSfTbYRLjQPdy116Sty4q+T+Bp3IC4l6jNBvreVPAHmpq9qhXQM7CXZPjLVmGMw9sy+hxQ3w==}
 
+  '@vercel/sdk@1.28.21':
+    resolution: {integrity: sha512-Q5UZmdS27dxbZTFtF9LRd9mSkURjvb3zwCDpvLXtWNPIvA5DIA535oxjlVZnlEr/JRQFr7uLJPwslwGP3p9m0g==}
+
   baseline-browser-mapping@2.11.14:
     resolution: {integrity: sha512-JyJ954WzuIR8/FFzX0o5krdSTrBAkcCSRfWSleRsIHSWV+cZe2FI1PKggVkFke1hBldRs+LRxUczzE9iPmgZww==}
     engines: {node: '>=6.0.0'}
@@ -1240,6 +1246,10 @@ snapshots:
   '@types/react@19.2.18':
     dependencies:
       csstype: 3.2.3
+
+  '@vercel/sdk@1.28.21':
+    dependencies:
+      zod: 4.4.3
 
   baseline-browser-mapping@2.11.14: {}
 
