@@ -2,12 +2,18 @@
 
 import { getDomainCustom } from "@/domain/custom";
 import { parseDomainHost } from "@/domain/host";
-import { addVercelDomain } from "@/vercel/domain";
+import { addVercelDomain, getVercelDomainDns } from "@/vercel/domain";
+
+export type DomainCheck = {
+  target: string;
+  cname: string | null;
+  ipv4: string | null;
+};
 
 export async function checkDomainAction(
-  _prev: string | null | undefined,
+  _prev: DomainCheck | null | undefined,
   formData: FormData,
-): Promise<string | null> {
+): Promise<DomainCheck | null> {
   const raw = formData.get("host");
   if (typeof raw !== "string") return null;
   const host = parseDomainHost(raw);
@@ -15,5 +21,6 @@ export async function checkDomainAction(
   const target = await getDomainCustom(host);
   if (target === null) return null;
   await addVercelDomain({ name: host });
-  return target;
+  const dns = await getVercelDomainDns({ name: host });
+  return { target, cname: dns.cname, ipv4: dns.ipv4 };
 }

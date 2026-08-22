@@ -6,7 +6,7 @@ import { checkDomainAction } from "./action";
 
 export function HomeForm(): ReactElement {
   const state = useActionState(checkDomainAction, undefined);
-  const [target, action, pending] = state;
+  const [result, action, pending] = state;
 
   return (
     <form action={action}>
@@ -17,8 +17,10 @@ export function HomeForm(): ReactElement {
       <button type="submit" disabled={pending}>
         Continue
       </button>
-      {typeof target === "string" && <p>{target}</p>}
-      {target === null && <p>No TXT record.</p>}
+      {result === null && <p>No TXT record.</p>}
+      {result && <p>{result.target}</p>}
+      {result?.cname && <p>CNAME {result.cname}</p>}
+      {result?.ipv4 && <p>A {result.ipv4}</p>}
     </form>
   );
 }
