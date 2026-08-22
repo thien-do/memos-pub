@@ -1,6 +1,7 @@
+/** Enforce a prefix to avoid silent fallback to system env */
 type MemosEnv = `MEMOS_${string}`;
 
-/** Read a required MEMOS_ env var. Empty string is missing. */
+/** Strictly read an env var */
 export function getEnvVar(name: MemosEnv): string {
   const value = process.env[name];
   if (value === undefined || value === "") {

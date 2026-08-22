@@ -1,6 +1,6 @@
 import { getDomainCustom } from "@/domain/custom";
 import type { Result } from "@/kit/result";
-import { getVercelDomainConfig } from "@/vercel/config";
+import { getVercelDomainConfig } from "@/vercel/domain";
 import {
   addVercelProjectDomain,
   getVercelProjectDomain,

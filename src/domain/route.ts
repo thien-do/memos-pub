@@ -1,5 +1,4 @@
 import { getDomainCustom } from "./custom";
-import { getDomainHost } from "./host";
 import { getDomainPlatform, hasPlatform } from "./platform";
 
 export type DomainRoute =
@@ -17,9 +16,10 @@ export async function routeDomain(params: {
 }): Promise<DomainRoute> {
   const { host, pathname } = params;
 
-  const hostname = getDomainHost(host);
+  // Drop port.
+  const hostname = host.split(":").at(0)?.toLowerCase() ?? "";
 
-  // Each rung returns a target that is safe to splice, or null.
+  // Each path returns a target that is safe to splice, or null.
   // A separate platform check saves cost in resolving custom domain.
   const target = hasPlatform(hostname)
     ? getDomainPlatform(hostname)
@@ -29,8 +29,7 @@ export async function routeDomain(params: {
     return { kind: "rewrite", path: `/blog/${target}${pathname}` };
   }
 
-  // Blog pages have exactly one public URL: the rewrite above.
-  // We should prevent direct access.
+  // "Blog" should be accessed via the rewrite above only.
   if (pathname === "/blog" || pathname.startsWith("/blog/")) {
     return { kind: "stop" };
   }
