@@ -8,7 +8,7 @@ export async function checkDomainAction(
 ): Promise<DomainCheck> {
   const raw = formData.get("host");
   if (typeof raw !== "string") {
-    return { ok: false, reason: "Can't use this domain." };
+    return { type: "error", reason: "Can't use this domain." };
   }
   return checkDomain(raw);
 }

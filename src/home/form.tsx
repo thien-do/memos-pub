@@ -17,16 +17,15 @@ export function HomeForm(): ReactElement {
       <button type="submit" disabled={pending}>
         Continue
       </button>
-      {result && !result.ok && <p>{result.reason}</p>}
-      {result?.ok && (
+      {result?.type === "error" && <p>{result.reason}</p>}
+      {result?.type === "ok" && (
         <>
           <p>{result.target}</p>
-          {result.config.cname.ok && <p>CNAME {result.config.cname.value}</p>}
-          {result.config.ipv4.ok && <p>A {result.config.ipv4.value}</p>}
-          {result.verify.txt.ok && (
+          {result.config.cname && <p>CNAME {result.config.cname}</p>}
+          {result.config.ipv4 && <p>A {result.config.ipv4}</p>}
+          {result.txt && (
             <p>
-              TXT {result.verify.txt.value.domain}{" "}
-              {result.verify.txt.value.value}
+              TXT {result.txt.domain} {result.txt.value}
             </p>
           )}
         </>

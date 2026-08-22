@@ -11,13 +11,13 @@ type Result =
   | { type: "not-verified"; verification: VercelVerification[] };
 
 /** null if not found */
-async function getDetail(domain: string): Promise<VercelBody | null> {
+async function getDetail(host: string): Promise<VercelBody | null> {
   const { project, vercel } = getVercel();
 
   try {
     const detail = await vercel.projects.getProjectDomain({
       idOrName: project,
-      domain,
+      domain: host,
     });
     return detail;
   } catch (error) {
@@ -27,8 +27,8 @@ async function getDetail(domain: string): Promise<VercelBody | null> {
   }
 }
 
-export async function getVercelDomain(domain: string): Promise<Result> {
-  const detail = await getDetail(domain);
+export async function getVercelDomain(host: string): Promise<Result> {
+  const detail = await getDetail(host);
 
   if (detail === null) {
     return { type: "not-found" };

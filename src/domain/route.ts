@@ -14,16 +14,16 @@ export async function routeDomain(params: {
   host: string;
   pathname: string;
 }): Promise<DomainRoute> {
-  const { host, pathname } = params;
+  const { host: header, pathname } = params;
 
   // Drop port.
-  const hostname = host.split(":").at(0)?.toLowerCase() ?? "";
+  const host = header.split(":").at(0)?.toLowerCase() ?? "";
 
   // Each path returns a target that is safe to splice, or null.
   // A separate platform check saves cost in resolving custom domain.
-  const target = hasPlatform(hostname)
-    ? getDomainPlatform(hostname)
-    : await getDomainCustom(hostname);
+  const target = hasPlatform(host)
+    ? getDomainPlatform(host)
+    : await getDomainCustom(host);
 
   if (target !== null) {
     return { kind: "rewrite", path: `/blog/${target}${pathname}` };

@@ -6,11 +6,11 @@ type Config = {
   ipv4: string | null;
 };
 
-export async function getVercelDomainConfig(domain: string): Promise<Config> {
+export async function getVercelDomainConfig(host: string): Promise<Config> {
   const { project, vercel } = getVercel();
 
   const config = await vercel.domains.getDomainConfig({
-    domain,
+    domain: host,
     projectIdOrName: project,
   });
 
