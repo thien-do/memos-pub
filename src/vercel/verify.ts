@@ -1,10 +1,10 @@
 import { Verification } from "@vercel/sdk/models/getprojectdomainop";
 
-export type VercelVerifyChallenge = Verification
+export type VercelVerifyReason = Verification[]
 
 export type VercelVerify =
   | { ok: true }
-  | { ok: false; challenges: Verification[] };
+  | { ok: false; reason: VercelVerifyReason };
 
 /** Common body of Vercel domain operations */
 interface VercelBody {
@@ -20,5 +20,5 @@ export function getVercelVerify(body: VercelBody): VercelVerify {
   if (verification === undefined)
     throw Error("Domain not verified with no verification");
 
-  return { ok: false, challenges: verification };
+  return { ok: false, reason: verification };
 }

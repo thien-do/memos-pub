@@ -5,7 +5,9 @@ interface Reason {
   ipv4: string | null;
 }
 
-type Result = { configured: true } | { configured: false; reason: Reason };
+export type VercelConfigReason = Reason
+
+type Result = | { ok: true } | { ok: false; reason: Reason };
 
 export async function getVercelDomainConfig(host: string): Promise<Result> {
   const { project, vercel } = getVercel();
@@ -15,10 +17,10 @@ export async function getVercelDomainConfig(host: string): Promise<Result> {
     projectIdOrName: project,
   });
 
-  if (config.misconfigured === false) return { configured: true };
+  if (config.misconfigured === false) return { ok: true };
 
   const cname = config.recommendedCNAME.at(0)?.value ?? null;
   const ipv4 = config.recommendedIPv4.at(0)?.value.at(0) ?? null;
   const reason: Reason = { cname, ipv4 };
-  return { configured: false, reason };
+  return { ok: false, reason };
 }

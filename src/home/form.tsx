@@ -2,10 +2,10 @@
 
 import type { ReactElement } from "react";
 import { useActionState } from "react";
-import { checkDomainAction } from "./action";
+import { connectDomainAction } from "./action";
 
 export function HomeForm(): ReactElement {
-  const state = useActionState(checkDomainAction, undefined);
+  const state = useActionState(connectDomainAction, undefined);
   const [result, action, pending] = state;
 
   return (

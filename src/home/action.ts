@@ -1,12 +1,15 @@
 "use server";
 
-import { checkDomain, type DomainCheck } from "./check";
+import {
+  connectHomeDomain,
+  ConnectHomeDomainResult
+} from "./connect";
 
-export async function checkDomainAction(
-  _prev: DomainCheck | undefined,
+export async function connectDomainAction(
+  _prev: ConnectHomeDomainResult | undefined,
   formData: FormData,
-): Promise<DomainCheck> {
+): Promise<ConnectHomeDomainResult> {
   const raw = formData.get("domain");
   if (typeof raw !== "string")  throw Error("invalid domain input")
-  return checkDomain(raw);
+  return connectHomeDomain(raw);
 }
