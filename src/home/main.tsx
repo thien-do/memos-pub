@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import { HomeForm } from "./form";
 
 export function HomeMain(): ReactElement {
   return (
@@ -10,13 +11,7 @@ export function HomeMain(): ReactElement {
         <code>thien-do/blog/notes</code>.
       </p>
       <p>Then enter the domain.</p>
-      <form>
-        <label>
-          Domain
-          <input name="host" type="text" placeholder="thien.do" />
-        </label>
-        <button type="submit">Continue</button>
-      </form>
+      <HomeForm />
     </main>
   );
 }
