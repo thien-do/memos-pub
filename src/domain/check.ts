@@ -2,6 +2,7 @@ import { getVercelDomainConfig } from "@/vercel/domain";
 import {
   addVercelProjectDomain,
   getVercelProjectDomain,
+  listVercelProjectDomains,
   verifyVercelProjectDomain,
 } from "@/vercel/project";
 import { getDomainCustom } from "./custom";
@@ -9,6 +10,7 @@ import { parseDomainHost } from "./host";
 
 export type DomainCheck =
   | { kind: "memos"; host: string }
+  | { kind: "apex"; apex: string }
   | {
       kind: "ready";
       target: string;
@@ -23,6 +25,14 @@ export async function checkDomain(input: string): Promise<DomainCheck | null> {
   if (target === null) return { kind: "memos", host };
   const found = await getVercelProjectDomain({ name: host });
   if (found === null) {
+    const rows = await listVercelProjectDomains();
+    const matched = rows.filter((row) => {
+      return host === row.apex || host.endsWith(`.${row.apex}`);
+    });
+    if (matched.length >= 3) {
+      const apex = matched.at(0)?.apex ?? host;
+      return { kind: "apex", apex };
+    }
     await addVercelProjectDomain({ name: host });
   }
   await verifyVercelProjectDomain({ name: host });

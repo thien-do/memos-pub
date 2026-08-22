@@ -74,3 +74,22 @@ export async function verifyVercelProjectDomain(params: {
     domain: name,
   });
 }
+
+export async function listVercelProjectDomains(): Promise<{ apex: string }[]> {
+  const { idOrName, vercel } = getClient();
+  const rows: { apex: string }[] = [];
+  let until: number | undefined;
+  while (true) {
+    const page = await vercel.projects.getProjectDomains({
+      idOrName,
+      limit: 100,
+      until,
+    });
+    for (const domain of page.domains) {
+      rows.push({ apex: domain.apexName });
+    }
+    if (page.pagination.next === null) break;
+    until = page.pagination.next;
+  }
+  return rows;
+}

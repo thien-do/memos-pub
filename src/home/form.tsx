@@ -25,6 +25,11 @@ export function HomeForm(): ReactElement {
           <code>thien-do/blog/notes</code>.
         </p>
       )}
+      {result?.kind === "apex" && (
+        <p>
+          Only three names per domain. <code>{result.apex}</code> is full.
+        </p>
+      )}
       {result?.kind === "ready" && (
         <>
           <p>{result.target}</p>
