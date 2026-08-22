@@ -31,6 +31,8 @@ export async function connectHomeDomain(
   const custom = await getDomainCustom(domain);
   if (custom === null) return { type: "custom" };
 
+  // We could add domain at this point, and display verified status,
+  // but it's easier to reason by doing things in serial
   const config = await getVercelDomainConfig(domain);
   if (config.ok === false) return { type: "config", reason: config.reason };
 

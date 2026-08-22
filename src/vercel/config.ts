@@ -9,11 +9,11 @@ export type VercelConfigReason = Reason
 
 type Result = | { ok: true } | { ok: false; reason: Reason };
 
-export async function getVercelDomainConfig(host: string): Promise<Result> {
+export async function getVercelDomainConfig(domain: string): Promise<Result> {
   const { project, vercel } = getVercel();
 
   const config = await vercel.domains.getDomainConfig({
-    domain: host,
+    domain,
     projectIdOrName: project,
   });
 
