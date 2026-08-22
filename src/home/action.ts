@@ -22,6 +22,6 @@ export async function checkDomainAction(
   const target = await getDomainCustom(host);
   if (target === null) return null;
   await addVercelProjectDomain({ name: host });
-  const dns = await getVercelDomainConfig({ name: host });
-  return { target, cname: dns.cname, ipv4: dns.ipv4 };
+  const config = await getVercelDomainConfig({ name: host });
+  return { target, cname: config.cname, ipv4: config.ipv4 };
 }

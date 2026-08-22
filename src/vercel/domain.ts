@@ -11,10 +11,9 @@ export async function getVercelDomainConfig(params: {
 }): Promise<VercelDomainDns> {
   const { name } = params;
   const vercel = getVercel();
-  const projectIdOrName = getEnvVar("MEMOS_VERCEL_PROJECT_ID");
   const config = await vercel.domains.getDomainConfig({
     domain: name,
-    projectIdOrName,
+    projectIdOrName: getEnvVar("MEMOS_VERCEL_PROJECT_ID"),
   });
   const cname = config.recommendedCNAME.at(0)?.value ?? null;
   const ipv4 = config.recommendedIPv4.at(0)?.value.at(0) ?? null;
