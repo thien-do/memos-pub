@@ -22,7 +22,7 @@ export function HomeForm(): ReactElement {
         <>
           <p>{result.target}</p>
           {result.config.cname.ok && <p>CNAME {result.config.cname.value}</p>}
-          {result.config.apex.ok && <p>A {result.config.apex.value}</p>}
+          {result.config.ipv4.ok && <p>A {result.config.ipv4.value}</p>}
           {result.verify.txt.ok && (
             <p>
               TXT {result.verify.txt.value.domain}{" "}

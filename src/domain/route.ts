@@ -1,4 +1,5 @@
 import { getDomainCustom } from "./custom";
+import { getDomainHost } from "./host";
 import { getDomainPlatform, hasPlatform } from "./platform";
 
 export type DomainRoute =
@@ -16,7 +17,7 @@ export async function routeDomain(params: {
 }): Promise<DomainRoute> {
   const { host, pathname } = params;
 
-  const hostname = host.split(":").at(0)?.toLowerCase() ?? "";
+  const hostname = getDomainHost(host);
 
   // Each rung returns a target that is safe to splice, or null.
   // A separate platform check saves cost in resolving custom domain.

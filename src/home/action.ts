@@ -1,6 +1,6 @@
 "use server";
 
-import { checkDomain, type DomainCheck } from "@/domain/check";
+import { checkDomain, type DomainCheck } from "./check";
 
 export async function checkDomainAction(
   _prev: DomainCheck | undefined,
