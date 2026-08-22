@@ -13,16 +13,20 @@ interface Body {
   verification?: Verification[];
 }
 
-export type VercelProjectDomain = {
-  verified: boolean;
-  txt: { domain: string; value: string } | null;
-};
+export type VercelProjectDomain =
+  | { verified: true; txt: null }
+  | { verified: false; txt: { domain: string; value: string } };
 
 function fromBody(body: Body): VercelProjectDomain {
   const row = body.verification?.find((item) => item.type === "TXT");
-  const txt =
-    row === undefined ? null : { domain: row.domain, value: row.value };
-  return { verified: body.verified, txt };
+  if (body.verified) return { verified: true, txt: null };
+  if (row === undefined) {
+    throw new Error("Unverified domain has no TXT challenge");
+  }
+  return {
+    verified: false,
+    txt: { domain: row.domain, value: row.value },
+  };
 }
 
 export async function getVercelProjectDomain(params: {

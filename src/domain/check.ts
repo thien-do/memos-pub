@@ -1,4 +1,4 @@
-import { getVercelDomainConfig, type VercelDomainDns } from "@/vercel/domain";
+import { getVercelDomainConfig } from "@/vercel/domain";
 import {
   addVercelProjectDomain,
   getVercelProjectDomain,
@@ -8,8 +8,8 @@ import { parseDomainHost } from "./host";
 
 export type DomainCheck = {
   target: string;
-  dns: VercelDomainDns;
-  txt: { domain: string; value: string } | null;
+  config: { cname: string | null; apex: string | null };
+  verify: { txt: { domain: string; value: string } | null };
 };
 
 export async function checkDomain(input: string): Promise<DomainCheck | null> {
@@ -21,6 +21,8 @@ export async function checkDomain(input: string): Promise<DomainCheck | null> {
   if (project === null) {
     project = await addVercelProjectDomain({ name: host });
   }
-  const dns = await getVercelDomainConfig({ name: host });
-  return { target, dns, txt: project.txt };
+  const { cname, ipv4 } = await getVercelDomainConfig({ name: host });
+  const config = { cname, apex: ipv4 };
+  const verify = { txt: project.txt };
+  return { target, config, verify };
 }

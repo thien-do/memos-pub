@@ -19,11 +19,11 @@ export function HomeForm(): ReactElement {
       </button>
       {result === null && <p>No TXT record.</p>}
       {result && <p>{result.target}</p>}
-      {result?.dns.cname && <p>CNAME {result.dns.cname}</p>}
-      {result?.dns.ipv4 && <p>A {result.dns.ipv4}</p>}
-      {result?.txt && (
+      {result?.config.cname && <p>CNAME {result.config.cname}</p>}
+      {result?.config.apex && <p>A {result.config.apex}</p>}
+      {result?.verify.txt && (
         <p>
-          TXT {result.txt.domain} {result.txt.value}
+          TXT {result.verify.txt.domain} {result.verify.txt.value}
         </p>
       )}
     </form>
