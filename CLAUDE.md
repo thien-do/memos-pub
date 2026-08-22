@@ -20,3 +20,5 @@ E.g., Next.js' `page.tsx` contains only Next.js' details.
 We prefer `.at` over `[]`.
 
 We use object params when there're more than 1 params.
+
+Env vars start with `MEMOS_`. Read them with `getEnvVar`.
