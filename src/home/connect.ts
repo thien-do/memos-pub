@@ -1,15 +1,15 @@
-import { getDomainCustom } from "@/domain/custom";
-import { cleanHomeDomain } from "./clean";
+import { DomainCustomReason, getDomainCustom } from "@/domain/custom";
+import { cleanHomeDomain, HomeCleanReason } from "./clean";
 import { VercelVerify, VercelVerifyReason } from "@/vercel/verify";
 import { getVercelDomain } from "@/vercel/get";
 import { getVercelDomainConfig, VercelConfigReason } from "@/vercel/config";
-import { addHomeDomain } from "./add";
+import { addHomeDomain, HomeAddReason } from "./add";
 
 type Result =
   | { type: "success" }
-  | { type: "custom" }
-  | { type: "apex-limit" }
-  | { type: "clean" }
+  | { type: "custom"; reason: DomainCustomReason }
+  | { type: "add"; reason: HomeAddReason }
+  | { type: "clean"; reason: HomeCleanReason }
   | { type: "config"; reason: VercelConfigReason }
   | { type: "verify"; reason: VercelVerifyReason };
 
@@ -24,12 +24,13 @@ function pipeVerify(verify: VercelVerify): Result {
 export async function connectHomeDomain(
   input: string,
 ): Promise<ConnectHomeDomainResult> {
-  const domain = cleanHomeDomain(input);
-  if (domain === null) return { type: "clean" };
+  const clean = cleanHomeDomain(input);
+  if (clean.ok === false) return { type: "clean", reason: clean.reason };
+  const { domain } = clean;
 
   // Always check for custom first to avoid adding redundant domains
   const custom = await getDomainCustom(domain);
-  if (custom === null) return { type: "custom" };
+  if (custom.ok === false) return { type: "custom", reason: custom.reason };
 
   // We could add domain at this point, and display verified status,
   // but it's easier to reason by doing things in serial
@@ -40,7 +41,9 @@ export async function connectHomeDomain(
 
   if (detail.found === false) {
     const result = await addHomeDomain(domain);
-    return result.ok ? pipeVerify(result.verify) : { type: result.reason };
+    return result.ok
+      ? pipeVerify(result.verify)
+      : { type: "add", reason: result.reason };
   }
 
   return pipeVerify(detail.verify);
