@@ -1,5 +1,4 @@
-import { getEnvVar } from "@/kit/env";
-import { getVercel } from "./instance";
+import { getProject } from "./instance";
 
 /** Recommended config only */
 type Config = {
@@ -11,16 +10,12 @@ export async function getVercelDomainConfig(params: {
   name: string;
 }): Promise<Config> {
   const { name } = params;
-
-  const vercel = getVercel();
-
+  const { idOrName, vercel } = getProject();
   const config = await vercel.domains.getDomainConfig({
     domain: name,
-    projectIdOrName: getEnvVar("MEMOS_VERCEL_PROJECT_ID"),
+    projectIdOrName: idOrName,
   });
-
   const cname = config.recommendedCNAME.at(0)?.value ?? null;
   const ipv4 = config.recommendedIPv4.at(0)?.value.at(0) ?? null;
-
   return { cname, ipv4 };
 }

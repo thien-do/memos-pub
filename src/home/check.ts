@@ -1,12 +1,9 @@
 import { getDomainCustom } from "@/domain/custom";
-import type { Result } from "@/kit/result";
-import { getVercelDomainConfig } from "@/vercel/domain";
-import {
-  addVercelProjectDomain,
-  getVercelProjectDomain,
-  listVercelProjectDomains,
-  verifyVercelProjectDomain,
-} from "@/vercel/project";
+import { toResult, type Result } from "@/kit/result";
+import { addVercelProjectDomain } from "@/vercel/add";
+import { getVercelDomainConfig } from "@/vercel/config";
+import { getVercelProjectDomain, listVercelProjectDomains } from "@/vercel/get";
+import { verifyVercelProjectDomain } from "@/vercel/verify";
 import { parseDomainHost } from "./host";
 
 export type DomainCheck =
@@ -49,7 +46,9 @@ export async function checkDomain(input: string): Promise<DomainCheck> {
     throw new Error("Domain is not on the project");
   }
   const dns = await getVercelDomainConfig({ name: host.value });
-  const config = { cname: dns.cname, ipv4: dns.ipv4 };
+  const cname = toResult(dns.cname, "No CNAME");
+  const ipv4 = toResult(dns.ipv4, "No A record");
+  const config = { cname, ipv4 };
   if (project.value.verified) {
     const txt = { ok: false as const, reason: "Already verified" };
     return { ok: true, target, config, verify: { txt } };

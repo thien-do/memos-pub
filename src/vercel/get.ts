@@ -1,7 +1,6 @@
 import { VercelError } from "@vercel/sdk/models/vercelerror.js";
 import type { Result } from "@/kit/result";
-import { getEnvVar } from "@/kit/env";
-import { getVercel } from "./instance";
+import { getProject } from "./instance";
 
 interface Verification {
   type: string;
@@ -30,17 +29,11 @@ function fromBody(body: Body): VercelProjectDomain {
   };
 }
 
-function getClient() {
-  const idOrName = getEnvVar("MEMOS_VERCEL_PROJECT_ID");
-  const vercel = getVercel();
-  return { idOrName, vercel };
-}
-
 export async function getVercelProjectDomain(params: {
   name: string;
 }): Promise<Result<VercelProjectDomain>> {
   const { name } = params;
-  const { idOrName, vercel } = getClient();
+  const { idOrName, vercel } = getProject();
   try {
     const body = await vercel.projects.getProjectDomain({
       idOrName,
@@ -54,30 +47,8 @@ export async function getVercelProjectDomain(params: {
   }
 }
 
-export async function addVercelProjectDomain(params: {
-  name: string;
-}): Promise<void> {
-  const { name } = params;
-  const { idOrName, vercel } = getClient();
-  await vercel.projects.addProjectDomain({
-    idOrName,
-    requestBody: { name },
-  });
-}
-
-export async function verifyVercelProjectDomain(params: {
-  name: string;
-}): Promise<void> {
-  const { name } = params;
-  const { idOrName, vercel } = getClient();
-  await vercel.projects.verifyProjectDomain({
-    idOrName,
-    domain: name,
-  });
-}
-
 export async function listVercelProjectDomains(): Promise<{ apex: string }[]> {
-  const { idOrName, vercel } = getClient();
+  const { idOrName, vercel } = getProject();
   const rows: { apex: string }[] = [];
   let until: number | undefined;
   while (true) {
