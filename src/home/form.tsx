@@ -17,19 +17,25 @@ export function HomeForm(): ReactElement {
       <button type="submit" disabled={pending}>
         Continue
       </button>
-      {result && (
-        <button type="submit" name="intent" value="verify" disabled={pending}>
-          Check again
-        </button>
-      )}
-      {result === null && <p>No TXT record.</p>}
-      {result && <p>{result.target}</p>}
-      {result?.config.cname && <p>CNAME {result.config.cname}</p>}
-      {result?.config.apex && <p>A {result.config.apex}</p>}
-      {result?.verify.txt && (
+      {result === null && <p>Can't use this domain.</p>}
+      {result?.kind === "memos" && (
         <p>
-          TXT {result.verify.txt.domain} {result.verify.txt.value}
+          Add a TXT record at <code>_memos.{result.host}</code>. Set it to your
+          GitHub path, for example <code>thien-do</code> or{" "}
+          <code>thien-do/blog/notes</code>.
         </p>
+      )}
+      {result?.kind === "ready" && (
+        <>
+          <p>{result.target}</p>
+          {result.config.cname && <p>CNAME {result.config.cname}</p>}
+          {result.config.apex && <p>A {result.config.apex}</p>}
+          {result.verify.txt && (
+            <p>
+              TXT {result.verify.txt.domain} {result.verify.txt.value}
+            </p>
+          )}
+        </>
       )}
     </form>
   );

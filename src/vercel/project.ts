@@ -29,12 +29,17 @@ function fromBody(body: Body): VercelProjectDomain {
   };
 }
 
+function getClient() {
+  const idOrName = getEnvVar("MEMOS_VERCEL_PROJECT_ID");
+  const vercel = getVercel();
+  return { idOrName, vercel };
+}
+
 export async function getVercelProjectDomain(params: {
   name: string;
 }): Promise<VercelProjectDomain | null> {
   const { name } = params;
-  const idOrName = getEnvVar("MEMOS_VERCEL_PROJECT_ID");
-  const vercel = getVercel();
+  const { idOrName, vercel } = getClient();
   try {
     const body = await vercel.projects.getProjectDomain({
       idOrName,
@@ -50,23 +55,20 @@ export async function getVercelProjectDomain(params: {
 
 export async function addVercelProjectDomain(params: {
   name: string;
-}): Promise<VercelProjectDomain> {
+}): Promise<void> {
   const { name } = params;
-  const idOrName = getEnvVar("MEMOS_VERCEL_PROJECT_ID");
-  const vercel = getVercel();
-  const body = await vercel.projects.addProjectDomain({
+  const { idOrName, vercel } = getClient();
+  await vercel.projects.addProjectDomain({
     idOrName,
     requestBody: { name },
   });
-  return fromBody(body);
 }
 
 export async function verifyVercelProjectDomain(params: {
   name: string;
 }): Promise<void> {
   const { name } = params;
-  const idOrName = getEnvVar("MEMOS_VERCEL_PROJECT_ID");
-  const vercel = getVercel();
+  const { idOrName, vercel } = getClient();
   await vercel.projects.verifyProjectDomain({
     idOrName,
     domain: name,
