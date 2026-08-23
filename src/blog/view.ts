@@ -6,7 +6,12 @@ import { getBlogTree } from "./tree";
 
 export type BlogView =
   | { kind: "file"; text: string }
-  | { kind: "dir"; entries: GitContentEntry[]; linkBase: string; readme: string | null }
+  | {
+      kind: "dir";
+      entries: GitContentEntry[];
+      linkBase: string;
+      readme: string | null;
+    }
   | { kind: "owner"; repos: GitRepo[] };
 
 async function fromContent(params: {
@@ -25,7 +30,11 @@ async function fromContent(params: {
       const found = content.entries.find((entry) => entry.name === "README.md");
       const file =
         found?.type === "file"
-          ? await getGitContent({ owner, repo, segments: [...segments, "README.md"] })
+          ? await getGitContent({
+              owner,
+              repo,
+              segments: [...segments, "README.md"],
+            })
           : null;
       return {
         kind: "dir",
