@@ -6,20 +6,34 @@ import { getBlogTree } from "./tree";
 
 export type BlogView =
   | { kind: "file"; text: string }
-  | { kind: "dir"; entries: GitContentEntry[]; linkBase: string }
+  | { kind: "dir"; entries: GitContentEntry[]; linkBase: string; readme: string | null }
   | { kind: "owner"; repos: GitRepo[] };
 
-function fromContent(params: {
+async function fromContent(params: {
   content: GitContent;
   linkBase: string;
-}): BlogView {
-  const { content, linkBase } = params;
+  owner: string;
+  repo: string;
+  segments: string[];
+}): Promise<BlogView> {
+  const { content, linkBase, owner, repo, segments } = params;
 
   switch (content.kind) {
     case "file":
       return { kind: "file", text: content.text };
-    case "dir":
-      return { kind: "dir", entries: content.entries, linkBase };
+    case "dir": {
+      const found = content.entries.find((entry) => entry.name === "README.md");
+      const file =
+        found?.type === "file"
+          ? await getGitContent({ owner, repo, segments: [...segments, "README.md"] })
+          : null;
+      return {
+        kind: "dir",
+        entries: content.entries,
+        linkBase,
+        readme: file?.kind === "file" ? file.text : null,
+      };
+    }
   }
 }
 
@@ -49,13 +63,25 @@ export async function getBlogView(params: {
 
   // If head is repo, repo wins, even if content is empty
   if (isRepo !== null) {
-    if (inRepo === null) return null;
-    return fromContent({ content: inRepo, linkBase: `/${head}` });
+    if (inRepo === null || head === undefined) return null;
+    return fromContent({
+      content: inRepo,
+      linkBase: `/${head}`,
+      owner,
+      repo: head,
+      segments: rest,
+    });
   }
 
   // If head is not repo, but profile repo found, profile wins
   if (inProfile !== null) {
-    return fromContent({ content: inProfile, linkBase: "" });
+    return fromContent({
+      content: inProfile,
+      linkBase: "",
+      owner,
+      repo: owner,
+      segments: path,
+    });
   }
 
   // Owner root without a profile repo: their repos, forks excluded
