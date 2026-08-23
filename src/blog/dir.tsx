@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { BlogFile } from "./file";
+import { MarkFile } from "@/mark/file";
 import type { BlogViewDir } from "./view";
 
 export function BlogDir(props: { view: BlogViewDir }): ReactElement {
@@ -8,7 +8,7 @@ export function BlogDir(props: { view: BlogViewDir }): ReactElement {
 
   return (
     <div>
-      {readme !== null ? <BlogFile text={readme} /> : null}
+      {readme !== null ? <MarkFile text={readme} /> : null}
       <ul>
         {entries.map((entry) => (
           <li key={entry.path}>

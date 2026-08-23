@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import { notFound } from "next/navigation";
+import { MarkFile } from "@/mark/file";
 import { BlogDir } from "./dir";
-import { BlogFile } from "./file";
 import { BlogOwner } from "./owner";
 import { getBlogView } from "./view";
 
@@ -16,7 +16,7 @@ export async function BlogPage(props: {
 
   switch (view.kind) {
     case "file":
-      return <BlogFile text={view.text} />;
+      return <MarkFile text={view.text} />;
     case "dir":
       return <BlogDir view={view} />;
     case "owner":
