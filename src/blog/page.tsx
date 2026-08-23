@@ -18,13 +18,7 @@ export async function BlogPage(props: {
     case "file":
       return <BlogFile text={view.text} />;
     case "dir":
-      return (
-        <BlogDir
-          linkBase={view.linkBase}
-          entries={view.entries}
-          readme={view.readme}
-        />
-      );
+      return <BlogDir view={view} />;
     case "owner":
       return <BlogOwner repos={view.repos} />;
   }

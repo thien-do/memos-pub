@@ -5,14 +5,16 @@ import { getGitRepos } from "@/git/repos";
 import type { BlogTree } from "./tree";
 import { getBlogTree } from "./tree";
 
+export type BlogViewDir = {
+  kind: "dir";
+  entries: GitContentEntry[];
+  linkBase: string;
+  readme: string | null;
+};
+
 export type BlogView =
   | { kind: "file"; text: string }
-  | {
-      kind: "dir";
-      entries: GitContentEntry[];
-      linkBase: string;
-      readme: string | null;
-    }
+  | BlogViewDir
   | { kind: "owner"; repos: GitRepo[] };
 
 function fromContent(params: {

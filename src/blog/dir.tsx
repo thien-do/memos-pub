@@ -1,13 +1,10 @@
 import type { ReactElement } from "react";
-import type { GitContentEntry } from "@/git/content";
 import { BlogFile } from "./file";
+import type { BlogViewDir } from "./view";
 
-export function BlogDir(props: {
-  linkBase: string;
-  entries: GitContentEntry[];
-  readme: string | null;
-}): ReactElement {
-  const { linkBase, entries, readme } = props;
+export function BlogDir(props: { view: BlogViewDir }): ReactElement {
+  const { view } = props;
+  const { linkBase, entries, readme } = view;
 
   return (
     <div>
