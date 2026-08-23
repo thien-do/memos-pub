@@ -1,5 +1,5 @@
 import { getVercel } from "./instance";
-import { VercelDetail, getVercelDetail} from "./detail";
+import { VercelDetail, getVercelDetail } from "./detail";
 
 export async function addVercelDomain(domain: string): Promise<VercelDetail> {
   const { project, vercel } = getVercel();

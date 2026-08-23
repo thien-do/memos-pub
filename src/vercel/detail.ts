@@ -6,7 +6,8 @@ export type VercelDetailReason = Verification[];
  * Better type than Vercel's built-in
  */
 export type VercelDetailVerify =
-  { ok: true } | { ok: false; reason: VercelDetailReason };
+  | { ok: true }
+  | { ok: false; reason: VercelDetailReason };
 
 /**
  * Detail of a domain as attached to our project.
