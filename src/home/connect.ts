@@ -1,7 +1,7 @@
 import { DomainCustomReason, getDomainCustom } from "@/domain/custom";
 import { cleanHomeDomain, HomeCleanReason } from "./clean";
-import { VercelVerifyReason } from "@/vercel/verify";
 import { getVercelDomainConfig, VercelConfigReason } from "@/vercel/config";
+import { VercelVerifyReason } from "@/vercel/project";
 import { getHomeDomain } from "./get";
 import { HomeAddReason } from "./add";
 

@@ -1,5 +1,10 @@
 import { Verification } from "@vercel/sdk/models/getprojectdomainop";
-import { getVercelVerify, VercelVerify } from "./verify";
+
+export type VercelVerifyReason = Verification[];
+
+export type VercelVerify =
+  | { ok: true }
+  | { ok: false; reason: VercelVerifyReason };
 
 export interface VercelProject {
   apex: string;
@@ -13,8 +18,9 @@ interface Body {
 }
 
 export function getVercelProject(body: Body): VercelProject {
-  return {
-    apex: body.apexName,
-    verify: getVercelVerify(body),
-  };
+  const { apexName, verified, verification } = body;
+  if (verified === true) return { apex: apexName, verify: { ok: true } };
+  if (verification === undefined)
+    throw Error("Domain not verified with no verification");
+  return { apex: apexName, verify: { ok: false, reason: verification } };
 }
