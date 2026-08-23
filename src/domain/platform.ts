@@ -1,7 +1,7 @@
 const PLATFORM_DOMAINS = ["memos.pub", "localhost"];
 
 /** Whether the domain is ours to handle */
-export function hasPlatform(domain: string): boolean {
+export function hasDomainPlatform(domain: string): boolean {
   return PLATFORM_DOMAINS.some((root) => {
     return domain === root || domain.endsWith(`.${root}`);
   });

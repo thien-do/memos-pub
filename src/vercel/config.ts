@@ -21,7 +21,7 @@ type Result = { ok: true } | { ok: false; reason: Reason };
  * Even more, we require "apex" here to decide the recommended config.
  * Fetch project domain for this apex.
  */
-export async function getVercelDomainConfig(params: {
+export async function getVercelConfig(params: {
   domain: string;
   apex: string;
 }): Promise<Result> {

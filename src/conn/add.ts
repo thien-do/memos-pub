@@ -1,14 +1,14 @@
 import { addVercelDomain } from "@/vercel/add";
 import { listVercelDomains } from "@/vercel/list";
-import { VercelProject } from "@/vercel/project";
+import { VercelDetail } from "@/vercel/detail";
 
-export type HomeAddReason = "apex-limit";
+export type ConnAddReason = "apex-limit";
 
 type Result =
-  | { ok: true; project: VercelProject }
-  | { ok: false; reason: HomeAddReason };
+  | { ok: true; detail: VercelDetail }
+  | { ok: false; reason: ConnAddReason };
 
-export async function addHomeDomain(domain: string): Promise<Result> {
+export async function addConn(domain: string): Promise<Result> {
   const exists = await listVercelDomains();
 
   const matched = exists.filter((exist) => {
@@ -18,6 +18,6 @@ export async function addHomeDomain(domain: string): Promise<Result> {
 
   if (matched.length >= 3) return { ok: false, reason: "apex-limit" };
 
-  const project = await addVercelDomain(domain);
-  return { ok: true, project };
+  const detail = await addVercelDomain(domain);
+  return { ok: true, detail };
 }
