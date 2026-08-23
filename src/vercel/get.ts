@@ -1,12 +1,12 @@
 import { VercelError } from "@vercel/sdk/models/vercelerror";
 import { getVercel } from "./instance";
 import { GetProjectDomainResponseBody as VercelBody } from "@vercel/sdk/models/getprojectdomainop";
-import { getVercelProject, VercelProject } from "./project";
+import { getVercelDetail, VercelDetail } from "./detail";
 
-type Result = { found: false } | { found: true; project: VercelProject };
+type Result = { found: false } | { found: true; detail: VercelDetail };
 
 /** null if not found */
-async function getDetail(domain: string): Promise<VercelBody | null> {
+async function getOrNull(domain: string): Promise<VercelBody | null> {
   const { project, vercel } = getVercel();
 
   try {
@@ -22,9 +22,12 @@ async function getDetail(domain: string): Promise<VercelBody | null> {
   }
 }
 
-/** Return the project domain if it is already attached. */
+/**
+ * Return the status of the domain as attached to our project.
+ * Not attached (not found) is a handled status here.
+ */
 export async function getVercelDomain(domain: string): Promise<Result> {
-  const body = await getDetail(domain);
+  const body = await getOrNull(domain);
   if (body === null) return { found: false };
-  return { found: true, project: getVercelProject(body) };
+  return { found: true, detail: getVercelDetail(body) };
 }

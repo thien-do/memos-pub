@@ -1,8 +1,7 @@
 import { getVercel } from "./instance";
-import { getVercelProject, VercelProject } from "./project";
+import { VercelDetail, getVercelDetail} from "./detail";
 
-/** Fails with 400 if the name is already on the project. */
-export async function addVercelDomain(domain: string): Promise<VercelProject> {
+export async function addVercelDomain(domain: string): Promise<VercelDetail> {
   const { project, vercel } = getVercel();
 
   const body = await vercel.projects.addProjectDomain({
@@ -10,5 +9,6 @@ export async function addVercelDomain(domain: string): Promise<VercelProject> {
     requestBody: { name: domain },
   });
 
-  return getVercelProject(body);
+  const detail = getVercelDetail(body);
+  return detail;
 }
