@@ -19,10 +19,11 @@ export async function BlogPage(props: {
       return <BlogFile text={view.text} />;
     case "dir":
       return (
-        <>
-          {view.readme !== null ? <BlogFile text={view.readme} /> : null}
-          <BlogDir linkBase={view.linkBase} entries={view.entries} />
-        </>
+        <BlogDir
+          linkBase={view.linkBase}
+          entries={view.entries}
+          readme={view.readme}
+        />
       );
     case "owner":
       return <BlogOwner repos={view.repos} />;
