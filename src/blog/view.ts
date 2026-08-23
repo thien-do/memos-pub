@@ -23,18 +23,13 @@ function fromTree(params: { tree: BlogTree; linkBase: string }): BlogView {
   switch (tree.kind) {
     case "file":
       return { kind: "file", text: tree.text };
-    case "dir": {
-      const entries =
-        tree.readme === null
-          ? tree.entries
-          : tree.entries.filter((entry) => entry.name !== "README.md");
+    case "dir":
       return {
         kind: "dir",
-        entries,
+        entries: tree.entries,
         linkBase,
         readme: tree.readme,
       };
-    }
   }
 }
 
