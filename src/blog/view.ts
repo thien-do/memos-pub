@@ -2,6 +2,7 @@ import type { GitContentEntry } from "@/git/content";
 import { getGitContent } from "@/git/content";
 import type { GitRepo } from "@/git/repos";
 import { getGitRepos } from "@/git/repos";
+import { dropAutoMd } from "./md";
 import type { BlogTree } from "./tree";
 import { getBlogTree } from "./tree";
 
@@ -17,6 +18,15 @@ export type BlogView =
   | BlogViewDir
   | { kind: "owner"; repos: GitRepo[] };
 
+function dropEntryMd(entry: GitContentEntry): GitContentEntry {
+  if (entry.type !== "file") return entry;
+  return {
+    ...entry,
+    name: dropAutoMd(entry.name),
+    path: dropAutoMd(entry.path),
+  };
+}
+
 function fromTree(params: { tree: BlogTree; linkBase: string }): BlogView {
   const { tree, linkBase } = params;
 
@@ -26,7 +36,7 @@ function fromTree(params: { tree: BlogTree; linkBase: string }): BlogView {
     case "dir":
       return {
         kind: "dir",
-        entries: tree.entries,
+        entries: tree.entries.map(dropEntryMd),
         linkBase,
         readme: tree.readme,
       };
