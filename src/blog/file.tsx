@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import { defaultUrlTransform, MarkdownAsync } from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { dropAutoMd } from "./md";
+import { dropAutoMd } from "@/mark/url";
 
 export async function BlogFile(props: { text: string }): Promise<ReactElement> {
   const { text } = props;
