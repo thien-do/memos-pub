@@ -10,16 +10,13 @@ type Result =
   | { type: "custom"; reason: DomainCustomReason }
   | { type: "add"; reason: HomeAddReason }
   | { type: "clean"; reason: HomeCleanReason }
-  | { type: "config"; reason: VercelConfigReason }
-  | { type: "verify"; reason: VercelVerifyReason };
+  | {
+      type: "setup";
+      config: VercelConfigReason | null;
+      verify: VercelVerifyReason | null;
+    };
 
 export type ConnectHomeDomainResult = Result;
-
-function pipeVerify(verify: VercelVerify): Result {
-  return verify.ok
-    ? { type: "success" }
-    : { type: "verify", reason: verify.reason };
-}
 
 export async function connectHomeDomain(
   input: string,
@@ -32,19 +29,24 @@ export async function connectHomeDomain(
   const custom = await getDomainCustom(domain);
   if (custom.ok === false) return { type: "custom", reason: custom.reason };
 
-  // We could add domain at this point, and display verified status,
-  // but it's easier to reason by doing things in serial
-  const config = await getVercelDomainConfig(domain);
-  if (config.ok === false) return { type: "config", reason: config.reason };
-
   const detail = await getVercelDomain(domain);
-
-  if (detail.found === false) {
+  let apex: string;
+  let verify: VercelVerify;
+  if (detail.found) {
+    apex = detail.apex;
+    verify = detail.verify;
+  } else {
     const result = await addHomeDomain(domain);
-    return result.ok
-      ? pipeVerify(result.verify)
-      : { type: "add", reason: result.reason };
+    if (result.ok === false) return { type: "add", reason: result.reason };
+    apex = result.apex;
+    verify = result.verify;
   }
 
-  return pipeVerify(detail.verify);
+  const config = await getVercelDomainConfig({ apex, domain });
+  if (config.ok && verify.ok) return { type: "success" };
+  return {
+    type: "setup",
+    config: config.ok ? null : config.reason,
+    verify: verify.ok ? null : verify.reason,
+  };
 }

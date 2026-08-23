@@ -4,7 +4,9 @@ import { GetProjectDomainResponseBody as VercelBody } from "@vercel/sdk/models/g
 import { getVercelVerify, VercelVerify } from "./verify";
 import { refreshVercelDomain } from "./refresh";
 
-type Result = { found: false } | { found: true; verify: VercelVerify };
+type Result =
+  | { found: false }
+  | { found: true; apex: string; verify: VercelVerify };
 
 /** null if not found */
 async function getDetail(domain: string): Promise<VercelBody | null> {
@@ -38,5 +40,5 @@ export async function getVercelDomain(domain: string): Promise<Result> {
   }
 
   const verify = getVercelVerify(body);
-  return { found: true, verify };
+  return { found: true, apex: body.apexName, verify };
 }

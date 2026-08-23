@@ -5,7 +5,7 @@ import { VercelVerify } from "@/vercel/verify";
 export type HomeAddReason = "apex-limit";
 
 type Result =
-  | { ok: true; verify: VercelVerify }
+  | { ok: true; apex: string; verify: VercelVerify }
   | { ok: false; reason: HomeAddReason };
 
 export async function addHomeDomain(domain: string): Promise<Result> {
@@ -18,6 +18,6 @@ export async function addHomeDomain(domain: string): Promise<Result> {
 
   if (matched.length >= 3) return { ok: false, reason: "apex-limit" };
 
-  const { verify } = await addVercelDomain(domain);
-  return { ok: true, verify };
+  const { apex, verify } = await addVercelDomain(domain);
+  return { ok: true, apex, verify };
 }
