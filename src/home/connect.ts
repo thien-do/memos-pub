@@ -1,9 +1,9 @@
 import { DomainCustomReason, getDomainCustom } from "@/domain/custom";
 import { cleanHomeDomain, HomeCleanReason } from "./clean";
-import { VercelVerify, VercelVerifyReason } from "@/vercel/verify";
-import { getVercelDomain } from "@/vercel/get";
+import { VercelVerifyReason } from "@/vercel/verify";
 import { getVercelDomainConfig, VercelConfigReason } from "@/vercel/config";
-import { addHomeDomain, HomeAddReason } from "./add";
+import { getHomeDomain } from "./get";
+import { HomeAddReason } from "./add";
 
 type Result =
   | { type: "success" }
@@ -29,18 +29,9 @@ export async function connectHomeDomain(
   const custom = await getDomainCustom(domain);
   if (custom.ok === false) return { type: "custom", reason: custom.reason };
 
-  const detail = await getVercelDomain(domain);
-  let apex: string;
-  let verify: VercelVerify;
-  if (detail.found) {
-    apex = detail.apex;
-    verify = detail.verify;
-  } else {
-    const result = await addHomeDomain(domain);
-    if (result.ok === false) return { type: "add", reason: result.reason };
-    apex = result.apex;
-    verify = result.verify;
-  }
+  const attached = await getHomeDomain(domain);
+  if (attached.ok === false) return { type: "add", reason: attached.reason };
+  const { apex, verify } = attached;
 
   const config = await getVercelDomainConfig({ apex, domain });
   if (config.ok && verify.ok) return { type: "success" };

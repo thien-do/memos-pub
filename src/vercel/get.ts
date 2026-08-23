@@ -1,12 +1,9 @@
 import { VercelError } from "@vercel/sdk/models/vercelerror";
 import { getVercel } from "./instance";
 import { GetProjectDomainResponseBody as VercelBody } from "@vercel/sdk/models/getprojectdomainop";
-import { getVercelVerify, VercelVerify } from "./verify";
-import { refreshVercelDomain } from "./refresh";
+import { getVercelProject, VercelProject } from "./project";
 
-type Result =
-  | { found: false }
-  | { found: true; apex: string; verify: VercelVerify };
+type Result = { found: false } | ({ found: true } & VercelProject);
 
 /** null if not found */
 async function getDetail(domain: string): Promise<VercelBody | null> {
@@ -25,20 +22,9 @@ async function getDetail(domain: string): Promise<VercelBody | null> {
   }
 }
 
-/** Return both found and verified status */
+/** Return the project domain if it is already attached. */
 export async function getVercelDomain(domain: string): Promise<Result> {
-  let body: VercelBody | null = await getDetail(domain);
+  const body = await getDetail(domain);
   if (body === null) return { found: false };
-
-  // This is a bit silly, but at this point "body.verified",
-  // if false, may be outdated.
-  // Vercel requires us to refresh the status manually:
-  if (body.verified === false) {
-    await refreshVercelDomain(domain);
-    body = await getDetail(domain);
-    if (body === null) throw Error("Body is null after not null");
-  }
-
-  const verify = getVercelVerify(body);
-  return { found: true, apex: body.apexName, verify };
+  return { found: true, ...getVercelProject(body) };
 }
