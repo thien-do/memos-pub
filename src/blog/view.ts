@@ -1,7 +1,8 @@
-import type { GitContent, GitContentEntry } from "@/git/content";
+import type { GitContentEntry } from "@/git/content";
 import { getGitContent } from "@/git/content";
 import type { GitRepo } from "@/git/repos";
 import { getGitRepos } from "@/git/repos";
+import type { BlogTree } from "./tree";
 import { getBlogTree } from "./tree";
 
 export type BlogView =
@@ -14,33 +15,25 @@ export type BlogView =
     }
   | { kind: "owner"; repos: GitRepo[] };
 
-async function fromContent(params: {
-  content: GitContent;
+function fromContent(params: {
+  content: BlogTree;
   linkBase: string;
-  owner: string;
-  repo: string;
-  segments: string[];
-}): Promise<BlogView> {
-  const { content, linkBase, owner, repo, segments } = params;
+}): BlogView {
+  const { content, linkBase } = params;
 
   switch (content.kind) {
     case "file":
       return { kind: "file", text: content.text };
     case "dir": {
-      const found = content.entries.find((entry) => entry.name === "README.md");
-      const file =
-        found?.type === "file"
-          ? await getGitContent({
-              owner,
-              repo,
-              segments: [...segments, "README.md"],
-            })
-          : null;
+      const entries =
+        content.readme === null
+          ? content.entries
+          : content.entries.filter((entry) => entry.name !== "README.md");
       return {
         kind: "dir",
-        entries: content.entries,
+        entries,
         linkBase,
-        readme: file?.kind === "file" ? file.text : null,
+        readme: content.readme,
       };
     }
   }
@@ -72,25 +65,13 @@ export async function getBlogView(params: {
 
   // If head is repo, repo wins, even if content is empty
   if (isRepo !== null) {
-    if (inRepo === null || head === undefined) return null;
-    return fromContent({
-      content: inRepo,
-      linkBase: `/${head}`,
-      owner,
-      repo: head,
-      segments: rest,
-    });
+    if (inRepo === null) return null;
+    return fromContent({ content: inRepo, linkBase: `/${head}` });
   }
 
   // If head is not repo, but profile repo found, profile wins
   if (inProfile !== null) {
-    return fromContent({
-      content: inProfile,
-      linkBase: "",
-      owner,
-      repo: owner,
-      segments: path,
-    });
+    return fromContent({ content: inProfile, linkBase: "" });
   }
 
   // Owner root without a profile repo: their repos, forks excluded
