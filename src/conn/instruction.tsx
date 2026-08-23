@@ -1,0 +1,65 @@
+import type { ReactElement } from "react";
+import type { ConnCheckResult } from "./check";
+
+export function ConnInstruction(props: {
+  result: ConnCheckResult;
+}): ReactElement {
+  const { result } = props;
+
+  switch (result.type) {
+    case "success":
+      return <p>This domain is connected.</p>;
+    case "clean":
+      switch (result.reason) {
+        case "parse":
+          return <p>Enter a domain like example.com.</p>;
+        case "unsafe":
+          return <p>That domain is not supported.</p>;
+      }
+    case "custom":
+      switch (result.reason) {
+        case "missing":
+          return (
+            <p>
+              Add a TXT record at <code>_memos</code>. Set it to your GitHub
+              path, for example <code>thien-do</code> or{" "}
+              <code>thien-do/blog/notes</code>. Then connect again.
+            </p>
+          );
+        case "unsafe":
+          return (
+            <p>
+              The TXT at <code>_memos</code> is not a valid GitHub path.
+            </p>
+          );
+      }
+    case "get":
+      return <p>This domain already has three names here.</p>;
+    case "setup": {
+      const { config, verify } = result;
+      return (
+        <>
+          {config !== null && (
+            <>
+              <p>Point this domain at us, then connect again.</p>
+              <p>
+                {config.kind === "cname" ? "CNAME" : "A"} {config.name}{" "}
+                {config.value}
+              </p>
+            </>
+          )}
+          {verify !== null && (
+            <>
+              <p>Prove you own this domain, then connect again.</p>
+              {verify.map((item) => (
+                <p key={item.value}>
+                  {item.type} {item.domain} {item.value}
+                </p>
+              ))}
+            </>
+          )}
+        </>
+      );
+    }
+  }
+}

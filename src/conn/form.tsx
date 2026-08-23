@@ -3,6 +3,7 @@
 import type { ReactElement } from "react";
 import { useActionState } from "react";
 import { checkConnAction } from "./check";
+import { ConnInstruction } from "./instruction";
 
 export function ConnForm(): ReactElement {
   const state = useActionState(checkConnAction, undefined);
@@ -17,7 +18,7 @@ export function ConnForm(): ReactElement {
       <button type="submit" disabled={pending}>
         Connect
       </button>
-      <pre>{JSON.stringify(result)}</pre>
+      {result && <ConnInstruction result={result} />}
     </form>
   );
 }
