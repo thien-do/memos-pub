@@ -42,7 +42,7 @@ export async function getVercelConfig(params: {
   }
 
   const value = config.recommendedCNAME.at(0)?.value ?? null;
-  if (value === null) throw Error("apex domain but ipv4 not found");
+  if (value === null) throw Error("sub domain but cname not found");
   const name = domain.replace(`.${apex}`, "");
   return { ok: false, reason: { kind: "cname", name, value } };
 }
