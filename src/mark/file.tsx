@@ -5,6 +5,7 @@ import { dropMarkAutoMD } from "./url";
 
 function transformUrl(url: string, key: string): string {
   const href = key === "href" ? dropMarkAutoMD(url) : url;
+  // Keep the default important transform
   return defaultUrlTransform(href);
 }
 
