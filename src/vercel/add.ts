@@ -1,11 +1,7 @@
 import { getVercel } from "./instance";
-import { getVercelVerify, VercelVerify } from "./verify";
+import { VercelDetail, getVercelDetail } from "./detail";
 
-interface Result {
-  verify: VercelVerify;
-}
-
-export async function addVercelDomain(domain: string): Promise<Result> {
+export async function addVercelDomain(domain: string): Promise<VercelDetail> {
   const { project, vercel } = getVercel();
 
   const body = await vercel.projects.addProjectDomain({
@@ -13,6 +9,6 @@ export async function addVercelDomain(domain: string): Promise<Result> {
     requestBody: { name: domain },
   });
 
-  const verify = getVercelVerify(body);
-  return { verify };
+  const detail = getVercelDetail(body);
+  return detail;
 }

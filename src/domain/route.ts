@@ -1,5 +1,5 @@
 import { getDomainCustom } from "./custom";
-import { getDomainPlatform, hasPlatform } from "./platform";
+import { getDomainPlatform, hasDomainPlatform } from "./platform";
 
 export type DomainRoute =
   // Rewrite into the internal blog namespace
@@ -19,7 +19,7 @@ export async function routeDomain(params: {
   // Each path returns a target that is safe to splice, or null.
   // A separate platform check saves cost in resolving custom domain.
   let target: string | null;
-  if (hasPlatform(domain)) {
+  if (hasDomainPlatform(domain)) {
     target = getDomainPlatform(domain);
   } else {
     const custom = await getDomainCustom(domain);
