@@ -10,6 +10,7 @@
     "fmt": "oxfmt"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "@vercel/sdk": "^1.28.21",
     "next": "16.3.1",
     "octokit": "^5.0.5",
