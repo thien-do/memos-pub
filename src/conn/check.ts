@@ -21,7 +21,7 @@ interface ResultSetup {
   verify: VercelDetailReason | null;
 }
 
-type Result =
+export type ConnCheckResult =
   | { type: "clean"; reason: ConnCleanReason }
   | { type: "custom"; reason: DomainCustomReason }
   | { type: "get"; reason: ConnGetReason }
@@ -29,9 +29,9 @@ type Result =
   | { type: "success" };
 
 export async function checkConnAction(
-  _prev: Result | undefined,
+  _prev: ConnCheckResult | undefined,
   formData: FormData,
-): Promise<Result> {
+): Promise<ConnCheckResult> {
   const raw = formData.get("domain");
   if (typeof raw !== "string") throw Error("invalid domain input");
 

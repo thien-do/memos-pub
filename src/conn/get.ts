@@ -4,7 +4,7 @@ import { refreshVercelDomain } from "@/vercel/refresh";
 import { addConn, ConnAddReason } from "./add";
 
 // Add is the only dependency of Get now
-export type ConnGetReason = ConnAddReason
+export type ConnGetReason = ConnAddReason;
 
 type Result =
   | { ok: true; detail: VercelDetail }
