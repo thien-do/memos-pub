@@ -1,11 +1,10 @@
 "use server";
 
 import { DomainCustomReason, getDomainCustom } from "@/domain/custom";
-import { ConnAddReason } from "./add";
 import { cleanConn, ConnCleanReason } from "./clean";
 import { getVercelConfig, VercelConfigReason } from "@/vercel/config";
 import { VercelDetailReason } from "@/vercel/detail";
-import { getConn } from "./get";
+import { getConn, ConnGetReason } from "./get";
 
 /**
  * This could be 2 separate results,
@@ -23,11 +22,11 @@ interface ResultSetup {
 }
 
 type Result =
-  | { type: "success" }
-  | { type: "custom"; reason: DomainCustomReason }
   | { type: "clean"; reason: ConnCleanReason }
-  | { type: "add"; reason: ConnAddReason }
-  | ResultSetup;
+  | { type: "custom"; reason: DomainCustomReason }
+  | { type: "get"; reason: ConnGetReason }
+  | ResultSetup
+  | { type: "success" };
 
 export async function checkConnAction(
   _prev: Result | undefined,
@@ -46,8 +45,7 @@ export async function checkConnAction(
   if (custom.ok === false) return { type: "custom", reason: custom.reason };
 
   const get = await getConn(domain);
-  // "add" is the only dependency of "get" for now
-  if (get.ok === false) return { type: "add", reason: get.reason };
+  if (get.ok === false) return { type: "get", reason: get.reason };
   const { apex, verify } = get.detail;
 
   const config = await getVercelConfig({ apex, domain });

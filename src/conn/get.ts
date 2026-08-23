@@ -3,10 +3,12 @@ import { getVercelDomain } from "@/vercel/get";
 import { refreshVercelDomain } from "@/vercel/refresh";
 import { addConn, ConnAddReason } from "./add";
 
+// Add is the only dependency of Get now
+export type ConnGetReason = ConnAddReason
+
 type Result =
   | { ok: true; detail: VercelDetail }
-  // get only rely on add for now
-  | { ok: false; reason: ConnAddReason };
+  | { ok: false; reason: ConnGetReason };
 
 /**
  * Get intentionally adds if not found
@@ -15,7 +17,8 @@ export async function getConn(domain: string): Promise<Result> {
   const get = await getVercelDomain(domain);
 
   // This is surprisingly simpler than found lol,
-  // as the verification after adding is latest.
+  // as the verification after adding is latest,
+  // and get reason is the same as add reason for now.
   if (get.found === false) return addConn(domain);
 
   // Can only return if verified, as verification could be outdated otherwise.
