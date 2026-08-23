@@ -3,7 +3,7 @@ import { getVercel } from "./instance";
 import { GetProjectDomainResponseBody as VercelBody } from "@vercel/sdk/models/getprojectdomainop";
 import { getVercelProject, VercelProject } from "./project";
 
-type Result = { found: false } | ({ found: true } & VercelProject);
+type Result = { found: false } | { found: true; project: VercelProject };
 
 /** null if not found */
 async function getDetail(domain: string): Promise<VercelBody | null> {
@@ -26,5 +26,5 @@ async function getDetail(domain: string): Promise<VercelBody | null> {
 export async function getVercelDomain(domain: string): Promise<Result> {
   const body = await getDetail(domain);
   if (body === null) return { found: false };
-  return { found: true, ...getVercelProject(body) };
+  return { found: true, project: getVercelProject(body) };
 }

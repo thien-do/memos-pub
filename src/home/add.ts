@@ -5,7 +5,7 @@ import { VercelProject } from "@/vercel/project";
 export type HomeAddReason = "apex-limit";
 
 type Result =
-  | ({ ok: true } & VercelProject)
+  | { ok: true; project: VercelProject }
   | { ok: false; reason: HomeAddReason };
 
 export async function addHomeDomain(domain: string): Promise<Result> {
@@ -18,6 +18,6 @@ export async function addHomeDomain(domain: string): Promise<Result> {
 
   if (matched.length >= 3) return { ok: false, reason: "apex-limit" };
 
-  const { apex, verify } = await addVercelDomain(domain);
-  return { ok: true, apex, verify };
+  const project = await addVercelDomain(domain);
+  return { ok: true, project };
 }

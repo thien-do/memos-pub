@@ -31,7 +31,7 @@ export async function connectHomeDomain(
 
   const attached = await getHomeDomain(domain);
   if (attached.ok === false) return { type: "add", reason: attached.reason };
-  const { apex, verify } = attached;
+  const { apex, verify } = attached.project;
 
   const config = await getVercelDomainConfig({ apex, domain });
   if (config.ok && verify.ok) return { type: "success" };
