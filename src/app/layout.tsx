@@ -1,7 +1,6 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import type { ReactElement, ReactNode } from "react";
-import "./stylex.css";
 
 export const metadata: Metadata = {
   title: "memos.pub",
