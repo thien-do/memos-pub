@@ -9,6 +9,12 @@ export type DomainRoute =
   // Our own pages: landing and such
   | { kind: "next" };
 
+/** Local apex and Vercel preview may open /blog without an owner host. */
+function allowsBlogPath(domain: string): boolean {
+  if (domain === "localhost" || domain === "127.0.0.1") return true;
+  return process.env.VERCEL_ENV === "preview";
+}
+
 /** Where a request should go, decided on plain strings */
 export async function routeDomain(params: {
   domain: string;
@@ -30,8 +36,10 @@ export async function routeDomain(params: {
     return { kind: "rewrite", path: `/blog/${target}${pathname}` };
   }
 
-  // "Blog" should be accessed via the rewrite above only.
+  // Public hosts use the owner subdomain. Preview and local apex may
+  // open /blog directly so a deployment URL can show a post.
   if (pathname === "/blog" || pathname.startsWith("/blog/")) {
+    if (allowsBlogPath(domain)) return { kind: "next" };
     return { kind: "stop" };
   }
 
