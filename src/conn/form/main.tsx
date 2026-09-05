@@ -2,7 +2,7 @@
 
 import type { ReactElement } from "react";
 import { useActionState } from "react";
-import { checkConnAction } from "./check";
+import { checkConnAction } from "../check";
 import { ConnInstruction } from "./instruction";
 
 export function ConnForm(): ReactElement {
