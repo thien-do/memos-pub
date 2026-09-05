@@ -35,7 +35,7 @@ export async function getBlogMeta(params: {
   path: string[];
 }): Promise<Metadata> {
   const { owner, path } = params;
-  const icon = `https://github.com/${encodeURIComponent(owner)}.png`;
+  const icon = `https://avatars.githubusercontent.com/${encodeURIComponent(owner)}`;
   const view = await getBlogView({ owner, path });
 
   if (view === null) return { icons: { icon }, title: owner };

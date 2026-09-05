@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { GitContentEntry } from "@/git/content";
 import { getGitContent } from "@/git/content";
 import type { GitRepo } from "@/git/repos";
@@ -33,7 +34,7 @@ function fromTree(params: { tree: BlogTree; linkBase: string }): BlogView {
   }
 }
 
-export async function getBlogView(params: {
+async function loadBlogView(params: {
   owner: string;
   path: string[];
 }): Promise<BlogView | null> {
@@ -74,4 +75,16 @@ export async function getBlogView(params: {
   }
 
   return null;
+}
+
+const loadBlogViewCached = cache((owner: string, pathKey: string) => {
+  const path = pathKey === "" ? [] : pathKey.split("/");
+  return loadBlogView({ owner, path });
+});
+
+export function getBlogView(params: {
+  owner: string;
+  path: string[];
+}): Promise<BlogView | null> {
+  return loadBlogViewCached(params.owner, params.path.join("/"));
 }
