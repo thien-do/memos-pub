@@ -1,48 +1,41 @@
-import { getDomainCustom } from "./custom";
-import { getDomainPlatform, hasDomainPlatform } from "./platform";
+import { DomainCustomReason, getDomainCustom } from "./custom";
+import { DomainPlatformReason, getDomainPlatform } from "./platform";
 
-export type DomainRoute =
-  // Rewrite into the internal blog namespace
-  | { kind: "rewrite"; path: string }
-  // Internal namespace
-  | { kind: "stop" }
-  // Our own pages: landing and such
-  | { kind: "next" };
+export type DomainRouteReason =
+  | { type: "custom"; reason: DomainCustomReason }
+  | { type: "platform"; reason: DomainPlatformReason };
 
-/** Local apex and Vercel preview may open /blog without an owner host. */
-function allowsBlogPath(domain: string): boolean {
-  if (domain === "localhost" || domain === "127.0.0.1") return true;
-  return process.env.VERCEL_ENV === "preview";
+type Result =
+  { ok: true; path: string } | { ok: false; reason: DomainRouteReason };
+
+function succeed(path: string): Result {
+  return { ok: true, path };
 }
 
-/** Where a request should go, decided on plain strings */
-export async function routeDomain(params: {
-  domain: string;
-  pathname: string;
-}): Promise<DomainRoute> {
-  const { domain, pathname } = params;
+function failPlatform(reason: DomainPlatformReason): Result {
+  return { ok: false, reason: { type: "platform", reason } };
+}
 
-  // Each path returns a target that is safe to splice, or null.
-  // A separate platform check saves cost in resolving custom domain.
-  let target: string | null;
-  if (hasDomainPlatform(domain)) {
-    target = getDomainPlatform(domain);
-  } else {
-    const custom = await getDomainCustom(domain);
-    target = custom.ok ? custom.target : null;
-  }
+function failCustom(reason: DomainCustomReason): Result {
+  return { ok: false, reason: { type: "custom", reason } };
+}
 
-  if (target !== null) {
-    return { kind: "rewrite", path: `/blog/${target}${pathname}` };
-  }
+/**
+ * Get a route path suffix from a domain, e.g.,
+ * - thien.do → thien-do/blog/2026 (custom)
+ * - thien-do.memos.pub → thien-do (platform)
+ * - example.com → custom not found
+ * - www.memos.pub → platform unsafe
+ */
+export async function getDomainRoute(domain: string): Promise<Result> {
+  // Check for platform first to avoid DNS cost of custom check
+  const platform = getDomainPlatform(domain);
+  if (platform.ok) return succeed(platform.target);
 
-  // Public hosts use the owner subdomain. Preview and local apex may
-  // open /blog directly so a deployment URL can show a post.
-  if (pathname === "/blog" || pathname.startsWith("/blog/")) {
-    if (allowsBlogPath(domain)) return { kind: "next" };
-    return { kind: "stop" };
-  }
+  // "invalid" failure means custom may work
+  if (platform.reason !== "invalid") return failPlatform(platform.reason);
 
-  // All other routes are handled as ours.
-  return { kind: "next" };
+  const custom = await getDomainCustom(domain);
+  if (custom.ok) return succeed(custom.target);
+  return failCustom(custom.reason);
 }

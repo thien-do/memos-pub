@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { routeDomain } from "@/domain/route";
+import { getDomainRoute } from "@/domain/route";
+import { GetDeploymentGitSourceDeploymentsResponse200ApplicationJSONRepoId$inboundSchema } from "@vercel/sdk/models/getdeploymenthasdeploymentsresponse200applicationjsonresponsebodyvalue.js";
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
   // This is more reliable than nextUrl.hostname,
@@ -9,19 +10,26 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   // Drop port and case. Host is case-insensitive.
   const domain = host.split(":").at(0)?.toLowerCase() ?? "";
   const { pathname } = request.nextUrl;
-  const route = await routeDomain({ domain, pathname });
 
-  switch (route.kind) {
-    case "rewrite": {
-      const path = `${route.path}${request.nextUrl.search}`;
-      const url = new URL(path, request.url);
-      return NextResponse.rewrite(url);
-    }
-    case "next":
-      return NextResponse.next();
-    case "stop":
-      return new NextResponse("Not Found", { status: 404 });
+  // Avoid duplicate content over internal blog path
+  const isBlog = pathname === "/blog" || pathname.startsWith("/blog/");
+  const isPreview = process.env.VERCEL_ENV === "preview";
+  const notFound = new NextResponse("Not Found", { status: 404 });
+  if (isBlog && isPreview === false) return notFound;
+
+  // Route to blog path from domain
+  const route = await getDomainRoute(domain);
+  if (route.ok) {
+    const path = [`/blog/`, route.path, pathname].join("");
+    const url = new URL(path, request.url);
+    url.search = request.nextUrl.search;
+    return NextResponse.rewrite(url);
   }
+
+  if (route.reason.type === "custom" || route.reason.reason === "unsafe")
+    return new NextResponse(route.reason.reason, { status: 400 });
+
+  return NextResponse.next();
 }
 
 export const config = {
