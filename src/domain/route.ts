@@ -1,12 +1,17 @@
 import { DomainCustomReason, getDomainCustom } from "./custom";
-import { DomainPlatformReason, getDomainPlatform } from "./platform";
+import {
+  DomainPlatformReason,
+  getDomainPlatform,
+  hasDomainPlatform,
+} from "./platform";
 
 export type DomainRouteReason =
   | { type: "custom"; reason: DomainCustomReason }
   | { type: "platform"; reason: DomainPlatformReason };
 
 type Result =
-  { ok: true; path: string } | { ok: false; reason: DomainRouteReason };
+  | { ok: true; path: string }
+  | { ok: false; reason: DomainRouteReason };
 
 function succeed(path: string): Result {
   return { ok: true, path };
@@ -28,12 +33,12 @@ function failCustom(reason: DomainCustomReason): Result {
  * - www.memos.pub → platform unsafe
  */
 export async function getDomainRoute(domain: string): Promise<Result> {
-  // Check for platform first to avoid DNS cost of custom check
-  const platform = getDomainPlatform(domain);
-  if (platform.ok) return succeed(platform.target);
-
-  // "invalid" failure means custom may work
-  if (platform.reason !== "invalid") return failPlatform(platform.reason);
+  if (hasDomainPlatform(domain)) {
+    const platform = getDomainPlatform(domain);
+    return platform.ok
+      ? succeed(platform.target)
+      : failPlatform(platform.reason);
+  }
 
   const custom = await getDomainCustom(domain);
   if (custom.ok) return succeed(custom.target);

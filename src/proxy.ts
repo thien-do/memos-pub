@@ -9,12 +9,8 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   // Drop port and case. Host is case-insensitive.
   const domain = host.split(":").at(0)?.toLowerCase() ?? "";
   const { pathname } = request.nextUrl;
-
-  // Avoid duplicate content over internal blog path
-  const isBlog = pathname === "/blog" || pathname.startsWith("/blog/");
-  const isPreview = process.env.VERCEL_ENV === "preview";
-  const notFound = new NextResponse("Not Found", { status: 404 });
-  if (isBlog && isPreview === false) return notFound;
+  const isLocal = domain === "localhost" || domain === "127.0.0.1";
+  if (isLocal) return NextResponse.next();
 
   // Route to blog path from domain
   const route = await getDomainRoute(domain);
@@ -23,6 +19,18 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     url.pathname = `/blog/${route.path}${url.pathname}`;
     return NextResponse.rewrite(url);
   }
+
+  const isBlog = pathname === "/blog" || pathname.startsWith("/blog/");
+  const isPreview = process.env.VERCEL_ENV === "preview";
+  if (isBlog && isPreview === false)
+    return new NextResponse("Not Found", { status: 404 });
+
+  if (
+    isPreview &&
+    route.reason.type === "custom" &&
+    route.reason.reason === "missing"
+  )
+    return NextResponse.next();
 
   if (route.reason.type === "custom" || route.reason.reason === "unsafe")
     return new NextResponse(route.reason.reason, { status: 400 });
