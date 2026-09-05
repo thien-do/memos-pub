@@ -1,39 +1,34 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { getDomainRoute } from "@/domain/route";
+import { getHostBlog } from "./host/blog";
+
+const IS_PREVIEW = process.env.VERCEL_ENV !== "preview";
+
+function getHostname(request: NextRequest): string {
+  // nextUrl is not reliable, as Vercel may override it
+  const host = request.headers.get("host") ?? "";
+  const hostname = host.split(":").at(0)?.toLowerCase() ?? "";
+  return hostname;
+}
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
-  // This is more reliable than nextUrl.hostname,
-  // which could be overriden by Vercel, both local and remote.
-  const host = request.headers.get("host") ?? "";
-  // Drop port and case. Host is case-insensitive.
-  const domain = host.split(":").at(0)?.toLowerCase() ?? "";
-  const { pathname } = request.nextUrl;
-  const isLocal = domain === "localhost" || domain === "127.0.0.1";
-  if (isLocal) return NextResponse.next();
+  // No blog routing in preview.
+  // Check this first to avoid paying host lookup cost.
+  if (IS_PREVIEW) return NextResponse.next();
 
-  // Route to blog path from domain
-  const route = await getDomainRoute(domain);
-  if (route.ok) {
+  const hostname = getHostname(request);
+
+  const blog = await getHostBlog(hostname);
+  if (typeof blog === "string") {
     const url = request.nextUrl.clone();
-    url.pathname = `/blog/${route.path}${url.pathname}`;
+    url.pathname = `/blog/${blog}${url.pathname}`;
     return NextResponse.rewrite(url);
   }
 
-  const isBlog = pathname === "/blog" || pathname.startsWith("/blog/");
-  const isPreview = process.env.VERCEL_ENV === "preview";
-  if (isBlog && isPreview === false)
+  // Prevent direct access to avoid duplicated paths
+  const { pathname } = request.nextUrl;
+  if (pathname === "/blog" || pathname.startsWith("/blog/"))
     return new NextResponse("Not Found", { status: 404 });
-
-  if (
-    isPreview &&
-    route.reason.type === "custom" &&
-    route.reason.reason === "missing"
-  )
-    return NextResponse.next();
-
-  if (route.reason.type === "custom" || route.reason.reason === "unsafe")
-    return new NextResponse(route.reason.reason, { status: 400 });
 
   return NextResponse.next();
 }

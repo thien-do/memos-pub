@@ -1,10 +1,10 @@
 "use server";
 
-import { DomainCustomReason, getDomainCustom } from "@/domain/custom";
 import { cleanConn, ConnCleanReason } from "./clean";
 import { getVercelConfig, VercelConfigReason } from "@/vercel/config";
 import { VercelDetailReason } from "@/vercel/detail";
 import { getConn, ConnGetReason } from "./get";
+import { getHostCustomPath } from "@/host/custom";
 
 /**
  * This could be 2 separate results,
@@ -23,7 +23,7 @@ interface ResultSetup {
 
 export type ConnCheckResult =
   | { type: "clean"; reason: ConnCleanReason }
-  | { type: "custom"; reason: DomainCustomReason }
+  | { type: "custom" }
   | { type: "get"; reason: ConnGetReason }
   | ResultSetup
   | { type: "success" };
@@ -41,8 +41,8 @@ export async function checkConnAction(
 
   // Always check for custom first to avoid adding any domain and waste our
   // project domain limit for real users.
-  const custom = await getDomainCustom(domain);
-  if (custom.ok === false) return { type: "custom", reason: custom.reason };
+  const custom = await getHostCustomPath(domain);
+  if (custom === null) return { type: "custom" };
 
   const get = await getConn(domain);
   if (get.ok === false) return { type: "get", reason: get.reason };
