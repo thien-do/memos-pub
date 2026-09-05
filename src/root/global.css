@@ -1,0 +1,62 @@
+@import "@radix-ui/colors/slate.css";
+@import "@radix-ui/colors/blue.css";
+@import "@radix-ui/colors/slate-dark.css" (prefers-color-scheme: dark);
+@import "@radix-ui/colors/blue-dark.css" (prefers-color-scheme: dark);
+
+:root {
+    color-scheme: light dark;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0 auto;
+    max-width: 60ch;
+    padding: 36px 24px 48px;
+    background-color: var(--slate-1);
+    color: var(--slate-11);
+    font-size: 14px;
+    line-height: 150%;
+}
+
+a {
+    color: var(--slate-12);
+    text-decoration: underline;
+    text-decoration-color: var(--slate-6);
+    text-underline-offset: 2px;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--slate-12);
+    margin: 2em 0 1em;
+}
+
+h1 {
+    margin: 0 0 1em;
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--slate-12);
+}
+
+strong,
+b {
+    font-weight: 500;
+    color: var(--slate-12);
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}

@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@radix-ui/colors':
+        specifier: 3.0.0
+        version: 3.0.0
       '@vercel/analytics':
         specifier: ^2.0.1
         version: 2.0.1(next@16.3.1(@types/node@20.19.43)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
@@ -639,6 +642,9 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [win32]
+
+  '@radix-ui/colors@3.0.0':
+    resolution: {integrity: sha512-FUOsGBkHrYJwCSEtWRCIfQbZG7q1e6DgxCIOe1SUQzDe/7rXXeA47s8yCn6fuTNQAj1Zq4oTFi9Yjp3wzElcxg==}
 
   '@swc/helpers@0.5.23':
     resolution: {integrity: sha512-5lSsMOTXURePglDfvuAQUqkGek9Hg2kksOYay2m0+XR++b2NWYL/4sWyuvVBIs8oKnJaxkdi9whaL/sqN13afw==}
@@ -1578,6 +1584,8 @@ snapshots:
 
   '@oxlint/binding-win32-x64-msvc@1.78.0':
     optional: true
+
+  '@radix-ui/colors@3.0.0': {}
 
   '@swc/helpers@0.5.23':
     dependencies:
