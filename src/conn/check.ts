@@ -7,23 +7,20 @@ import { getConn, ConnGetReason } from "./get";
 import { getHostCustomPath } from "@/host/custom";
 
 /**
- * This could be 2 separate results,
- * but that requires users to complete them separately.
- * UX-wise it's better to let them know all at once,
- * as they are all DNS settings usually in one place.
+ * Custom, routing, and ownership are all DNS.
+ * Show them together so the customer can set them in one pass.
  *
- * Btw both "null" would be runtime error,
- * even though we haven't put that into type.
+ * All-done would be success, not this result.
  */
 interface ResultSetup {
   type: "setup";
+  custom: boolean;
   config: VercelConfigReason | null;
   verify: VercelDetailReason | null;
 }
 
 export type ConnCheckResult =
   | { type: "clean"; reason: ConnCleanReason }
-  | { type: "custom" }
   | { type: "get"; reason: ConnGetReason }
   | ResultSetup
   | { type: "success"; path: string };
@@ -39,20 +36,18 @@ export async function checkConnAction(
   if (clean.ok === false) return { type: "clean", reason: clean.reason };
   const { domain } = clean;
 
-  // Always check for custom first to avoid adding any domain and waste our
-  // project domain limit for real users.
-  const custom = await getHostCustomPath(domain);
-  if (custom === null) return { type: "custom" };
-
   const get = await getConn(domain);
   if (get.ok === false) return { type: "get", reason: get.reason };
   const { apex, verify } = get.detail;
 
   const config = await getVercelConfig({ apex, domain });
-  if (config.ok && verify.ok) return { type: "success", path: custom };
+  const custom = await getHostCustomPath(domain);
+  if (custom !== null && config.ok && verify.ok)
+    return { type: "success", path: custom };
 
   return {
     type: "setup",
+    custom: custom === null,
     config: config.ok ? null : config.reason,
     verify: verify.ok ? null : verify.reason,
   };

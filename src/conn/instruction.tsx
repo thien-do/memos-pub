@@ -18,15 +18,6 @@ export function ConnInstruction(props: {
           return <p>That domain is not supported.</p>;
       }
     }
-    case "custom": {
-      return (
-        <p>
-          Add a TXT record at <code>_memos</code>. Set it to your GitHub path,
-          for example <code>thien-do</code> or <code>thien-do/blog/notes</code>.
-          Then connect again.
-        </p>
-      );
-    }
     case "get": {
       switch (result.reason) {
         case "apex-limit":
@@ -34,12 +25,19 @@ export function ConnInstruction(props: {
       }
     }
     case "setup": {
-      const { config, verify } = result;
+      const { custom, config, verify } = result;
       return (
         <>
+          {custom && (
+            <p>
+              Add a TXT record at <code>_memos</code>. Set it to your GitHub
+              path, for example <code>thien-do</code> or{" "}
+              <code>thien-do/blog/notes</code>.
+            </p>
+          )}
           {config !== null && (
             <>
-              <p>Point this domain at us, then connect again.</p>
+              <p>Point this domain at us.</p>
               <p>
                 {config.kind === "cname" ? "CNAME" : "A"} {config.name}{" "}
                 {config.value}
@@ -48,7 +46,7 @@ export function ConnInstruction(props: {
           )}
           {verify !== null && (
             <>
-              <p>Prove you own this domain, then connect again.</p>
+              <p>Prove you own this domain.</p>
               {verify.map((item) => (
                 <p key={item.value}>
                   {item.type} {item.domain} {item.value}
@@ -56,6 +54,7 @@ export function ConnInstruction(props: {
               ))}
             </>
           )}
+          <p>Then connect again.</p>
         </>
       );
     }
