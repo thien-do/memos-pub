@@ -1,0 +1,66 @@
+@import "@radix-ui/colors/slate.css";
+@import "@radix-ui/colors/blue.css";
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0 auto;
+    max-width: 70ch;
+    background-color: var(--slate-1);
+    color: var(--slate-11);
+    font-size: 14px;
+    line-height: 150%;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 2em 0 1em;
+}
+
+strong,
+b {
+    font-weight: 500;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+i,
+strong,
+em,
+a {
+    color: var(--slate-12);
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}

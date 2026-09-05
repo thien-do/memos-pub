@@ -10,6 +10,7 @@
     "fmt": "oxfmt"
   },
   "dependencies": {
+    "@radix-ui/colors": "3.0.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/sdk": "^1.28.21",
     "next": "16.3.1",
