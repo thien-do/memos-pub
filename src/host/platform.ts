@@ -1,7 +1,9 @@
 const ROOTS = ["memos.pub", "localhost"];
 
 export function getIsHostPlatform(hostname: string): boolean {
-  return ROOTS.some((root) => hostname.endsWith(root));
+  return ROOTS.some((root) => {
+    return hostname === root || hostname.endsWith(`.${root}`);
+  });
 }
 
 /**

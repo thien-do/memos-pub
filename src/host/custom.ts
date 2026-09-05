@@ -16,6 +16,12 @@ async function resolveTxtSafe(hostname: string): Promise<string[][] | null> {
   }
 }
 
+function isSafe(path: string): boolean {
+  return path.split("/").every((segment) => {
+    return segment !== "..";
+  });
+}
+
 /**
  * Get a potential blog path from a custom hostname.
  * This could include owner, repo, and folders.
@@ -25,5 +31,10 @@ export async function getHostCustomPath(
   hostname: string,
 ): Promise<string | null> {
   const records = await resolveTxtSafe(hostname);
-  return records?.at(0)?.join("") ?? null;
+
+  const path = records?.at(0)?.join("") ?? null;
+  if (path === null) return null;
+  if (isSafe(path) === false) return null;
+
+  return path;
 }

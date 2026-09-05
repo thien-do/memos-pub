@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { getHostBlog } from "./host/blog";
 
-const IS_PREVIEW = process.env.VERCEL_ENV !== "preview";
+const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
 
 function getHostname(request: NextRequest): string {
   // nextUrl is not reliable, as Vercel may override it

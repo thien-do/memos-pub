@@ -26,7 +26,7 @@ export type ConnCheckResult =
   | { type: "custom" }
   | { type: "get"; reason: ConnGetReason }
   | ResultSetup
-  | { type: "success" };
+  | { type: "success"; path: string };
 
 export async function checkConnAction(
   _prev: ConnCheckResult | undefined,
@@ -49,7 +49,7 @@ export async function checkConnAction(
   const { apex, verify } = get.detail;
 
   const config = await getVercelConfig({ apex, domain });
-  if (config.ok && verify.ok) return { type: "success" };
+  if (config.ok && verify.ok) return { type: "success", path: custom };
 
   return {
     type: "setup",
