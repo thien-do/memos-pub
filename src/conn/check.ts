@@ -7,14 +7,19 @@ import { getConn, ConnGetReason } from "./get";
 import { getHostCustomPath } from "@/host/custom";
 
 /**
- * Custom, routing, and ownership are all DNS.
- * Show them together so the customer can set them in one pass.
- *
- * All-done would be success, not this result.
+ * Host doesn't expose its reason (for good reason)
+ * so we have only one generic reason here.
+ */
+type PathReason = "invalid";
+
+/**
+ * These are separated steps from technical perspective,
+ * but it's super useful to show them at once,
+ * as they are all settings in one place for the users.
  */
 interface ResultSetup {
   type: "setup";
-  custom: boolean;
+  path: PathReason | null;
   config: VercelConfigReason | null;
   verify: VercelDetailReason | null;
 }
@@ -36,18 +41,21 @@ export async function checkConnAction(
   if (clean.ok === false) return { type: "clean", reason: clean.reason };
   const { domain } = clean;
 
+  // Calling get here will add a real entry to our Vercel project,
+  // even before the user has created their _memos entry.
+  // This is not ideal but it allows us to show all DNS entries at once.
   const get = await getConn(domain);
   if (get.ok === false) return { type: "get", reason: get.reason };
-  const { apex, verify } = get.detail;
 
+  const { apex, verify } = get.detail;
   const config = await getVercelConfig({ apex, domain });
-  const custom = await getHostCustomPath(domain);
-  if (custom !== null && config.ok && verify.ok)
-    return { type: "success", path: custom };
+  const path = await getHostCustomPath(domain);
+
+  if (path !== null && config.ok && verify.ok) return { type: "success", path };
 
   return {
     type: "setup",
-    custom: custom === null,
+    path: path ? null : "invalid",
     config: config.ok ? null : config.reason,
     verify: verify.ok ? null : verify.reason,
   };

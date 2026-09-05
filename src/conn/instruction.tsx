@@ -25,10 +25,10 @@ export function ConnInstruction(props: {
       }
     }
     case "setup": {
-      const { custom, config, verify } = result;
+      const { path, config, verify } = result;
       return (
         <>
-          {custom && (
+          {path && (
             <p>
               Add a TXT record at <code>_memos</code>. Set it to your GitHub
               path, for example <code>thien-do</code> or{" "}
