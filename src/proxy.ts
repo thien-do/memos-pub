@@ -1,27 +1,37 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { routeDomain } from "@/domain/route";
+import { getHostBlog } from "./host/blog";
+
+const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
+
+function getHostname(request: NextRequest): string {
+  // nextUrl is not reliable, as Vercel may override it
+  const host = request.headers.get("host") ?? "";
+  const hostname = host.split(":").at(0)?.toLowerCase() ?? "";
+  return hostname;
+}
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
-  // This is more reliable than nextUrl.hostname,
-  // which could be overriden by Vercel, both local and remote.
-  const host = request.headers.get("host") ?? "";
-  // Drop port and case. Host is case-insensitive.
-  const domain = host.split(":").at(0)?.toLowerCase() ?? "";
-  const { pathname } = request.nextUrl;
-  const route = await routeDomain({ domain, pathname });
+  // No blog routing in preview.
+  // Check this first to avoid paying host lookup cost.
+  if (IS_PREVIEW) return NextResponse.next();
 
-  switch (route.kind) {
-    case "rewrite": {
-      const path = `${route.path}${request.nextUrl.search}`;
-      const url = new URL(path, request.url);
-      return NextResponse.rewrite(url);
-    }
-    case "next":
-      return NextResponse.next();
-    case "stop":
-      return new NextResponse("Not Found", { status: 404 });
+  const hostname = getHostname(request);
+
+  const blog = await getHostBlog(hostname);
+  if (typeof blog === "string") {
+    const url = request.nextUrl.clone();
+    const target = blog.split("/").map(encodeURIComponent).join("/");
+    url.pathname = `/blog/${target}${url.pathname}`;
+    return NextResponse.rewrite(url);
   }
+
+  // Prevent direct access to avoid duplicated paths
+  const { pathname } = request.nextUrl;
+  if (pathname === "/blog" || pathname.startsWith("/blog/"))
+    return new NextResponse("Not Found", { status: 404 });
+
+  return NextResponse.next();
 }
 
 export const config = {

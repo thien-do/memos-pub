@@ -1,4 +1,4 @@
-import { hasDomainPlatform } from "@/domain/platform";
+import { getIsHostPlatform } from "@/host/platform";
 
 export type ConnCleanReason = "parse" | "unsafe";
 
@@ -13,7 +13,7 @@ export function cleanConn(raw: string): Result {
   const domain = URL.parse(input)?.hostname ?? null;
 
   if (domain === null) return { ok: false, reason: "parse" };
-  if (hasDomainPlatform(domain)) return { ok: false, reason: "unsafe" };
+  if (getIsHostPlatform(domain)) return { ok: false, reason: "unsafe" };
 
   return { ok: true, domain };
 }

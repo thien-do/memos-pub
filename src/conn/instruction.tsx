@@ -7,34 +7,32 @@ export function ConnInstruction(props: {
   const { result } = props;
 
   switch (result.type) {
-    case "success":
-      return <p>This domain is connected.</p>;
-    case "clean":
+    case "success": {
+      return <p>This domain is connected to {result.path}.</p>;
+    }
+    case "clean": {
       switch (result.reason) {
         case "parse":
           return <p>Enter a domain like example.com.</p>;
         case "unsafe":
           return <p>That domain is not supported.</p>;
       }
-    case "custom":
+    }
+    case "custom": {
+      return (
+        <p>
+          Add a TXT record at <code>_memos</code>. Set it to your GitHub path,
+          for example <code>thien-do</code> or <code>thien-do/blog/notes</code>.
+          Then connect again.
+        </p>
+      );
+    }
+    case "get": {
       switch (result.reason) {
-        case "missing":
-          return (
-            <p>
-              Add a TXT record at <code>_memos</code>. Set it to your GitHub
-              path, for example <code>thien-do</code> or{" "}
-              <code>thien-do/blog/notes</code>. Then connect again.
-            </p>
-          );
-        case "unsafe":
-          return (
-            <p>
-              The TXT at <code>_memos</code> is not a valid GitHub path.
-            </p>
-          );
+        case "apex-limit":
+          return <p>This domain already has three names here.</p>;
       }
-    case "get":
-      return <p>This domain already has three names here.</p>;
+    }
     case "setup": {
       const { config, verify } = result;
       return (
