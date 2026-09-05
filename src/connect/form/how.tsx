@@ -1,12 +1,10 @@
 import type { ReactElement } from "react";
-import type { ConnCheckResult } from "../check";
-import { ConnConfig } from "./config";
-import { ConnField } from "./field";
-import { ConnPath } from "./path";
-import { ConnVerify } from "./verify";
+import type { ConnectCheckResult } from "../check/result";
+import { InputField } from "@/kit/input-field";
+import { ConnectFormRecords } from "./records";
 
-export function ConnInstruction(props: {
-  result: ConnCheckResult;
+export function ConnectFormHow(props: {
+  result: ConnectCheckResult;
 }): ReactElement {
   const { result } = props;
 
@@ -15,7 +13,7 @@ export function ConnInstruction(props: {
       return (
         <>
           <p>This domain is connected.</p>
-          <ConnField label="GitHub path" value={result.path} />
+          <InputField label="GitHub path" value={result.path} readonly />
         </>
       );
     }
@@ -27,19 +25,16 @@ export function ConnInstruction(props: {
           return <p>That domain is not supported.</p>;
       }
     }
-    case "get": {
+    case "ensure": {
       switch (result.reason) {
         case "apex-limit":
           return <p>This domain already has three names here.</p>;
       }
     }
     case "setup": {
-      const { path, config, verify } = result;
       return (
         <>
-          {path && <ConnPath />}
-          {config !== null && <ConnConfig config={config} />}
-          {verify !== null && <ConnVerify verify={verify} />}
+          <ConnectFormRecords records={result.records} />
           <p>Then connect again.</p>
         </>
       );

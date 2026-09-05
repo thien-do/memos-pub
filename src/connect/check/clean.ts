@@ -1,12 +1,12 @@
 import { getIsHostPlatform } from "@/host/platform";
 
-export type ConnCleanReason = "parse" | "unsafe";
+export type ConnectCheckCleanReason = "parse" | "unsafe";
 
 type Result =
   | { ok: true; domain: string }
-  | { ok: false; reason: ConnCleanReason };
+  | { ok: false; reason: ConnectCheckCleanReason };
 
-export function cleanConn(raw: string): Result {
+export function connectCheckClean(raw: string): Result {
   let input = raw.trim().toLowerCase();
   // URL class requires scheme
   input = input.includes("://") ? input : `https://${input}`;

@@ -1,10 +1,10 @@
-import { ConnForm } from "@/conn/form/main";
+import { ConnectFormMain } from "@/connect/form/main";
 import type { ReactElement } from "react";
 
 export function HomeMain(): ReactElement {
   return (
     <main>
-      <ConnForm />
+      <ConnectFormMain />
     </main>
   );
 }
