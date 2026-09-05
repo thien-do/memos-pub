@@ -1,7 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { getDomainRoute } from "@/domain/route";
-import { GetDeploymentGitSourceDeploymentsResponse200ApplicationJSONRepoId$inboundSchema } from "@vercel/sdk/models/getdeploymenthasdeploymentsresponse200applicationjsonresponsebodyvalue.js";
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
   // This is more reliable than nextUrl.hostname,
@@ -20,9 +19,8 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   // Route to blog path from domain
   const route = await getDomainRoute(domain);
   if (route.ok) {
-    const path = [`/blog/`, route.path, pathname].join("");
-    const url = new URL(path, request.url);
-    url.search = request.nextUrl.search;
+    const url = request.nextUrl.clone();
+    url.pathname = `/blog/${route.path}${url.pathname}`;
     return NextResponse.rewrite(url);
   }
 
