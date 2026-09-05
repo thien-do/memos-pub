@@ -16,9 +16,9 @@ async function resolveTxtSafe(hostname: string): Promise<string[][] | null> {
   }
 }
 
-function isSafe(path: string): boolean {
-  return path.split("/").every((segment) => {
-    return segment !== "..";
+function isNotSafe(path: string): boolean {
+  return path.split("/").some((segment) => {
+    return ["", ".", ".."].some((check) => segment === check);
   });
 }
 
@@ -34,7 +34,7 @@ export async function getHostCustomPath(
 
   const path = records?.at(0)?.join("") ?? null;
   if (path === null) return null;
-  if (isSafe(path) === false) return null;
+  if (isNotSafe(path)) return null;
 
   return path;
 }

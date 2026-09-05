@@ -21,7 +21,8 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   const blog = await getHostBlog(hostname);
   if (typeof blog === "string") {
     const url = request.nextUrl.clone();
-    url.pathname = `/blog/${blog}${url.pathname}`;
+    const target = blog.split("/").map(encodeURIComponent).join("/");
+    url.pathname = `/blog/${target}${url.pathname}`;
     return NextResponse.rewrite(url);
   }
 
