@@ -48,6 +48,11 @@ h1 {
     color: var(--slate-12);
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+}
+
 strong,
 b {
     font-weight: 500;
