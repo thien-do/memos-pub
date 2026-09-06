@@ -21,7 +21,7 @@ export function InputField(props: {
         type="text"
         name={name}
         readOnly={readonly}
-        defaultValue={defaultValue}
+        {...(readonly ? { value: defaultValue ?? "" } : { defaultValue })}
       />
     </div>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactElement } from "react";
 import { useActionState } from "react";
 import { checkConnectAction } from "../check";
@@ -9,7 +11,7 @@ export function ConnectFormBox(): ReactElement {
   const [result, action, pending] = state;
 
   return (
-    <form action={action}>
+    <form action={action} onReset={(event) => event.preventDefault()}>
       <InputField name="hostname" label="Domain" />
       <p>
         For example <code>thien.do</code> or <code>memos.thien.do</code>.
