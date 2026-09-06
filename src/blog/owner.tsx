@@ -8,7 +8,7 @@ export function BlogOwner(props: { repos: GitRepo[] }): ReactElement {
     <ul>
       {repos.map((repo) => (
         <li key={repo.name}>
-          <a href={`/${repo.name}`}>{repo.name}</a>
+          <a href={`./${repo.name}/`}>{repo.name}</a>
         </li>
       ))}
     </ul>
