@@ -1,37 +1,15 @@
-import type { GitContentEntry } from "@/git/content";
 import { getGitContent } from "@/git/content";
 import type { GitRepo } from "@/git/repos";
 import { getGitRepos } from "@/git/repos";
 import type { BlogTree } from "./tree";
 import { getBlogTree } from "./tree";
 
-export type BlogViewDir = {
-  kind: "dir";
-  entries: GitContentEntry[];
-  linkBase: string;
-  readme: string | null;
-};
-
-export type BlogView =
-  | { kind: "file"; text: string }
-  | BlogViewDir
-  | { kind: "owner"; repos: GitRepo[] };
-
-function fromTree(params: { tree: BlogTree; linkBase: string }): BlogView {
-  const { tree, linkBase } = params;
-
-  switch (tree.kind) {
-    case "file":
-      return { kind: "file", text: tree.text };
-    case "dir":
-      return {
-        kind: "dir",
-        entries: tree.entries,
-        linkBase,
-        readme: tree.readme,
-      };
-  }
+interface Owner {
+  kind: "owner";
+  repos: GitRepo[];
 }
+
+export type BlogView = BlogTree | Owner;
 
 export async function getBlogView(params: {
   owner: string;
@@ -58,15 +36,10 @@ export async function getBlogView(params: {
   ]);
 
   // If head is repo, repo wins, even if content is empty
-  if (isRepo !== null) {
-    if (inRepo === null) return null;
-    return fromTree({ tree: inRepo, linkBase: `/${head}` });
-  }
+  if (isRepo !== null) return inRepo;
 
   // If head is not repo, but profile repo found, profile wins
-  if (inProfile !== null) {
-    return fromTree({ tree: inProfile, linkBase: "" });
-  }
+  if (inProfile !== null) return inProfile;
 
   // Owner root without a profile repo: their repos, forks excluded
   if (repos !== null) {

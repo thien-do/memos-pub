@@ -1,21 +1,30 @@
 import type { ReactElement } from "react";
 import { MarkFile } from "@/mark/file";
-import type { BlogViewDir } from "./view";
+import { GitContentEntry } from "@/git/content";
+import { BlogTreeDir } from "./tree";
 
-export function BlogDir(props: { view: BlogViewDir }): ReactElement {
-  const { view } = props;
-  const { linkBase, entries, readme } = view;
+function Row(props: { entry: GitContentEntry }): ReactElement {
+  const { entry } = props;
+
+  const name = entry.type === "dir" ? `${entry.name}/` : entry.name;
+
+  return (
+    <li>
+      <a href={`./${name}`}>{name}</a>
+    </li>
+  );
+}
+
+export function BlogDir(props: { dir: BlogTreeDir }): ReactElement {
+  const { dir } = props;
+  const { readme, entries } = dir;
 
   return (
     <div>
       {readme !== null ? <MarkFile text={readme} /> : null}
       <ul>
         {entries.map((entry) => (
-          <li key={entry.path}>
-            <a href={`${linkBase}/${entry.path}`}>
-              {entry.type === "dir" ? `${entry.name}/` : entry.name}
-            </a>
-          </li>
+          <Row key={entry.name} entry={entry} />
         ))}
       </ul>
     </div>

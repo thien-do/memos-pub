@@ -1,13 +1,18 @@
 import type { GitContentEntry } from "@/git/content";
 import { getGitContent } from "@/git/content";
 
-export type BlogTree =
-  | { kind: "file"; text: string }
-  | {
-      kind: "dir";
-      entries: GitContentEntry[];
-      readme: string | null;
-    };
+export interface BlogTreeFile {
+  kind: "file";
+  text: string;
+}
+
+export interface BlogTreeDir {
+  kind: "dir";
+  entries: GitContentEntry[];
+  readme: string | null;
+}
+
+export type BlogTree = BlogTreeFile | BlogTreeDir;
 
 /**
  * Get content within a specific repo.
