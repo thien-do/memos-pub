@@ -3,7 +3,7 @@
 import type { ReactElement } from "react";
 import { useActionState } from "react";
 import { checkConnectAction } from "../check";
-import { ConnectFormHow } from "./how";
+import { ConnectFormResult } from "./result";
 import { InputField } from "@/kit/input-field";
 
 export function ConnectFormBox(): ReactElement {
@@ -12,18 +12,20 @@ export function ConnectFormBox(): ReactElement {
 
   return (
     <form action={action} onReset={(event) => event.preventDefault()}>
-      <InputField name="hostname" label="Domain" />
-      <p>
-        For example <code>thien.do</code> or <code>memos.thien.do</code>.
-      </p>
-      <InputField name="path" label="GitHub path" />
-      <p>
-        For example <code>thien-do</code> or <code>thien-do/blog/notes</code>.
-      </p>
+      <InputField
+        name="hostname"
+        label="Domain"
+        desc="e.g., “memos.thien.do”"
+      />
+      <InputField
+        name="path"
+        label="GitHub repo"
+        desc="e.g., “thien-do/memos”"
+      />
       <button type="submit" disabled={pending}>
         Connect
       </button>
-      {result && <ConnectFormHow result={result} />}
+      {result && <ConnectFormResult result={result} />}
     </form>
   );
 }

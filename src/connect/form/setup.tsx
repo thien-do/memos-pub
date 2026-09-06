@@ -1,5 +1,4 @@
 import type { ReactElement } from "react";
-import { InputField } from "@/kit/input-field";
 import {
   ConnectCheckSetupRecord as Record,
   ConnectCheckSetupReason as Reason,
@@ -10,24 +9,14 @@ function Row(props: { record: Record }): ReactElement {
 
   return (
     <li>
-      <InputField
-        readonly
-        name="type"
-        label="Type"
-        defaultValue={record.type}
-      />
-      <InputField
-        readonly
-        name="name"
-        label="Name"
-        defaultValue={record.name}
-      />
-      <InputField
-        readonly
-        name="value"
-        label="Value"
-        defaultValue={record.value}
-      />
+      <dl>
+        <dt>Type</dt>
+        <dd>{record.type}</dd>
+        <dt>Name</dt>
+        <dd>{record.name}</dd>
+        <dt>Value</dt>
+        <dd>{record.value}</dd>
+      </dl>
     </li>
   );
 }

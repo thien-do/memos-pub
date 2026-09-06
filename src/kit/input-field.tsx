@@ -4,10 +4,9 @@ import { useId } from "react";
 export function InputField(props: {
   name: string;
   label: string;
-  defaultValue?: string;
-  readonly?: boolean;
+  desc?: string;
 }): ReactElement {
-  const { name, label, defaultValue, readonly } = props;
+  const { name, label, desc } = props;
 
   const id = useId();
 
@@ -16,13 +15,8 @@ export function InputField(props: {
       <div>
         <label htmlFor={id}>{label}</label>
       </div>
-      <input
-        id={id}
-        type="text"
-        name={name}
-        readOnly={readonly}
-        {...(readonly ? { value: defaultValue ?? "" } : { defaultValue })}
-      />
+      <input id={id} type="text" name={name} />
+      {desc && <p>{desc}</p>}
     </div>
   );
 }

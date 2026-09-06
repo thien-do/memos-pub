@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 import { ConnectCheckResult as Result } from "../check";
 import { ConnectFormSetup } from "./setup";
 
-export function ConnectFormHow(props: { result: Result }): ReactElement {
+export function ConnectFormResult(props: { result: Result }): ReactElement {
   const { result } = props;
 
   switch (result.step) {
