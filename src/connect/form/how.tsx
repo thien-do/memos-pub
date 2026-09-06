@@ -1,31 +1,24 @@
 import type { ReactElement } from "react";
-import type { ConnectCheckResult } from "../check/result";
-import { InputField } from "@/kit/input-field";
-import { ConnectFormRecords } from "./records";
+import { ConnectCheckResult as Result } from "../check";
+import { ConnectFormSetup } from "./setup";
 
-export function ConnectFormHow(props: {
-  result: ConnectCheckResult;
-}): ReactElement {
+export function ConnectFormHow(props: { result: Result }): ReactElement {
   const { result } = props;
 
-  switch (result.type) {
-    case "success": {
-      return (
-        <>
-          <p>This domain is connected.</p>
-          <InputField label="GitHub path" value={result.path} readonly />
-        </>
-      );
-    }
-    case "clean": {
+  switch (result.step) {
+    case "input": {
       switch (result.reason) {
-        case "parse":
-          return <p>Enter a domain like example.com.</p>;
-        case "unsafe":
-          return <p>That domain is not supported.</p>;
+        case "hostname-parse":
+          return <p>Enter a domain, like “example.com”</p>;
+        case "hostname-unsafe":
+          return <p>We can't support that domain, sorry.</p>;
+        case "path-parse":
+          return <p>Enter a repo path, like “thien-do/blog”.</p>;
+        case "path-unsafe":
+          return <p>We can't support that path, sorry.</p>;
       }
     }
-    case "ensure": {
+    case "record": {
       switch (result.reason) {
         case "apex-limit":
           return <p>This domain already has three names here.</p>;
@@ -34,9 +27,16 @@ export function ConnectFormHow(props: {
     case "setup": {
       return (
         <>
-          <ConnectFormRecords records={result.records} />
-          <p>Then connect again.</p>
+          <p>Update your DNS, then connect again.</p>
+          <ConnectFormSetup reason={result.reason} />
         </>
+      );
+    }
+    case "success": {
+      return (
+        <p>
+          “{result.hostname}” is connected to “{result.path}”.
+        </p>
       );
     }
   }

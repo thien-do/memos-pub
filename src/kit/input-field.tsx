@@ -1,14 +1,14 @@
-"use client";
-
 import type { ReactElement } from "react";
 import { useId } from "react";
 
 export function InputField(props: {
+  name: string;
   label: string;
-  value: string;
-  readonly: boolean;
+  defaultValue?: string;
+  readonly?: boolean;
 }): ReactElement {
-  const { label, value, readonly } = props;
+  const { name, label, defaultValue, readonly } = props;
+
   const id = useId();
 
   return (
@@ -19,8 +19,9 @@ export function InputField(props: {
       <input
         id={id}
         type="text"
+        name={name}
         readOnly={readonly}
-        {...(readonly ? { value } : { defaultValue: value })}
+        defaultValue={defaultValue}
       />
     </div>
   );
