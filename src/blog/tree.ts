@@ -1,6 +1,6 @@
 import type { GitContentEntry } from "@/git/content";
 import { getGitContent } from "@/git/content";
-import { getIsBlogPathAllowed } from "./path";
+import { getIsBlogPathAllowed, getIsBlogPathMarkdown } from "./path";
 
 export interface BlogTreeFile {
   kind: "file";
@@ -40,11 +40,11 @@ export async function getBlogTree(params: {
   // The exact "bar" — file or folder — beats the auto "bar.md".
   if (exact !== null) {
     if (exact.kind === "file")
-      return last?.toLowerCase().endsWith(".md") ? exact : null;
+      return getIsBlogPathMarkdown(last ?? "") ? exact : null;
     const entries = exact.entries.filter((entry) => {
       return entry.type === "dir"
         ? getIsBlogPathAllowed(entry.name)
-        : entry.type === "file" && entry.name.toLowerCase().endsWith(".md");
+        : entry.type === "file" && getIsBlogPathMarkdown(entry.name);
     });
 
     return {
