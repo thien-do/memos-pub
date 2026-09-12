@@ -17,7 +17,8 @@ export async function BlogPage(props: {
   const view = await getBlogView({ owner, path });
   if (view === null) notFound();
 
-  ensureBlogSlash({ view, form, lastSegment: path.at(-1) ?? owner });
+  const segment = path.at(-1) ?? owner;
+  ensureBlogSlash({ view, form, segment });
 
   switch (view.kind) {
     case "file":

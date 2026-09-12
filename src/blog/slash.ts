@@ -9,10 +9,10 @@ import { notFound, redirect } from "next/navigation";
 export function ensureBlogSlash(params: {
   view: BlogView;
   form: BlogForm;
-  lastSegment: string;
+  segment: string;
 }): void {
-  const { view, form, lastSegment } = params;
-  const segment = encodeURIComponent(lastSegment);
+  const { view, form } = params;
+  const segment = encodeURIComponent(params.segment);
 
   switch (view.kind) {
     case "file":

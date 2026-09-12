@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getBlogForm } from "./form";
 import { getBlogUrl } from "./url";
 
+/** Rewrite a blog target from hostname routing or preview parsing to its cached route. */
 export function getBlogProxy(params: {
   request: NextRequest;
   target: string;
@@ -19,21 +20,13 @@ export function getBlogProxy(params: {
   return NextResponse.rewrite(url);
 }
 
+/** Read /blog/owner/path preview URLs instead of resolving a hostname. */
 export function getBlogProxyPreview(request: NextRequest): NextResponse {
   const { pathname } = request.nextUrl;
   if (!pathname.startsWith("/blog/")) return NextResponse.next();
 
-  const [, , encodedOwner, ...path] = pathname.split("/");
-  if (!encodedOwner) return new NextResponse("Not Found", { status: 404 });
-
-  let owner: string;
-  try {
-    owner = decodeURIComponent(encodedOwner);
-  } catch {
-    return new NextResponse("Not Found", { status: 404 });
-  }
-  if (owner.includes("/") || owner === "." || owner === "..")
-    return new NextResponse("Not Found", { status: 404 });
+  const [, , owner, ...path] = pathname.split("/");
+  if (!owner) return new NextResponse("Not Found", { status: 404 });
 
   return getBlogProxy({
     request,
