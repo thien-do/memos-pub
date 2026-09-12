@@ -1,5 +1,5 @@
 import type { BlogView } from "./view";
-import type { BlogUrlForm } from "./url";
+import type { BlogForm } from "./form";
 import { notFound, redirect } from "next/navigation";
 
 /**
@@ -8,11 +8,11 @@ import { notFound, redirect } from "next/navigation";
  */
 export function ensureBlogSlash(params: {
   view: BlogView;
-  form: BlogUrlForm;
-  name: string;
+  form: BlogForm;
+  lastSegment: string;
 }): void {
-  const { view, form, name } = params;
-  const segment = encodeURIComponent(name);
+  const { view, form, lastSegment } = params;
+  const segment = encodeURIComponent(lastSegment);
 
   switch (view.kind) {
     case "file":

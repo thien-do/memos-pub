@@ -1,17 +1,11 @@
-export type BlogUrlForm = "root" | "slash" | "bare";
+import type { BlogForm } from "./form";
 
-export function getBlogUrlForm(pathname: string): BlogUrlForm {
-  if (pathname === "/") return "root";
-  return pathname.endsWith("/") ? "slash" : "bare";
-}
-
-export function getBlogRewritePath(params: {
+export function getBlogUrl(params: {
   target: string;
   pathname: string;
-  form: BlogUrlForm;
+  form: BlogForm;
 }): string {
   const { target, pathname, form } = params;
-  const [owner, ...prefix] = target.split("/").map(encodeURIComponent);
-  const base = ["", "blog", owner, form, ...prefix].join("/");
-  return `${base}${pathname}`.replace(/\/$/, "");
+  const encodedTarget = target.split("/").map(encodeURIComponent).join("/");
+  return `/blog/${form}/${encodedTarget}${pathname}`.replace(/\/$/, "");
 }

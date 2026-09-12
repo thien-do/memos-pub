@@ -1,38 +1,16 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { getHostBlog } from "./host/blog";
-import { getBlogRewritePath, getBlogUrlForm } from "./blog/url";
+import { getBlogProxy, getBlogProxyPreview } from "./blog/proxy";
 
 const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
+  if (IS_PREVIEW) return getBlogProxyPreview(request);
+
   const { pathname } = request.nextUrl;
-  let contentPath = pathname;
-  let blog: string | null = null;
-  if (IS_PREVIEW) {
-    if (!pathname.startsWith("/blog/")) return NextResponse.next();
-    const [, , owner, ...path] = pathname.split("/");
-    if (!owner) return new NextResponse("Not Found", { status: 404 });
-    try {
-      blog = decodeURIComponent(owner);
-      if (blog.includes("/") || blog === "." || blog === "..")
-        return new NextResponse("Not Found", { status: 404 });
-    } catch {
-      return new NextResponse("Not Found", { status: 404 });
-    }
-    contentPath = `/${path.join("/")}`;
-  } else {
-    blog = await getHostBlog(request);
-  }
-  if (typeof blog === "string") {
-    const url = request.nextUrl.clone();
-    url.pathname = getBlogRewritePath({
-      target: blog,
-      pathname: contentPath,
-      form: getBlogUrlForm(pathname),
-    });
-    return NextResponse.rewrite(url);
-  }
+  const target = await getHostBlog(request);
+  if (target !== null) return getBlogProxy({ request, target, pathname });
 
   // Prevent direct access to avoid duplicated paths
   if (pathname === "/blog" || pathname.startsWith("/blog/"))
