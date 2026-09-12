@@ -41,13 +41,15 @@ export async function getBlogTree(params: {
   if (exact !== null) {
     if (exact.kind === "file")
       return last?.toLowerCase().endsWith(".md") ? exact : null;
+    const entries = exact.entries.filter((entry) => {
+      return entry.type === "dir"
+        ? getIsBlogPathAllowed(entry.name)
+        : entry.type === "file" && entry.name.toLowerCase().endsWith(".md");
+    });
+
     return {
       kind: "dir",
-      entries: exact.entries.filter((entry) => {
-        return entry.type === "dir"
-          ? getIsBlogPathAllowed(entry.name)
-          : entry.type === "file" && entry.name.toLowerCase().endsWith(".md");
-      }),
+      entries,
       readme: autoReadme?.kind === "file" ? autoReadme.text : null,
     };
   }

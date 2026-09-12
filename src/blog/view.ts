@@ -26,7 +26,7 @@ export async function getBlogView(params: {
   const [head, ...rest] = path;
   const noHead = head === undefined;
 
-  const [inProfile, isRepo, inRepo, repos] = await Promise.all([
+  const [inProfile, isRepo, inRepo, reposRaw] = await Promise.all([
     // Always try content in profile repo
     getBlogTree({ owner, repo: owner, segments: path }),
     // Need an explicit check if head is a repo
@@ -44,13 +44,12 @@ export async function getBlogView(params: {
   if (inProfile !== null) return inProfile;
 
   // Owner root without a profile repo: their repos, forks excluded
-  if (repos !== null) {
-    return {
-      kind: "owner",
-      repos: repos.filter((repo) => {
-        return !repo.fork && getIsBlogPathAllowed(repo.name);
-      }),
-    };
+  if (reposRaw !== null) {
+    const repos = reposRaw.filter((repo) => {
+      return !repo.fork && getIsBlogPathAllowed(repo.name);
+    });
+
+    return { kind: "owner", repos };
   }
 
   return null;
