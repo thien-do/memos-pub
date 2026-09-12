@@ -3,6 +3,7 @@ import type { GitRepo } from "@/git/repos";
 import { getGitRepos } from "@/git/repos";
 import type { BlogTree } from "./tree";
 import { getBlogTree } from "./tree";
+import { getIsBlogPathAllowed } from "./path";
 
 interface Owner {
   kind: "owner";
@@ -19,12 +20,13 @@ export async function getBlogView(params: {
 
   // Dot segments could escape the repo in the API URL.
   if (path.some((s) => s === "." || s === "..")) return null;
+  if (!getIsBlogPathAllowed(path.join("/"))) return null;
 
   // Head could be a repo, or the whole path is resolved in profile repo
   const [head, ...rest] = path;
   const noHead = head === undefined;
 
-  const [inProfile, isRepo, inRepo, repos] = await Promise.all([
+  const [inProfile, isRepo, inRepo, reposRaw] = await Promise.all([
     // Always try content in profile repo
     getBlogTree({ owner, repo: owner, segments: path }),
     // Need an explicit check if head is a repo
@@ -42,8 +44,12 @@ export async function getBlogView(params: {
   if (inProfile !== null) return inProfile;
 
   // Owner root without a profile repo: their repos, forks excluded
-  if (repos !== null) {
-    return { kind: "owner", repos: repos.filter((repo) => !repo.fork) };
+  if (reposRaw !== null) {
+    const repos = reposRaw.filter((repo) => {
+      return !repo.fork && getIsBlogPathAllowed(repo.name);
+    });
+
+    return { kind: "owner", repos };
   }
 
   return null;
