@@ -1,3 +1,5 @@
+import type { Config } from "@/config";
+import { loadConfig, parseConfig } from "@/config";
 import { getGitContent } from "@/git/content";
 import type { GitRepo } from "@/git/repos";
 import { getGitRepos } from "@/git/repos";
@@ -9,7 +11,12 @@ interface Owner {
   repos: GitRepo[];
 }
 
-export type BlogView = BlogTree | Owner;
+export type BlogView = (BlogTree | Owner) & { config: Config };
+
+interface ResolvedView {
+  view: BlogTree | Owner;
+  config?: ReturnType<typeof loadConfig>;
+}
 
 export async function getBlogView(params: {
   owner: string;
@@ -20,31 +27,60 @@ export async function getBlogView(params: {
   // Dot segments could escape the repo in the API URL.
   if (path.some((s) => s === "." || s === "..")) return null;
 
-  // Head could be a repo, or the whole path is resolved in profile repo
-  const [head, ...rest] = path;
-  const noHead = head === undefined;
+  const [repo, ...segments] = path;
+  const resolved =
+    repo === undefined
+      ? await resolveOwnerRoot({ owner })
+      : await resolvePath({ owner, repo, segments });
 
-  const [inProfile, isRepo, inRepo, repos] = await Promise.all([
-    // Always try content in profile repo
-    getBlogTree({ owner, repo: owner, segments: path }),
-    // Need an explicit check if head is a repo
-    noHead ? null : getGitContent({ owner, repo: head, segments: [] }),
-    // Content if head is a repo
-    noHead ? null : getBlogTree({ owner, repo: head, segments: rest }),
-    // Root can fall back to repo list
-    noHead ? getGitRepos({ owner }) : null,
+  if (resolved === null) return null;
+
+  return {
+    ...resolved.view,
+    config: parseConfig(await resolved.config),
+  };
+}
+
+async function resolveOwnerRoot(params: {
+  owner: string;
+}): Promise<ResolvedView | null> {
+  const { owner } = params;
+  const config = loadConfig({ owner, repo: owner });
+  const [profile, repos] = await Promise.all([
+    getBlogTree({ owner, repo: owner, segments: [] }),
+    getGitRepos({ owner }),
   ]);
 
-  // If head is repo, repo wins, even if content is empty
-  if (isRepo !== null) return inRepo;
+  if (profile !== null) return { view: profile, config };
+  if (repos === null) return null;
 
-  // If head is not repo, but profile repo found, profile wins
-  if (inProfile !== null) return inProfile;
+  return {
+    view: { kind: "owner", repos: repos.filter((repo) => !repo.fork) },
+  };
+}
 
-  // Owner root without a profile repo: their repos, forks excluded
-  if (repos !== null) {
-    return { kind: "owner", repos: repos.filter((repo) => !repo.fork) };
+async function resolvePath(params: {
+  owner: string;
+  repo: string;
+  segments: string[];
+}): Promise<ResolvedView | null> {
+  const { owner, repo, segments } = params;
+  const profileConfig = loadConfig({ owner, repo: owner });
+  const repoConfig =
+    repo === owner ? profileConfig : loadConfig({ owner, repo });
+
+  const [profile, repoRoot, content] = await Promise.all([
+    getBlogTree({ owner, repo: owner, segments: [repo, ...segments] }),
+    getGitContent({ owner, repo, segments: [] }),
+    getBlogTree({ owner, repo, segments }),
+  ]);
+
+  // An existing explicit repo wins even when its requested page is missing.
+  if (repoRoot !== null) {
+    if (content === null) return null;
+    return { view: content, config: repoConfig };
   }
 
-  return null;
+  if (profile === null) return null;
+  return { view: profile, config: profileConfig };
 }

@@ -1,10 +1,32 @@
 @import "@radix-ui/colors/slate.css";
+@import "@radix-ui/colors/mauve.css";
+@import "@radix-ui/colors/sage.css";
 @import "@radix-ui/colors/blue.css";
 @import "@radix-ui/colors/slate-dark.css" (prefers-color-scheme: dark);
+@import "@radix-ui/colors/mauve-dark.css" (prefers-color-scheme: dark);
+@import "@radix-ui/colors/sage-dark.css" (prefers-color-scheme: dark);
 @import "@radix-ui/colors/blue-dark.css" (prefers-color-scheme: dark);
 
 :root {
     color-scheme: light dark;
+    --gray-1: var(--slate-1);
+    --gray-6: var(--slate-6);
+    --gray-11: var(--slate-11);
+    --gray-12: var(--slate-12);
+}
+
+:root:has([data-color="crimson"]) {
+    --gray-1: var(--mauve-1);
+    --gray-6: var(--mauve-6);
+    --gray-11: var(--mauve-11);
+    --gray-12: var(--mauve-12);
+}
+
+:root:has([data-color="jade"]) {
+    --gray-1: var(--sage-1);
+    --gray-6: var(--sage-6);
+    --gray-11: var(--sage-11);
+    --gray-12: var(--sage-12);
 }
 
 *,
@@ -17,16 +39,16 @@ body {
     margin: 0 auto;
     max-width: 60ch;
     padding: 36px 24px 48px;
-    background-color: var(--slate-1);
-    color: var(--slate-11);
+    background-color: var(--gray-1);
+    color: var(--gray-11);
     font-size: 14px;
     line-height: 150%;
 }
 
 a {
-    color: var(--slate-12);
+    color: var(--gray-12);
     text-decoration: underline;
-    text-decoration-color: var(--slate-6);
+    text-decoration-color: var(--gray-6);
     text-underline-offset: 2px;
 }
 
@@ -37,7 +59,7 @@ h5,
 h6 {
     font-weight: 500;
     font-size: 14px;
-    color: var(--slate-12);
+    color: var(--gray-12);
     margin: 2em 0 1em;
 }
 
@@ -45,7 +67,7 @@ h1 {
     margin: 0 0 1em;
     font-weight: 500;
     font-size: 16px;
-    color: var(--slate-12);
+    color: var(--gray-12);
 }
 
 img {
@@ -56,7 +78,7 @@ img {
 strong,
 b {
     font-weight: 500;
-    color: var(--slate-12);
+    color: var(--gray-12);
 }
 
 button,
