@@ -19,10 +19,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function Page(props: Props): Promise<ReactElement> {
-  const { owner, path, form } = await props.params;
+  const { owner, path, form: formRaw } = await props.params;
   if (owner === "__placeholder__") notFound();
-  const parsedForm = BlogForm.safeParse(form);
-  if (!parsedForm.success) notFound();
+  const form = BlogForm.parse(formRaw);
 
-  return <BlogPage owner={owner} path={path ?? []} form={parsedForm.data} />;
+  return <BlogPage owner={owner} path={path ?? []} form={form} />;
 }
