@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import type { BlogForm } from "./form";
 import { NextResponse } from "next/server";
 import { getHostBlog } from "@/host/blog";
+import { getIsBlogPathAllowed } from "./path";
 
 const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
 
@@ -11,6 +12,8 @@ export async function getBlogProxy(
 ): Promise<NextResponse> {
   const { pathname } = request.nextUrl;
   if (pathname === "/blog" || pathname.startsWith("/blog/"))
+    return new NextResponse("Not Found", { status: 404 });
+  if (!getIsBlogPathAllowed(pathname))
     return new NextResponse("Not Found", { status: 404 });
 
   if (IS_PREVIEW) {
