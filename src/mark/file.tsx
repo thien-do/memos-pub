@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache";
 import type { ReactElement } from "react";
 import { defaultUrlTransform, MarkdownAsync } from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -10,6 +11,8 @@ function transformUrl(url: string, key: string): string {
 }
 
 export async function MarkFile(props: { text: string }): Promise<ReactElement> {
+  "use cache: remote";
+  cacheLife("days");
   const { text } = props;
 
   return (

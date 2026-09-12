@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache";
 import { getGit } from "./instance";
 import { mapGitNotFoundToNull } from "./not-found";
 
@@ -42,4 +43,10 @@ const getStrict: GetFn = async (params) => {
   return null;
 };
 
-export const getGitContent: GetFn = mapGitNotFoundToNull(getStrict);
+const get = mapGitNotFoundToNull(getStrict);
+
+export const getGitContent: GetFn = async (params) => {
+  "use cache: remote";
+  cacheLife("github");
+  return get(params);
+};
