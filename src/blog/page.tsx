@@ -17,7 +17,7 @@ export async function BlogPage(props: {
   if (view === null) notFound();
 
   // Relative links require a trailing slash for directories and none for files.
-  const segment = encodeURIComponent(path.at(-1) ?? owner);
+  const segment = path.at(-1) ?? owner;
 
   switch (view.kind) {
     case "file":
@@ -26,12 +26,10 @@ export async function BlogPage(props: {
       if (form === "slash") redirect(`../${segment}`);
       return <MarkFile text={view.text} />;
     case "dir":
+      if (form === "bare") redirect(`./${segment}/`);
+      return <BlogDir dir={view} />;
     case "owner":
       if (form === "bare") redirect(`./${segment}/`);
-      return view.kind === "dir" ? (
-        <BlogDir dir={view} />
-      ) : (
-        <BlogOwner repos={view.repos} />
-      );
+      return <BlogOwner repos={view.repos} />;
   }
 }
