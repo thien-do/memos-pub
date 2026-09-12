@@ -8,8 +8,8 @@ import { notFound } from "next/navigation";
 type Props = PageProps<"/blog/[form]/[owner]/[[...path]]">;
 
 export function generateStaticParams() {
-  // Cache Components requires one result, even when blogs load on demand.
-  return [{ form: "root", owner: "__placeholder__", path: [] }];
+  // Keep the required build placeholder outside every real form's cache route.
+  return [{ form: "__placeholder__", owner: "__placeholder__", path: [] }];
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
