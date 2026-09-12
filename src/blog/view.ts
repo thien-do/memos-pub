@@ -47,9 +47,9 @@ export async function getBlogView(params: {
   if (repos !== null) {
     return {
       kind: "owner",
-      repos: repos.filter(
-        (repo) => !repo.fork && getIsBlogPathAllowed(repo.name),
-      ),
+      repos: repos.filter((repo) => {
+        return !repo.fork && getIsBlogPathAllowed(repo.name);
+      }),
     };
   }
 
