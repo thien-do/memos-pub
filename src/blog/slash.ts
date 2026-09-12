@@ -1,28 +1,28 @@
-import { BlogView } from "./view";
-import { headers as getHeaders } from "next/headers";
+import type { BlogView } from "./view";
+import type { BlogUrlForm } from "./url";
 import { notFound, redirect } from "next/navigation";
 
 /**
  * Our links are always relative,
  * so they require strict trailing slash behaviour.
  */
-export async function ensureBlogSlash(view: BlogView): Promise<void> {
-  const headers = await getHeaders();
-  // Provided by our proxy
-  const pathname = headers.get("x-memos-pathname");
-  if (pathname === null) throw new Error("Missing pathname header");
-
-  const hasSlash = pathname.endsWith("/");
+export function ensureBlogSlash(params: {
+  view: BlogView;
+  form: BlogUrlForm;
+  name: string;
+}): void {
+  const { view, form, name } = params;
+  const segment = encodeURIComponent(name);
 
   switch (view.kind) {
     case "file":
       // We don't support custom domain to specific files.
-      if (pathname === "/") notFound();
-      if (hasSlash) redirect(pathname.slice(0, -1));
+      if (form === "root") notFound();
+      if (form === "slash") redirect(`../${segment}`);
       return;
     case "dir":
     case "owner":
-      if (!hasSlash) redirect(`${pathname}/`);
+      if (form === "bare") redirect(`./${segment}/`);
       return;
   }
 }

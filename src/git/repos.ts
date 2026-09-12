@@ -1,4 +1,4 @@
-import { unstable_cache } from "next/cache";
+import { cacheLife } from "next/cache";
 import { getGit } from "./instance";
 import { mapGitNotFoundToNull } from "./not-found";
 
@@ -29,8 +29,10 @@ const getStrict: GetFn = async (params) => {
   return result;
 };
 
-export const getGitRepos: GetFn = unstable_cache(
-  mapGitNotFoundToNull(getStrict),
-  ["git-repos"],
-  { revalidate: 300 },
-);
+const get = mapGitNotFoundToNull(getStrict);
+
+export const getGitRepos: GetFn = async (params) => {
+  "use cache: remote";
+  cacheLife("github");
+  return get(params);
+};
