@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { getGit } from "./instance";
 import { mapGitNotFoundToNull } from "./not-found";
 
@@ -42,4 +43,8 @@ const getStrict: GetFn = async (params) => {
   return null;
 };
 
-export const getGitContent: GetFn = mapGitNotFoundToNull(getStrict);
+export const getGitContent: GetFn = unstable_cache(
+  mapGitNotFoundToNull(getStrict),
+  ["git-content"],
+  { revalidate: 300 },
+);
