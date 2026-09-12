@@ -1,22 +1,38 @@
 import type { NextRequest } from "next/server";
+import type { BlogForm } from "./blog/form";
 import { NextResponse } from "next/server";
 import { getHostBlog } from "./host/blog";
-import { getBlogProxy, getBlogProxyPreview } from "./blog/proxy";
 
 const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
-  if (IS_PREVIEW) return getBlogProxyPreview(request);
-
   const { pathname } = request.nextUrl;
-  const target = await getHostBlog(request);
-  if (target !== null) return getBlogProxy({ request, target, pathname });
-
-  // Prevent direct access to avoid duplicated paths
   if (pathname === "/blog" || pathname.startsWith("/blog/"))
     return new NextResponse("Not Found", { status: 404 });
 
-  return NextResponse.next();
+  let target: string | null;
+  let contentPath = pathname;
+  if (IS_PREVIEW) {
+    if (!pathname.startsWith("/preview/")) return NextResponse.next();
+    const [, , owner, ...path] = pathname.split("/");
+    if (!owner) return new NextResponse("Not Found", { status: 404 });
+    target = owner;
+    contentPath = `/${path.join("/")}`;
+  } else {
+    target = await getHostBlog(request);
+  }
+  if (target === null) return NextResponse.next();
+
+  const form: BlogForm =
+    pathname === "/" ? "root" : pathname.endsWith("/") ? "slash" : "bare";
+  const encodedTarget = target.split("/").map(encodeURIComponent).join("/");
+  // NextURL would restore the incoming trailing slash after rewriting.
+  const url = new URL(request.nextUrl.href);
+  url.pathname = `/blog/${form}/${encodedTarget}${contentPath}`.replace(
+    /\/$/,
+    "",
+  );
+  return NextResponse.rewrite(url);
 }
 
 export const config = {

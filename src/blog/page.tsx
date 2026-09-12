@@ -1,9 +1,8 @@
 import { MarkFile } from "@/mark/file";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { ReactElement } from "react";
 import { BlogDir } from "./dir";
 import { BlogOwner } from "./owner";
-import { ensureBlogSlash } from "./slash";
 import { getBlogView } from "./view";
 import type { BlogForm } from "./form";
 
@@ -17,15 +16,22 @@ export async function BlogPage(props: {
   const view = await getBlogView({ owner, path });
   if (view === null) notFound();
 
-  const segment = path.at(-1) ?? owner;
-  ensureBlogSlash({ view, form, segment });
+  // Relative links require a trailing slash for directories and none for files.
+  const segment = encodeURIComponent(path.at(-1) ?? owner);
 
   switch (view.kind) {
     case "file":
+      // We don't support custom domains pointing to specific files.
+      if (form === "root") notFound();
+      if (form === "slash") redirect(`../${segment}`);
       return <MarkFile text={view.text} />;
     case "dir":
-      return <BlogDir dir={view} />;
     case "owner":
-      return <BlogOwner repos={view.repos} />;
+      if (form === "bare") redirect(`./${segment}/`);
+      return view.kind === "dir" ? (
+        <BlogDir dir={view} />
+      ) : (
+        <BlogOwner repos={view.repos} />
+      );
   }
 }
