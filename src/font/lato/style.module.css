@@ -1,0 +1,7 @@
+.text main {
+  letter-spacing: 0.25px;
+}
+
+.text :is(pre, code, kbd, samp) {
+  letter-spacing: normal;
+}
