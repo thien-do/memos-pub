@@ -20,13 +20,13 @@ export function BlogDir(props: { dir: BlogTreeDir }): ReactElement {
   const { readme, entries } = dir;
 
   return (
-    <div>
+    <>
       {readme !== null ? <MarkFile text={readme} /> : null}
       <ul>
         {entries.map((entry) => (
           <Row key={entry.name} entry={entry} />
         ))}
       </ul>
-    </div>
+    </>
   );
 }

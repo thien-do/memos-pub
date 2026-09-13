@@ -12,5 +12,9 @@ export async function MarkFile(props: { text: string }): Promise<ReactElement> {
   cacheLife("days");
   const { text } = props;
 
-  return <Markdown urlTransform={transformUrl}>{text}</Markdown>;
+  return (
+    <article>
+      <Markdown urlTransform={transformUrl}>{text}</Markdown>
+    </article>
+  );
 }
